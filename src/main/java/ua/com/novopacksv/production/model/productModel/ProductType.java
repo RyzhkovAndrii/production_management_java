@@ -1,9 +1,10 @@
-package ua.com.novopacksv.production.model;
+package ua.com.novopacksv.production.model.productModel;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import ua.com.novopacksv.production.model.BaseEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,11 +15,11 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "roll_type")
-public class RollType extends BaseEntity{
+@Table(name = "product_type")
+public class ProductType extends BaseEntity {
 
-    @Column(name = "thickness")
-    private Double thickness;
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "weight")
     private Double weight;

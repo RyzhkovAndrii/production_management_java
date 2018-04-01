@@ -1,9 +1,11 @@
-package ua.com.novopacksv.production.model;
+package ua.com.novopacksv.production.model.orderModel;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import ua.com.novopacksv.production.model.BaseEntity;
+import ua.com.novopacksv.production.model.productModel.ProductType;
 
 import javax.persistence.*;
 import javax.persistence.Table;
@@ -14,7 +16,7 @@ import javax.persistence.Table;
 @Entity
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "order_item")
-public class OrderItem extends BaseEntity{
+public class OrderItem extends BaseEntity {
 
     @OneToOne
     @PrimaryKeyJoinColumn

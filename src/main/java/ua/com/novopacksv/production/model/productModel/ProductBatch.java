@@ -1,25 +1,30 @@
-package ua.com.novopacksv.production.model;
+package ua.com.novopacksv.production.model.productModel;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import ua.com.novopacksv.production.model.BaseEntity;
 
 import javax.persistence.*;
 import javax.persistence.Table;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "roll_left_over")
-public class RollLeftOver extends BaseEntity{
+@Table(name = "product_batch")
+public class ProductBatch extends BaseEntity {
 
     @OneToOne
     @PrimaryKeyJoinColumn
-    private RollType rollType;
+    private ProductType productType;
+
+    @Column(name = "creation_date")
+    private Date creationDate;
 
     @Column(name = "amount")
-    private Integer amount;
+    private Double amount;
 }

@@ -1,9 +1,10 @@
-package ua.com.novopacksv.production.model;
+package ua.com.novopacksv.production.model.userModel;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import ua.com.novopacksv.production.model.BaseEntity;
 
 import javax.persistence.*;
 import java.util.Date;

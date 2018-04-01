@@ -1,7 +1,8 @@
-package ua.com.novopacksv.production.model;
+package ua.com.novopacksv.production.model.orderModel;
 
 import lombok.*;
 import org.hibernate.annotations.Type;
+import ua.com.novopacksv.production.model.BaseEntity;
 
 import javax.persistence.*;
 import javax.persistence.Table;
@@ -14,7 +15,7 @@ import java.util.List;
 @Entity
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "order")
-public class Order extends BaseEntity{
+public class Order extends BaseEntity {
 
     @OneToOne
     @PrimaryKeyJoinColumn
