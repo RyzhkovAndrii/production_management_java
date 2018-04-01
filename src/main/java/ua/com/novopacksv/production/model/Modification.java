@@ -14,12 +14,16 @@ import java.util.Date;
 @Entity
 @EqualsAndHashCode(callSuper = true)
 @javax.persistence.Table(name = "modification")
-public class Modification extends BaseEntity{
+public class Modification extends BaseEntity {
 
-    @Column(name = "user")
+    @OneToOne
+    @JoinColumn(name = "user_id")
     private User user;
+
     @Column(name = "modification_date")
     private Date modificationDate;
-    @Column(name = "table_date")
+
+    @Column(name = "table_type")
+    @Enumerated(EnumType.STRING)
     private Table tableType;
 }
