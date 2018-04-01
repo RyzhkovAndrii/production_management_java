@@ -17,7 +17,7 @@ import java.util.Date;
 public class Modification extends BaseEntity {
 
     @OneToOne
-    @JoinColumn(name = "user_id")
+    @PrimaryKeyJoinColumn
     private User user;
 
     @Column(name = "modification_date")

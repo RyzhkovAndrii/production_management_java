@@ -1,8 +1,29 @@
 package ua.com.novopacksv.production.model;
 
-public class OrderItem {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-    private Long id;
+import javax.persistence.*;
+import javax.persistence.Table;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "order_item")
+public class OrderItem extends BaseEntity{
+
+    @OneToOne
+    @PrimaryKeyJoinColumn
     private ProductType product;
-    private Integer count;
+
+    @Column(name = "amount")
+    private Integer amount;
+
+    @ManyToOne
+    @PrimaryKeyJoinColumn
+    private Order order;
 }

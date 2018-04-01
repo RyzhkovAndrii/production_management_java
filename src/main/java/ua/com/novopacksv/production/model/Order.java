@@ -17,7 +17,7 @@ import java.util.List;
 public class Order extends BaseEntity{
 
     @OneToOne
-    @JoinColumn(name = "client_id")
+    @PrimaryKeyJoinColumn
     private Client client;
 
     @OneToMany(mappedBy = "order")

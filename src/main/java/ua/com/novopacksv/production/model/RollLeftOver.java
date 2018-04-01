@@ -1,8 +1,25 @@
 package ua.com.novopacksv.production.model;
 
-public class RollLeftOver {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
-    private Long id;
+import javax.persistence.*;
+import javax.persistence.Table;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "roll_left_over")
+public class RollLeftOver extends BaseEntity{
+
+    @OneToOne
+    @PrimaryKeyJoinColumn
     private RollType rollType;
-    private Integer count;
+
+    @Column(name = "amount")
+    private Integer amount;
 }
