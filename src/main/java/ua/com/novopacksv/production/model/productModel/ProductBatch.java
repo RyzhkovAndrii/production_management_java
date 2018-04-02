@@ -8,7 +8,8 @@ import ua.com.novopacksv.production.model.BaseEntity;
 
 import javax.persistence.*;
 import javax.persistence.Table;
-import java.util.Date;
+import java.time.LocalDate;
+
 
 @Data
 @NoArgsConstructor
@@ -23,8 +24,8 @@ public class ProductBatch extends BaseEntity {
     private ProductType productType;
 
     @Column(name = "creation_date")
-    private Date creationDate;
+    private LocalDate creationDate;
 
     @Column(name = "amount")
-    private Double amount;
+    private Integer amount;
 }

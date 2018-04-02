@@ -8,7 +8,7 @@ import ua.com.novopacksv.production.model.BaseEntity;
 
 import javax.persistence.*;
 import javax.persistence.Table;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -23,10 +23,10 @@ public class RollBatch extends BaseEntity {
     private RollType rollType;
 
     @Column(name = "creation_date")
-    private Date creationDate;
+    private LocalDate creationDate;
 
     @Column(name = "ready_to_use_date")
-    private Date readyToUseDate;
+    private LocalDate readyToUseDate;
 
     @Column(name = "amount")
     private Integer amount;

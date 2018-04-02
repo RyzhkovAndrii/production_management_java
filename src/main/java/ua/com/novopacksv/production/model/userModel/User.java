@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import ua.com.novopacksv.production.model.BaseEntity;
-import ua.com.novopacksv.production.model.userModel.Role;
 
 import javax.persistence.*;
 import javax.persistence.Table;

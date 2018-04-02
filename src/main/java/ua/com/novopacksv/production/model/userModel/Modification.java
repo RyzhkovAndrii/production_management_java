@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import ua.com.novopacksv.production.model.BaseEntity;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -17,12 +17,12 @@ import java.util.Date;
 @javax.persistence.Table(name = "modification")
 public class Modification extends BaseEntity {
 
-    @OneToOne
+    @ManyToOne
     @PrimaryKeyJoinColumn
     private User user;
 
     @Column(name = "modification_date")
-    private Date modificationDate;
+    private LocalDateTime modificationDate;
 
     @Column(name = "table_type")
     @Enumerated(EnumType.STRING)
