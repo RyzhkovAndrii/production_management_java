@@ -16,6 +16,6 @@ public class UserResponse extends BaseEntityResponse {
 
     private String lastName;
 
-    private List<String> roleNames;
+    private List<String> roleNames; // todo /user/{id}/roles ???
 
 }
