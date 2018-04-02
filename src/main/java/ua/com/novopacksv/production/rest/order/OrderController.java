@@ -6,7 +6,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.com.novopacksv.production.dto.order.*;
-import ua.com.novopacksv.production.model.OrderItem;
 import ua.com.novopacksv.production.service.order.OrderService;
 import ua.com.novopacksv.production.converter.ModelConversionService;
 
@@ -66,13 +65,15 @@ public class OrderController {
     }
 
     @PutMapping("/{orderId}/order-items/{orderItemId}/")
-    public ResponseEntity<Void> addOrderItemToOrder(@PathVariable Long orderId, @PathVariable Long orderItemId) {
+    public ResponseEntity<Void> addOrderItemToOrder(@PathVariable("orderId") Long orderId,
+                                                    @PathVariable("orderItemId") Long orderItemId) {
         orderService.addOrderItemToOrder(orderId, orderItemId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{orderId}/order-items/{orderItemId}/")
-    public ResponseEntity<Void> removeOrderItemFromOrder(@PathVariable Long orderId, @PathVariable Long orderItemId) {
+    public ResponseEntity<Void> removeOrderItemFromOrder(@PathVariable("orderId") Long orderId,
+                                                         @PathVariable("orderItemId") Long orderItemId) {
         orderService.removeOrderItemFromOrder(orderId, orderItemId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
