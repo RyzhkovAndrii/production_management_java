@@ -30,7 +30,7 @@ public class ClientController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ClientResponse> getById(@PathVariable Long id) {
-        Client client = clientService.getById(id);
+        Client client = clientService.findById(id);
         ClientResponse response = conversionService.convert(client, ClientResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

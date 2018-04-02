@@ -22,7 +22,7 @@ public class OrderItemController {
 
     @GetMapping("/{id}")
     public ResponseEntity<OrderItemResponse> getById(@PathVariable Long id) {
-        OrderItem orderItem = orderItemService.getById(id);
+        OrderItem orderItem = orderItemService.findById(id);
         OrderItemResponse response = conversionService.convert(orderItem, OrderItemResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
