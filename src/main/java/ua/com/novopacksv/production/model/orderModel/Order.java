@@ -17,7 +17,7 @@ import java.util.List;
 @Table(name = "order")
 public class Order extends BaseEntity {
 
-    @OneToOne
+    @ManyToOne
     @PrimaryKeyJoinColumn
     private Client client;
 
