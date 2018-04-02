@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ua.com.novopacksv.production.converter.ModelConversionService;
 import ua.com.novopacksv.production.dto.order.ClientRequest;
 import ua.com.novopacksv.production.dto.order.ClientResponse;
+import ua.com.novopacksv.production.model.orderModel.Client;
 import ua.com.novopacksv.production.service.order.ClientService;
 
 import java.util.List;
