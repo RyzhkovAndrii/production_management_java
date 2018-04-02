@@ -1,12 +1,12 @@
 package ua.com.novopacksv.production.service;
 
-import java.util.Collection;
+import java.util.List;
 
 public interface BaseEntityService<T extends BaseEntity> {
 
     T findById(Long id);
 
-    Collection<T> findAll();
+    List<T> findAll();
 
     T save(T t);
 
