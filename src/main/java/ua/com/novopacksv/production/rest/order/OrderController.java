@@ -5,10 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ua.com.novopacksv.production.dto.order.ClientRequest;
-import ua.com.novopacksv.production.dto.order.ClientResponse;
-import ua.com.novopacksv.production.dto.order.OrderRequest;
-import ua.com.novopacksv.production.dto.order.OrderResponse;
+import ua.com.novopacksv.production.dto.order.*;
+import ua.com.novopacksv.production.model.OrderItem;
 import ua.com.novopacksv.production.service.order.OrderService;
 import ua.com.novopacksv.production.converter.ModelConversionService;
 
@@ -56,6 +54,26 @@ public class OrderController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         orderService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/order-items/")
+    public ResponseEntity<List<OrderItemResponse>> getOrderItemsByOrderId(@PathVariable Long id) {
+        Order order = orderService.findById(id);
+        List<OrderItem> orderItems = order.getOrderItems();
+        List<OrderItemResponse> response = conversionService.convert(orderItems, OrderItemResponse.class);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PutMapping("/{orderId}/order-items/{orderItemId}/")
+    public ResponseEntity<Void> addOrderItemToOrder(@PathVariable Long orderId, @PathVariable Long orderItemId) {
+        orderService.addOrderItemToOrder(orderId, orderItemId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{orderId}/order-items/{orderItemId}/")
+    public ResponseEntity<Void> removeOrderItemFromOrder(@PathVariable Long orderId, @PathVariable Long orderItemId) {
+        orderService.removeOrderItemFromOrder(orderId, orderItemId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
