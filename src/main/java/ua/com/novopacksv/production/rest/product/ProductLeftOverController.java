@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ua.com.novopacksv.production.service.product.ProductLeftOverService;
 
 @RestController
 @RequestMapping(value = "/product-leftovers", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
