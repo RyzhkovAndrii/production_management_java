@@ -36,7 +36,7 @@ public class OrderItemController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity update(@PathVariable Long id, @RequestBody OrderItemRequest request) {
+    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody OrderItemRequest request) {
         OrderItem orderItem = conversionService.convert(request, OrderItem.class);
         orderItem.setId(id);
         orderItemService.update(orderItem);

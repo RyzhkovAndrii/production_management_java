@@ -44,7 +44,7 @@ public class ClientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity update(@PathVariable Long id, @RequestBody ClientRequest request) {
+    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody ClientRequest request) {
         Client client = conversionService.convert(request, Client.class);
         client.setId(id);
         clientService.update(client);
