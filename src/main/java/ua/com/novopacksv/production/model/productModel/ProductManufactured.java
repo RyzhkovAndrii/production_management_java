@@ -1,4 +1,6 @@
 package ua.com.novopacksv.production.model.productModel;
 
-public class ProductManufactured {
+import ua.com.novopacksv.production.model.BaseEntity;
+
+public class ProductManufactured extends BaseEntity{
 }
