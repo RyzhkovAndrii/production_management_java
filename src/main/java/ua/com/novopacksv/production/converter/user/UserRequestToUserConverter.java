@@ -14,15 +14,15 @@ public class UserRequestToUserConverter implements Converter<UserRequest, User> 
 
     @Override
     public User convert(UserRequest source) {
+        List<Role> roles = source.getRoles()
+                .stream()
+                .map(Role::valueOf)
+                .collect(Collectors.toList());
         User result = new User();
         result.setUserName(source.getUserName());
         result.setPassword(source.getPassword());
         result.setFirstName(source.getFirstName());
         result.setLastName(source.getLastName());
-        List<Role> roles = source.getRolesNames()
-                .stream()
-                .map(Role::valueOf)
-                .collect(Collectors.toList());
         result.setRoles(roles);
         return result;
     }

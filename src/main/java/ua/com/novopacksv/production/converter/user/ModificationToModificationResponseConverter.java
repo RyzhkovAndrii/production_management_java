@@ -20,7 +20,7 @@ public class ModificationToModificationResponseConverter implements Converter<Mo
         result.setId(source.getId());
         result.setUserId(source.getUser().getId());
         result.setModificationDate(modificationDate);
-        result.setTableTypeName(source.getTableType().name());
+        result.setTable(source.getTableType().name());
         return result;
     }
 
