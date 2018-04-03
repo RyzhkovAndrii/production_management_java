@@ -17,6 +17,6 @@ public class UserRequest {
 
     private String lastName;
 
-    private List<String> roles; // todo put roles ???
+    private List<String> roles;
 
 }
