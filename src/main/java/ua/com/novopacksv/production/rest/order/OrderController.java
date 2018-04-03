@@ -47,11 +47,12 @@ public class OrderController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody OrderRequest request) {
+    public ResponseEntity<OrderResponse> update(@PathVariable Long id, @RequestBody OrderRequest request) {
         Order order = conversionService.convert(request, Order.class);
         order.setId(id);
-        orderService.update(order);
-        return new ResponseEntity<>(HttpStatus.OK);
+        order = orderService.update(order);
+        OrderResponse response = conversionService.convert(order, OrderResponse.class);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
