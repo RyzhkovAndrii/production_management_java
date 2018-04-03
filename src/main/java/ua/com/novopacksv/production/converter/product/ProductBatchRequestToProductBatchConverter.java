@@ -1,6 +1,7 @@
 package ua.com.novopacksv.production.converter.product;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import ua.com.novopacksv.production.dto.product.ProductBatchRequest;
@@ -17,13 +18,15 @@ public class ProductBatchRequestToProductBatchConverter implements Converter<Pro
     @Autowired
     private ProductTypeService productTypeService;
 
+    @Autowired
+    private ConversionService conversionService;
+
     @Override
     public ProductBatch convert(ProductBatchRequest source) {
-        ProductBatch result = new ProductBatch();
         ProductType productType = productTypeService.findById(source.getProductTypeId());
+        LocalDate creationDate = conversionService.convert(source.getCreationDate(), LocalDate.class);
+        ProductBatch result = new ProductBatch();
         result.setProductType(productType);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate creationDate = LocalDate.parse(source.getCreationDate(), formatter);
         result.setCreationDate(creationDate);
         result.setAmount(source.getAmount());
         return result;

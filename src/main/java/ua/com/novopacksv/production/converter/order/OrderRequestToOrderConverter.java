@@ -1,6 +1,7 @@
 package ua.com.novopacksv.production.converter.order;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import ua.com.novopacksv.production.dto.order.OrderRequest;
@@ -17,14 +18,16 @@ public class OrderRequestToOrderConverter implements Converter<OrderRequest, Ord
     @Autowired
     private ClientService clientService;
 
+    @Autowired
+    private ConversionService conversionService;
+
     @Override
     public Order convert(OrderRequest source) {
         Order result = new Order();
         Client client = clientService.findById(source.getClientId());
+        LocalDate deliveryDate = conversionService.convert(source.getDeliveryDate(), LocalDate.class);
         result.setClient(client);
         result.setIsImportant(source.getIsImportant());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate deliveryDate = LocalDate.parse(source.getDeliveryDate(), formatter);
         result.setDeliveryDate(deliveryDate);
         return result;
     }

@@ -1,6 +1,7 @@
 package ua.com.novopacksv.production.converter.roll;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import ua.com.novopacksv.production.dto.roll.RollBatchRequest;
@@ -17,12 +18,14 @@ public class RollBatchRequestToRollBatchConverter implements Converter<RollBatch
     @Autowired
     private RollTypeService rollTypeService;
 
+    @Autowired
+    private ConversionService conversionService;
+
     @Override
     public RollBatch convert(RollBatchRequest source) {
-        RollBatch result = new RollBatch();
         RollType rollType = rollTypeService.findById(source.getRollTypeId());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate creationDate = LocalDate.parse(source.getCreationDate(), formatter);
+        LocalDate creationDate = conversionService.convert(source.getCreationDate(), LocalDate.class);
+        RollBatch result = new RollBatch();
         result.setRollType(rollType);
         result.setCreationDate(creationDate);
         result.setAmount(source.getAmount());
