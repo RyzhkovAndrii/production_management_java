@@ -14,6 +14,7 @@ public class ModificationToModificationResponseConverter implements Converter<Mo
     public ModificationResponse convert(Modification source) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         ModificationResponse result = new ModificationResponse();
+        result.setId(source.getId());
         result.setUserId(source.getUser().getId());
         result.setModificationDate(source.getModificationDate().format(formatter));
         result.setTableTypeName(source.getTableType().name());

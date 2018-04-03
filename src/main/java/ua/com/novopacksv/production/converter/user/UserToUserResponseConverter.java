@@ -13,14 +13,15 @@ public class UserToUserResponseConverter implements Converter<User, UserResponse
 
     @Override
     public UserResponse convert(User source) {
-        UserResponse result = new UserResponse();
-        result.setUserName(source.getUserName());
-        result.setFirstName(source.getFirstName());
-        result.setLastName(source.getLastName());
         List<String> roleNames = source.getRoles()
                 .stream()
                 .map(Enum::name)
                 .collect(Collectors.toList());
+        UserResponse result = new UserResponse();
+        result.setId(source.getId());
+        result.setUserName(source.getUserName());
+        result.setFirstName(source.getFirstName());
+        result.setLastName(source.getLastName());
         result.setRoleNames(roleNames);
         return result;
     }

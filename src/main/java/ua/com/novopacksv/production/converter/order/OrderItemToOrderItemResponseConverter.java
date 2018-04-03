@@ -11,6 +11,7 @@ public class OrderItemToOrderItemResponseConverter implements Converter<OrderIte
     @Override
     public OrderItemResponse convert(OrderItem source) {
         OrderItemResponse result = new OrderItemResponse();
+        result.setId(source.getId());
         result.setProductId(source.getProduct().getId());
         result.setAmount(source.getAmount());
         result.setOrderId(source.getOrder().getId());

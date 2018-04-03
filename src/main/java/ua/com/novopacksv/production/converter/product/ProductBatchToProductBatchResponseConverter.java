@@ -12,9 +12,10 @@ public class ProductBatchToProductBatchResponseConverter implements Converter<Pr
 
     @Override
     public ProductBatchResponse convert(ProductBatch source) {
-        ProductBatchResponse result = new ProductBatchResponse();
-        result.setProductTypeId(source.getProductType().getId());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        ProductBatchResponse result = new ProductBatchResponse();
+        result.setId(source.getId());
+        result.setProductTypeId(source.getProductType().getId());
         result.setCreationDate(source.getCreationDate().format(formatter));
         result.setAmount(source.getAmount());
         return result;

@@ -11,6 +11,7 @@ public class ProductTypeToProductTypeResponseConverter implements Converter<Prod
     @Override
     public ProductTypeResponse convert(ProductType source) {
         ProductTypeResponse result = new ProductTypeResponse();
+        result.setId(source.getId());
         result.setName(source.getName());
         result.setWeight(source.getWeight());
         result.setColorCode(source.getColorCode());

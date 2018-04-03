@@ -13,6 +13,7 @@ public class OrderToOrderResponseConverter implements Converter<Order, OrderResp
     @Override
     public OrderResponse convert(Order source) {
         OrderResponse result = new OrderResponse();
+        result.setId(source.getId());
         result.setClientId(source.getClient().getId());
         result.setIsImportant(source.getIsImportant());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");

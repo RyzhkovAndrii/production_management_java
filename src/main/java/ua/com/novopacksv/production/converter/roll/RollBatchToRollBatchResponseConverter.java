@@ -14,6 +14,7 @@ public class RollBatchToRollBatchResponseConverter implements Converter<RollBatc
     public RollBatchResponse convert(RollBatch source) {
         RollBatchResponse result = new RollBatchResponse();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        result.setId(source.getId());
         result.setRollTypeId(source.getRollType().getId());
         result.setCreationDate(source.getCreationDate().format(formatter));
         result.setReadyToUseDate(source.getReadyToUseDate().format(formatter));
