@@ -32,4 +32,8 @@ public class ProductBatch extends BaseEntity {
     @ManyToOne
     @PrimaryKeyJoinColumn
     private ProductSold productSold;
+
+    @ManyToOne
+    @PrimaryKeyJoinColumn
+    private ProductLeftOver productLeftOver;
 }
