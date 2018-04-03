@@ -8,7 +8,7 @@ import ua.com.novopacksv.production.dto.BaseEntityResponse;
 @Setter
 public class ModificationResponse extends BaseEntityResponse {
 
-    private String userId;
+    private Long userId;
 
     private String modificationDate;
 

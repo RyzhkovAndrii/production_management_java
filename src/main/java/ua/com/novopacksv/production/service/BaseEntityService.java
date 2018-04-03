@@ -1,5 +1,7 @@
 package ua.com.novopacksv.production.service;
 
+import ua.com.novopacksv.production.model.BaseEntity;
+
 import java.util.List;
 
 public interface BaseEntityService<T extends BaseEntity> {

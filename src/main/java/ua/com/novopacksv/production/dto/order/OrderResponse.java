@@ -14,4 +14,6 @@ public class OrderResponse extends BaseEntityResponse {
 
     private String deliveryDate;
 
+    // todo add create date
+
 }

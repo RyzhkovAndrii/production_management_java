@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -19,8 +19,8 @@ public class ModelConversionServiceSpringImpl implements ModelConversionService 
     }
 
     @Override
-    public <T> Collection<T> convert(Collection<?> collection, Class<T> type) {
-        return collection.stream()
+    public <T> List<T> convert(List<?> list, Class<T> type) {
+        return list.stream()
                 .map(element -> convert(element, type))
                 .collect(Collectors.toList());
     }
