@@ -5,9 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ua.com.novopacksv.production.dto.order.*;
-import ua.com.novopacksv.production.service.order.OrderService;
 import ua.com.novopacksv.production.converter.ModelConversionService;
+import ua.com.novopacksv.production.dto.order.OrderItemResponse;
+import ua.com.novopacksv.production.dto.order.OrderRequest;
+import ua.com.novopacksv.production.dto.order.OrderResponse;
+import ua.com.novopacksv.production.model.orderModel.Order;
+import ua.com.novopacksv.production.model.orderModel.OrderItem;
+import ua.com.novopacksv.production.service.order.OrderService;
 
 import java.util.List;
 

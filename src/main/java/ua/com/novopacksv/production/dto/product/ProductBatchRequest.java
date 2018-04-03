@@ -11,6 +11,6 @@ public class ProductBatchRequest {
 
     private String creationDate;
 
-    private Double amount;
+    private Integer amount;
 
 }

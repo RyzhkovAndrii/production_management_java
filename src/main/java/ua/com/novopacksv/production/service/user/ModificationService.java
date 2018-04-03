@@ -9,4 +9,8 @@ public interface ModificationService extends BaseEntityService<Modification> {
 
     // todo get by table
 
+    // todo method like getLastByTableType()
+
+    // todo create() method which must be called when some data is modified
+
 }
