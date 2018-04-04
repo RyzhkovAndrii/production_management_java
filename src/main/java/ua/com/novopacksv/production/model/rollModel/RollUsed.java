@@ -7,28 +7,24 @@ import lombok.NoArgsConstructor;
 import ua.com.novopacksv.production.model.BaseEntity;
 
 import javax.persistence.*;
-import javax.persistence.Table;
 import java.time.LocalDate;
-import java.util.List;
+
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "roll_batch")
-public class RollBatch extends BaseEntity {
+@Table(name = "roll_used")
+public class RollUsed extends BaseEntity {
 
-    @Column(name = "manufactured_date")
-    private LocalDate manufacturedDate;
+    @Column(name = "used_date")
+    private LocalDate usedDate;
+
+    @Column(name = "used_amount")
+    private Integer usedAmount;
 
     @ManyToOne
     @PrimaryKeyJoinColumn
-    private RollType rollType;
-
-    @Column(name = "manufacture_amount")
-    private Integer manufactureAmount;
-
-    @OneToMany(mappedBy = "rollBatch")
-    private List<RollUsed> rollUsedList;
+    private RollBatch rollBatch;
 }
