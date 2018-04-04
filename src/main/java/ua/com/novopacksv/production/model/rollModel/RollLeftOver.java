@@ -23,4 +23,6 @@ public class RollLeftOver extends BaseEntity {
 
     @Column(name = "amount")
     private Integer amount;
+
+    //TODO I think we can remove this class as useless
 }
