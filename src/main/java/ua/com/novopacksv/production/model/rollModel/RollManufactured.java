@@ -9,22 +9,21 @@ import ua.com.novopacksv.production.model.BaseEntity;
 import javax.persistence.*;
 import java.time.LocalDate;
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "roll_used")
-public class RollUsed extends BaseEntity {
+@Table(name = "roll_manufactured")
+public class RollManufactured extends BaseEntity {
 
-    @Column(name = "used_date")
-    private LocalDate usedDate;
-
-    @Column(name = "used_amount")
-    private Integer usedAmount;
+    @Column(name = "manufactured_date")
+    private LocalDate manufacturedDate;
 
     @ManyToOne
     @PrimaryKeyJoinColumn
-    private RollBatch rollBatch;
+    private RollType rollType;
+
+    @Column(name = "ready_to_use")
+    private Boolean readyToUse;
 }
