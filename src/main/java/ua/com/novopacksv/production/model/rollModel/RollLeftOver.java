@@ -21,7 +21,7 @@ public class RollLeftOver extends BaseEntity {
     @Column(name = "date")
     private LocalDate date;
 
-    @ManyToOne
+    @OneToOne
     @PrimaryKeyJoinColumn
     private RollType rollType;
 
