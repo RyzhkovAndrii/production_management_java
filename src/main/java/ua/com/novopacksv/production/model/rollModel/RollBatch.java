@@ -8,8 +8,6 @@ import ua.com.novopacksv.production.model.BaseEntity;
 
 import javax.persistence.*;
 import javax.persistence.Table;
-import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -19,16 +17,16 @@ import java.util.List;
 @Table(name = "roll_batch")
 public class RollBatch extends BaseEntity {
 
-    @Column(name = "manufactured_date")
-    private LocalDate manufacturedDate;
-
-    @ManyToOne
+    @OneToOne
     @PrimaryKeyJoinColumn
-    private RollType rollType;
+    private RollManufactured rollManufactured;
 
     @Column(name = "manufacture_amount")
     private Integer manufactureAmount;
 
-    @OneToMany(mappedBy = "rollBatch")
-    private List<RollUsed> rollUsedList;
+    @Column(name = "used_amount")
+    private Integer usedAmount;
+
+    @Column(name = "left_over_amount")
+    private Integer leftOverAmount;
 }
