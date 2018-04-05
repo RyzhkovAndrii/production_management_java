@@ -18,6 +18,9 @@ import javax.persistence.Table;
 @Table(name = "roll_type")
 public class RollType extends BaseEntity {
 
+    @Column(name = "name")
+    private String name;
+
     @Column(name = "thickness")
     private Double thickness;
 
