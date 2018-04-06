@@ -15,14 +15,14 @@ public class RollBatchToRollBatchResponseConverter implements Converter<RollBatc
 
     @Override
     public RollBatchResponse convert(RollBatch source) {
-        String creationDate = conversionService.convert(source.getCreationDate(), String.class);
-        String readyToUseDate = conversionService.convert(source.getReadyToUseDate(), String.class);
+        String dateManufactured = conversionService
+                .convert(source.getRollManufactured().getManufacturedDate(), String.class);
         RollBatchResponse result = new RollBatchResponse();
-        result.setId(source.getId());
-        result.setRollTypeId(source.getRollType().getId());
-        result.setCreationDate(creationDate);
-        result.setReadyToUseDate(readyToUseDate);
-        result.setAmount(source.getAmount());
+        result.setDateManufactured(dateManufactured);
+        result.setRollTypeId(source.getRollManufactured().getRollType().getId());
+        result.setManufacturedAmount(source.getManufactureAmount());
+        result.setUsedAmount(source.getUsedAmount());
+        result.setLeftOverAmount(source.getLeftOverAmount());
         return result;
     }
 
