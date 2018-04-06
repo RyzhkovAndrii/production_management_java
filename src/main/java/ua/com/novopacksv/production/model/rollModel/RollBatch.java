@@ -8,7 +8,6 @@ import ua.com.novopacksv.production.model.BaseEntity;
 
 import javax.persistence.*;
 import javax.persistence.Table;
-import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -20,14 +19,14 @@ public class RollBatch extends BaseEntity {
 
     @OneToOne
     @PrimaryKeyJoinColumn
-    private RollType rollType;
+    private RollManufactured rollManufactured;
 
-    @Column(name = "creation_date")
-    private LocalDate creationDate;
+    @Column(name = "manufacture_amount")
+    private Integer manufactureAmount;
 
-    @Column(name = "ready_to_use_date")
-    private LocalDate readyToUseDate;
+    @Column(name = "used_amount")
+    private Integer usedAmount;
 
-    @Column(name = "amount")
-    private Integer amount;
+    @Column(name = "left_over_amount")
+    private Integer leftOverAmount;
 }

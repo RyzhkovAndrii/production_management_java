@@ -7,24 +7,29 @@ import lombok.NoArgsConstructor;
 import ua.com.novopacksv.production.model.BaseEntity;
 
 import javax.persistence.*;
-import javax.persistence.Table;
 import java.time.LocalDate;
+
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "roll_left_over")
-public class RollLeftOver extends BaseEntity {
+@Table(name = "roll_operation")
+public class RollOperation extends BaseEntity {
 
-    @Column(name = "date")
-    private LocalDate date;
+    @Column(name = "operation_date")
+    private LocalDate operationDate;
 
-    @OneToOne
+    @ManyToOne
     @PrimaryKeyJoinColumn
-    private RollType rollType;
+    private RollManufactured rollManufactured;
 
-    @Column(name = "amount")
-    private Integer amount;
+    @Column(name = "operation_type")
+    @Enumerated(EnumType.STRING)
+    private OperationType operationType;
+
+    @Column(name = "roll_amount")
+    private Integer rollAmount;
+
 }

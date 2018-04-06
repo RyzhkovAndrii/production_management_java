@@ -24,4 +24,16 @@ public class ProductBatch extends BaseEntity {
 
     @Column(name = "amount")
     private Integer amount;
+
+    @ManyToOne
+    @PrimaryKeyJoinColumn
+    private ProductManufactured productManufactured;
+
+    @ManyToOne
+    @PrimaryKeyJoinColumn
+    private ProductSold productSold;
+
+    @ManyToOne
+    @PrimaryKeyJoinColumn
+    private ProductLeftOver productLeftOver;
 }

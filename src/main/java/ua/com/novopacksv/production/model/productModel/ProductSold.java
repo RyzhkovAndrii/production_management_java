@@ -6,9 +6,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import ua.com.novopacksv.production.model.BaseEntity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -16,13 +18,12 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "product_left_over")
-public class ProductLeftOver extends BaseEntity {
+@Table(name = "product_sold")
+public class ProductSold extends BaseEntity {
 
-    //LocalDateTime for take all changes up to the midnight (here we point a time for this)
-    @Column(name = "left_date")
-    private LocalDateTime leftDate;
+    @Column(name = "sold_date")
+    private LocalDate soldDate;
 
-    @OneToMany(mappedBy = "productLeftOver")
+    @OneToMany(mappedBy = "productSold")
     private List<ProductBatch> productBatches;
 }

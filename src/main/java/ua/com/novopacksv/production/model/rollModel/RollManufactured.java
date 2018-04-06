@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import ua.com.novopacksv.production.model.BaseEntity;
 
 import javax.persistence.*;
-import javax.persistence.Table;
 import java.time.LocalDate;
 
 @Data
@@ -15,16 +14,16 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "roll_left_over")
-public class RollLeftOver extends BaseEntity {
+@Table(name = "roll_manufactured")
+public class RollManufactured extends BaseEntity {
 
-    @Column(name = "date")
-    private LocalDate date;
+    @Column(name = "manufactured_date")
+    private LocalDate manufacturedDate;
 
-    @OneToOne
+    @ManyToOne
     @PrimaryKeyJoinColumn
     private RollType rollType;
 
-    @Column(name = "amount")
-    private Integer amount;
+    @Column(name = "ready_to_use")
+    private Boolean readyToUse;
 }
