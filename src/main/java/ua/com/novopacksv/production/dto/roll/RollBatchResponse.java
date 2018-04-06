@@ -2,18 +2,19 @@ package ua.com.novopacksv.production.dto.roll;
 
 import lombok.Getter;
 import lombok.Setter;
-import ua.com.novopacksv.production.dto.BaseEntityResponse;
 
 @Getter
 @Setter
-public class RollBatchResponse extends BaseEntityResponse {
+public class RollBatchResponse {
+
+    private String dateManufactured;
 
     private Long rollTypeId;
 
-    private String creationDate;
+    private Integer manufacturedAmount;
 
-    private String readyToUseDate;
+    private Integer usedAmount;
 
-    private Integer amount;
+    private Integer leftOverAmount;
 
 }
