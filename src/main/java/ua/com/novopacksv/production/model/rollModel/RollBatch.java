@@ -21,8 +21,8 @@ public class RollBatch extends BaseEntity {
     @PrimaryKeyJoinColumn
     private RollManufactured rollManufactured;
 
-    @Column(name = "manufacture_amount")
-    private Integer manufactureAmount;
+    @Column(name = "manufactured_amount")
+    private Integer manufacturedAmount;
 
     @Column(name = "used_amount")
     private Integer usedAmount;
