@@ -1,6 +1,5 @@
 package ua.com.novopacksv.production.model.rollModel;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -8,7 +7,6 @@ import ua.com.novopacksv.production.model.BaseEntity;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class RollBatch extends BaseEntity {
 
@@ -18,12 +16,14 @@ public class RollBatch extends BaseEntity {
 
     private Integer usedAmount;
 
-    private Integer leftOverAmount = countLeftOverAmount(manufacturedAmount, usedAmount);
+    private Integer leftOverAmount;
 
-    private Integer countLeftOverAmount(Integer manufacturedAmount, Integer usedAmount){
-        if(usedAmount<= manufacturedAmount){
-            return manufacturedAmount-usedAmount;
-        }
-        return 0;
+    public RollBatch(RollManufactured rollManufactured, Integer manufacturedAmount, Integer usedAmount, Integer leftOverAmount) {
+        this.rollManufactured = rollManufactured;
+        this.manufacturedAmount = manufacturedAmount;
+        this.usedAmount = usedAmount;
+        if(usedAmount<=manufacturedAmount) {
+            this.leftOverAmount = manufacturedAmount - usedAmount;
+        }else this.leftOverAmount = 0;
     }
 }
