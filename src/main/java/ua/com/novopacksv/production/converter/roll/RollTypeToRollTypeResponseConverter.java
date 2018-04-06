@@ -12,6 +12,7 @@ public class RollTypeToRollTypeResponseConverter implements Converter<RollType, 
     public RollTypeResponse convert(RollType source) {
         RollTypeResponse result = new RollTypeResponse();
         result.setId(source.getId());
+        result.setName(source.getName());
         result.setThickness(source.getThickness());
         result.setWeight(source.getWeight());
         result.setColorCode(source.getColorCode());
