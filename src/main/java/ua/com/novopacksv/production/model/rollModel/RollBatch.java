@@ -18,7 +18,7 @@ public class RollBatch extends BaseEntity {
 
     private Integer leftOverAmount;
 
-    public RollBatch(RollManufactured rollManufactured, Integer manufacturedAmount, Integer usedAmount, Integer leftOverAmount) {
+    public RollBatch(RollManufactured rollManufactured, Integer manufacturedAmount, Integer usedAmount) {
         this.rollManufactured = rollManufactured;
         this.manufacturedAmount = manufacturedAmount;
         this.usedAmount = usedAmount;
