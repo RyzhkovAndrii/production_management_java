@@ -25,7 +25,7 @@ public class RollBatchController {
 
     private final ModelConversionService conversionService;
 
-    @GetMapping
+    @GetMapping(params = {"date"})
     public ResponseEntity<List<RollBatchResponse>> findAllByManufacturedDate(
             @RequestParam("date") LocalDate date) {
         List<RollBatch> rollBatches =
@@ -34,7 +34,7 @@ public class RollBatchController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping(params = {"roll_type_id", "from", "to"})
     public ResponseEntity<List<RollBatchResponse>> findAllByRollTypeIdAndManufacturedPeriod(
             @RequestParam("roll_type_id") Long rollTypeId,
             @RequestParam("from") LocalDate fromDate,
@@ -45,7 +45,7 @@ public class RollBatchController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping(params = {"from", "to"})
     public ResponseEntity<List<RollBatchResponse>> findAllByManufacturedPeriod(
             @RequestParam("from") LocalDate fromDate,
             @RequestParam("to") LocalDate toDate) {
@@ -55,7 +55,7 @@ public class RollBatchController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping(params = {"roll_type_id", "date"})
     public ResponseEntity<RollBatchResponse> findByRollTypeIdAndManufacturedDate(
             @RequestParam("roll_type_id") Long rollTypeId,
             @RequestParam("date") LocalDate date) {
