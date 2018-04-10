@@ -18,13 +18,13 @@ import java.time.LocalDate;
 @Table(name = "roll_left_over")
 public class RollLeftOver extends BaseEntity {
 
-    @Column(name = "date")
+    @Column(name = "date", nullable = false)
     private LocalDate date;
 
     @OneToOne
     @PrimaryKeyJoinColumn
     private RollType rollType;
 
-    @Column(name = "amount")
+    @Column(name = "amount", nullable = false)
     private Integer amount;
 }
