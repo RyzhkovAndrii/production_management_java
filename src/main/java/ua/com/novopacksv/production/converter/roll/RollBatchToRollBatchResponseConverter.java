@@ -22,7 +22,7 @@ public class RollBatchToRollBatchResponseConverter implements Converter<RollBatc
         RollBatchResponse result = new RollBatchResponse();
         result.setDateManufactured(dateManufactured);
         result.setRollTypeId(source.getRollManufactured().getRollType().getId());
-        result.setManufacturedAmount(source.getManufactureAmount());
+        result.setManufacturedAmount(source.getManufacturedAmount());
         result.setUsedAmount(source.getUsedAmount());
         result.setLeftOverAmount(source.getLeftOverAmount());
         return result;
