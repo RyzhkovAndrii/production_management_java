@@ -18,15 +18,15 @@ import javax.persistence.Table;
 @Table(name = "roll_type")
 public class RollType extends BaseEntity {
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "thickness")
+    @Column(name = "thickness", nullable = false)
     private Double thickness;
 
-    @Column(name = "weight")
+    @Column(name = "weight", nullable = false)
     private Double weight;
 
-    @Column(name = "color_code")
+    @Column(name = "color_code", nullable = false)
     private String colorCode;
 }

@@ -17,13 +17,13 @@ import java.time.LocalDate;
 @Table(name = "roll_manufactured")
 public class RollManufactured extends BaseEntity {
 
-    @Column(name = "manufactured_date")
+    @Column(name = "manufactured_date", nullable = false)
     private LocalDate manufacturedDate;
 
     @ManyToOne
     @PrimaryKeyJoinColumn
     private RollType rollType;
 
-    @Column(name = "ready_to_use")
+    @Column(name = "ready_to_use", nullable = false)
     private Boolean readyToUse;
 }
