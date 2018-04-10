@@ -1,6 +1,7 @@
 package ua.com.novopacksv.production.converter.roll;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -18,12 +19,15 @@ import java.time.LocalDate;
 public class RollOperationRequestToRollOperationConverter implements Converter<RollOperationRequest, RollOperation> {
 
     @Autowired
+    @Lazy
     private ConversionService conversionService;
 
     @Autowired
+    @Lazy
     private RollTypeService rollTypeService;
 
     @Autowired
+    @Lazy
     private RollManufacturedService rollManufacturedService;
 
     @Override
@@ -32,7 +36,7 @@ public class RollOperationRequestToRollOperationConverter implements Converter<R
         LocalDate manufacturedDate = conversionService.convert(source.getManufacturedDate(), LocalDate.class);
         RollType rollType = rollTypeService.findById(source.getRollTypeId());
         RollManufactured rollManufactured = rollManufacturedService
-                .findByManufacturedDateAndRollType(manufacturedDate, rollType); // todo byDateAndRollTypeID
+                .findByManufacturedDateAndRollType(manufacturedDate, rollType);
         RollOperation result = new RollOperation();
         result.setOperationDate(operationDate);
         result.setRollManufactured(rollManufactured);

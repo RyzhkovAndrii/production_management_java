@@ -1,6 +1,7 @@
 package ua.com.novopacksv.production.converter.roll;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import ua.com.novopacksv.production.model.rollModel.RollBatch;
 public class RollBatchToRollBatchResponseConverter implements Converter<RollBatch, RollBatchResponse> {
 
     @Autowired
+    @Lazy
     private ConversionService conversionService;
 
     @Override
