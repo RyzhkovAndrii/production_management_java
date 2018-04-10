@@ -1,12 +1,11 @@
 package ua.com.novopacksv.production.service.roll;
 
 import ua.com.novopacksv.production.model.rollModel.RollBatch;
-import ua.com.novopacksv.production.service.BaseEntityService;
 
 import java.time.LocalDate;
 import java.util.List;
 
-public interface RollBatchService extends BaseEntityService<RollBatch> {
+public interface RollBatchService {
 
     List<RollBatch> findAllByManufacturedDate(LocalDate date);
 

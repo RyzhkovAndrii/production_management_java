@@ -31,29 +31,4 @@ public class RollBatchServiceImpl implements RollBatchService {
         return null;
     }
 
-    @Override
-    public RollBatch findById(Long id) {
-        return null;
-    }
-
-    @Override
-    public List<RollBatch> findAll() {
-        return null;
-    }
-
-    @Override
-    public RollBatch save(RollBatch rollBatch) {
-        return null;
-    }
-
-    @Override
-    public RollBatch update(RollBatch rollBatch) {
-        return null;
-    }
-
-    @Override
-    public void delete(Long id) {
-
-    }
-
 }
