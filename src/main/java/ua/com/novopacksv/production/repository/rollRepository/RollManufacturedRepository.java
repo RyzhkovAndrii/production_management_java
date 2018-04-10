@@ -16,4 +16,8 @@ public interface RollManufacturedRepository extends JpaRepository <RollManufactu
     List<RollManufactured> findAllByReadyToUseIsTrue();
 
     List<RollManufactured> findAllByRollType(RollType rollType);
+
+    RollManufactured findAllByManufacturedDateAndRollType(LocalDate manufacturedDate, RollType rollType);
+
+    List<RollManufactured> findAllByManufacturedDate(LocalDate manufacturedDate);
 }
