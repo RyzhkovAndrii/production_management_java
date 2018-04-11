@@ -8,7 +8,6 @@ import ua.com.novopacksv.production.model.rollModel.RollType;
 import ua.com.novopacksv.production.repository.rollRepository.RollManufacturedRepository;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Service
 @Transactional
@@ -50,31 +49,6 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
             rollManufacturedRepository.save(rollManufactured);
         }
         return rollManufactured;
-    }
-
-    @Override
-    public RollManufactured findById(Long id) {
-        return null;
-    }
-
-    @Override
-    public List<RollManufactured> findAll() {
-        return null;
-    }
-
-    @Override
-    public RollManufactured save(RollManufactured rollManufactured) {
-        return null;
-    }
-
-    @Override
-    public RollManufactured update(RollManufactured rollManufactured) {
-        return null;
-    }
-
-    @Override
-    public void delete(Long id) {
-
     }
 
 }
