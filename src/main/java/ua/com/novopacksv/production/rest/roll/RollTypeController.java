@@ -1,11 +1,17 @@
 package ua.com.novopacksv.production.rest.roll;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import ua.com.novopacksv.production.service.roll.RollTypeService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import ua.com.novopacksv.production.converter.ModelConversionService;
+import ua.com.novopacksv.production.dto.roll.RollTypeRequest;
+import ua.com.novopacksv.production.dto.roll.RollTypeResponse;
+import ua.com.novopacksv.production.model.rollModel.RollType;
+import ua.com.novopacksv.production.service.roll.RollTypeService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/roll-types", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -15,5 +21,42 @@ public class RollTypeController {
     private final RollTypeService rollTypeService;
 
     private final ModelConversionService conversionService;
+
+    @GetMapping
+    public ResponseEntity<List<RollTypeResponse>> getList() {
+        List<RollType> rollTypes = rollTypeService.findAll();
+        List<RollTypeResponse> response = conversionService.convert(rollTypes, RollTypeResponse.class);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<RollTypeResponse> getById(@PathVariable Long id) {
+        RollType rollType = rollTypeService.findById(id);
+        RollTypeResponse response = conversionService.convert(rollType, RollTypeResponse.class);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<RollTypeResponse> save(@RequestBody RollTypeRequest request) {
+        RollType rollType = conversionService.convert(request, RollType.class);
+        rollType = rollTypeService.save(rollType);
+        RollTypeResponse response = conversionService.convert(rollType, RollTypeResponse.class);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<RollTypeResponse> update(@PathVariable Long id, @RequestBody RollTypeRequest request) {
+        RollType rollType = conversionService.convert(request, RollType.class);
+        rollType.setId(id);
+        rollType = rollTypeService.update(rollType);
+        RollTypeResponse response = conversionService.convert(rollType, RollTypeResponse.class);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        rollTypeService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }

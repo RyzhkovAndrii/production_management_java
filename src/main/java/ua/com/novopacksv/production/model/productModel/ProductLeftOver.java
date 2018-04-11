@@ -8,6 +8,8 @@ import ua.com.novopacksv.production.model.BaseEntity;
 
 import javax.persistence.*;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -17,10 +19,10 @@ import javax.persistence.Table;
 @Table(name = "product_left_over")
 public class ProductLeftOver extends BaseEntity {
 
-    @OneToOne
-    @PrimaryKeyJoinColumn
-    private ProductType productType;
+    //LocalDateTime for take all changes up to the midnight (here we point a time for this)
+    @Column(name = "left_date")
+    private LocalDateTime leftDate;
 
-    @Column(name = "amount")
-    private Integer amount;
+    @OneToMany(mappedBy = "productLeftOver")
+    private List<ProductBatch> productBatches;
 }

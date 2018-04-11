@@ -6,11 +6,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.com.novopacksv.production.converter.ModelConversionService;
-import ua.com.novopacksv.production.dto.order.OrderItemResponse;
 import ua.com.novopacksv.production.dto.order.OrderRequest;
 import ua.com.novopacksv.production.dto.order.OrderResponse;
 import ua.com.novopacksv.production.model.orderModel.Order;
-import ua.com.novopacksv.production.model.orderModel.OrderItem;
 import ua.com.novopacksv.production.service.order.OrderService;
 
 import java.util.List;
@@ -47,38 +45,17 @@ public class OrderController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody OrderRequest request) {
+    public ResponseEntity<OrderResponse> update(@PathVariable Long id, @RequestBody OrderRequest request) {
         Order order = conversionService.convert(request, Order.class);
         order.setId(id);
-        orderService.update(order);
-        return new ResponseEntity<>(HttpStatus.OK);
+        order = orderService.update(order);
+        OrderResponse response = conversionService.convert(order, OrderResponse.class);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         orderService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @GetMapping("/{id}/order-items/")
-    public ResponseEntity<List<OrderItemResponse>> getOrderItemsByOrderId(@PathVariable Long id) {
-        Order order = orderService.findById(id);
-        List<OrderItem> orderItems = order.getOrderItems();
-        List<OrderItemResponse> response = conversionService.convert(orderItems, OrderItemResponse.class);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @PutMapping("/{orderId}/order-items/{orderItemId}/")
-    public ResponseEntity<Void> addOrderItemToOrder(@PathVariable("orderId") Long orderId,
-                                                    @PathVariable("orderItemId") Long orderItemId) {
-        orderService.addOrderItemToOrder(orderId, orderItemId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{orderId}/order-items/{orderItemId}/")
-    public ResponseEntity<Void> removeOrderItemFromOrder(@PathVariable("orderId") Long orderId,
-                                                         @PathVariable("orderItemId") Long orderItemId) {
-        orderService.removeOrderItemFromOrder(orderId, orderItemId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

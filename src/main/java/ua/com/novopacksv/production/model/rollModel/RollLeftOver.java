@@ -8,6 +8,7 @@ import ua.com.novopacksv.production.model.BaseEntity;
 
 import javax.persistence.*;
 import javax.persistence.Table;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -17,10 +18,13 @@ import javax.persistence.Table;
 @Table(name = "roll_left_over")
 public class RollLeftOver extends BaseEntity {
 
+    @Column(name = "date", nullable = false)
+    private LocalDate date;
+
     @OneToOne
     @PrimaryKeyJoinColumn
     private RollType rollType;
 
-    @Column(name = "amount")
+    @Column(name = "amount", nullable = false)
     private Integer amount;
 }

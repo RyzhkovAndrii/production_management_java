@@ -12,7 +12,7 @@ public interface BaseEntityService<T extends BaseEntity> {
 
     T save(T t);
 
-    void update(T t);
+    T update(T t);
 
     void delete(Long id);
 

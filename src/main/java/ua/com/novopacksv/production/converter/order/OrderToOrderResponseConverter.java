@@ -1,6 +1,7 @@
 package ua.com.novopacksv.production.converter.order;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import ua.com.novopacksv.production.model.orderModel.Order;
 public class OrderToOrderResponseConverter implements Converter<Order, OrderResponse> {
 
     @Autowired
+    @Lazy
     private ConversionService conversionService;
 
     @Override

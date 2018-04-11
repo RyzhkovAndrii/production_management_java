@@ -36,11 +36,12 @@ public class OrderItemController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable Long id, @RequestBody OrderItemRequest request) {
+    public ResponseEntity<OrderItemResponse> update(@PathVariable Long id, @RequestBody OrderItemRequest request) {
         OrderItem orderItem = conversionService.convert(request, OrderItem.class);
         orderItem.setId(id);
-        orderItemService.update(orderItem);
-        return new ResponseEntity<>(HttpStatus.OK);
+        orderItem = orderItemService.update(orderItem);
+        OrderItemResponse response = conversionService.convert(orderItem, OrderItemResponse.class);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }

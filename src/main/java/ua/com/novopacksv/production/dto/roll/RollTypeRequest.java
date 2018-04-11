@@ -7,6 +7,8 @@ import lombok.Setter;
 @Setter
 public class RollTypeRequest {
 
+    private String name;
+
     private Double thickness;
 
     private Double weight;

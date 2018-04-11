@@ -12,6 +12,6 @@ public class ModificationResponse extends BaseEntityResponse {
 
     private String modificationDate;
 
-    private String tableTypeName;
+    private String table;
 
 }

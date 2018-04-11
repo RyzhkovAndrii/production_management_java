@@ -1,6 +1,7 @@
 package ua.com.novopacksv.production.converter.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import ua.com.novopacksv.production.model.userModel.Modification;
 public class ModificationToModificationResponseConverter implements Converter<Modification, ModificationResponse> {
 
     @Autowired
+    @Lazy
     private ConversionService conversionService;
 
     @Override
@@ -20,7 +22,7 @@ public class ModificationToModificationResponseConverter implements Converter<Mo
         result.setId(source.getId());
         result.setUserId(source.getUser().getId());
         result.setModificationDate(modificationDate);
-        result.setTableTypeName(source.getTableType().name());
+        result.setTable(source.getTableType().name());
         return result;
     }
 
