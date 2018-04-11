@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @Table(name = "roll_type")
 public class RollType extends BaseEntity {
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
     @Column(name = "thickness", nullable = false)
