@@ -47,6 +47,7 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
             rollManufactured.setManufacturedDate(manufacturedDate);
             rollManufactured.setRollType(rollType);
             rollManufactured.setReadyToUse(isRollReadyToUse(manufacturedDate));
+            rollManufacturedRepository.save(rollManufactured);
         }
         return rollManufactured;
     }
