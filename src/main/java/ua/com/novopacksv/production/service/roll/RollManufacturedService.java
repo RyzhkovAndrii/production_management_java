@@ -11,4 +11,8 @@ public interface RollManufacturedService {
 
     RollManufactured findByManufacturedDateAndRollTypeOrCreateNew(LocalDate manufacturedDate, RollType rollType);
 
+    Integer getManufacturedRollAmount(RollManufactured rollManufactured);
+
+    Integer getUsedRollAmount(RollManufactured rollManufactured);
+
 }
