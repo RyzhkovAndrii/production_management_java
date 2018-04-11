@@ -1,0 +1,37 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+   http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="1" author="pryadilnikova@gmail.com">
+        <addForeignKeyConstraint baseTableName="roll_operation"
+                                 baseColumnNames="roll_manufactured_id"
+                                 constraintName="fk_roll_operation_roll_manufactured"
+                                 onUpdate="CASCADE"
+                                 onDelete="CASCADE"
+                                 referencedTableName="roll_manufactured"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="2" author="pryadilnikova@gmail.com">
+        <addForeignKeyConstraint baseTableName="roll_manufactured"
+                                 baseColumnNames="roll_type_id"
+                                 constraintName="fk_roll_manufactured_role_type"
+                                 onUpdate="CASCADE"
+                                 onDelete="CASCADE"
+                                 referencedTableName="roll_type"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="3" author="pryadilnikova@gmail.com">
+        <addForeignKeyConstraint baseTableName="roll_left_over"
+                                 baseColumnNames="roll_type_id"
+                                 constraintName="fk_roll_left_over_roll_type"
+                                 onUpdate="CASCADE"
+                                 onDelete="CASCADE"
+                                 referencedTableName="roll_type"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>
