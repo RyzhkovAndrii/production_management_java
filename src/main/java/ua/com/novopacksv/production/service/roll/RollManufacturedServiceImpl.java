@@ -39,7 +39,7 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
     }
 
     @Override
-    public RollManufactured findByManufacturedDateAndRollType(LocalDate manufacturedDate, RollType rollType) {
+    public RollManufactured findByManufacturedDateAndRollTypeOrCreateNew(LocalDate manufacturedDate, RollType rollType) {
         RollManufactured rollManufactured = rollManufacturedRepository
                 .findAllByManufacturedDateAndRollType(manufacturedDate, rollType);
         if (rollManufactured == null) {

@@ -10,6 +10,6 @@ import java.time.LocalDate;
 @Service
 public interface RollManufacturedService extends BaseEntityService<RollManufactured> {
 
-    RollManufactured findByManufacturedDateAndRollType(LocalDate manufacturedDate, RollType rollType);
+    RollManufactured findByManufacturedDateAndRollTypeOrCreateNew(LocalDate manufacturedDate, RollType rollType);
 
 }
