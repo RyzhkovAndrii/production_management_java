@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class RollBatch{
+public class RollBatch {
 
     private RollManufactured rollManufactured;
 
