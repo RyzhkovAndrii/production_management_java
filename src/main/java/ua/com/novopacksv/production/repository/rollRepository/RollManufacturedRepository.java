@@ -7,6 +7,7 @@ import ua.com.novopacksv.production.model.rollModel.RollType;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RollManufacturedRepository extends JpaRepository <RollManufactured, Long> {
@@ -17,7 +18,7 @@ public interface RollManufacturedRepository extends JpaRepository <RollManufactu
 
     List<RollManufactured> findAllByRollType(RollType rollType);
 
-    RollManufactured findAllByManufacturedDateAndRollType(LocalDate manufacturedDate, RollType rollType);
+    Optional<RollManufactured> findByManufacturedDateAndRollType(LocalDate manufacturedDate, RollType rollType);
 
     List<RollManufactured> findAllByManufacturedDate(LocalDate manufacturedDate);
 }
