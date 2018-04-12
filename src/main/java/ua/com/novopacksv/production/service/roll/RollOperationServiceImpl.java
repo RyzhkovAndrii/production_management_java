@@ -17,7 +17,7 @@ import java.util.List;
 public class RollOperationServiceImpl implements RollOperationService {
 
     private final RollOperationRepository rollOperationRepository;
-    private final RollLeftOverService rollLeftOverService;
+    private final RollLeftOverServiceImpl rollLeftOverService;
     private final RollManufacturedService rollManufacturedService;
 
     /*
@@ -51,34 +51,52 @@ public class RollOperationServiceImpl implements RollOperationService {
         return rollOperationRepository.findAll();
     }
 
+    /*
+    Before save method recounts and rewrites rollLeftOver
+     */
     @Override
-    public RollOperation save(RollOperation rollOperation) {
-        return rollOperationSaveCorrect(rollOperation);
+    public RollOperation save(RollOperation rollOperation) throws NegativeRollAmountException {
+        RollManufactured rollManufactured = rollOperation.getRollManufactured();
+        RollLeftOver rollLeftOver = rollLeftOverService
+                .findLastRollLeftOverByRollType(rollManufactured.getRollType());
+        rollLeftOverService.changeRollLeftOverAmount(rollLeftOver,
+                checkOperationOfNegativeAmount(rollManufactured, rollOperation));
+        return rollOperationRepository.save(rollOperation);
     }
 
     @Override
     public RollOperation update(RollOperation rollOperation) {
-        return rollOperationSaveCorrect(rollOperation);
+        RollOperation rollOperationOld = rollOperationRepository.getOne(rollOperation.getId());
+        RollManufactured rollManufactured = rollOperation.getRollManufactured();
+        RollLeftOver rollLeftOver = rollLeftOverService
+                .findLastRollLeftOverByRollType(rollManufactured.getRollType());
+        rollLeftOverService.changeRollLeftOverAmount(rollLeftOver,
+                rollOperation.getRollAmount() - rollOperationOld.getRollAmount());
+        return rollOperationRepository.save(rollOperation);
     }
 
     @Override
     public void delete(Long id) {
+        RollLeftOver rollLeftOver = rollLeftOverService
+                .findLastRollLeftOverByRollType(findById(id).getRollManufactured().getRollType());
+        rollLeftOverService.changeRollLeftOverAmount(rollLeftOver, -findById(id).getRollAmount());
         rollOperationRepository.deleteById(id);
     }
 
-    private RollOperation rollOperationSaveCorrect(RollOperation rollOperation) {
-        RollManufactured rollManufactured = rollOperation.getRollManufactured();
+    private Integer checkOperationOfNegativeAmount(RollManufactured rollManufactured, RollOperation rollOperation)
+            throws NegativeRollAmountException {
         Integer rollManufacturedAmount = rollManufacturedService.getManufacturedRollAmount(rollManufactured);
         Integer rollUsedAmount = rollManufacturedService.getUsedRollAmount(rollManufactured);
+
         if (rollOperation.getOperationType().equals(OperationType.USE)) {
-            if ((rollManufacturedAmount - rollUsedAmount - rollOperation.getRollAmount()) >= 0) {
-                RollLeftOver rollLeftOver = rollLeftOverService
-                        .findByRollTypeIdAndDate(rollManufactured.getRollType().getId(), LocalDate.now());
-                Integer rollLeftOldAmount = rollLeftOver.getAmount();
-                rollLeftOver.setAmount(rollLeftOldAmount - rollOperation.getRollAmount());
-                return rollOperationRepository.save(rollOperation);
-            } else throw new NegativeRollAmountException("Roll's left is negative!");
-        } else
-            return rollOperationRepository.save(rollOperation);
+            Integer resultOfAmount = rollManufacturedAmount - rollUsedAmount - rollOperation.getRollAmount();
+            if (resultOfAmount >= 0) {
+                return -rollOperation.getRollAmount();
+            } else {
+                throw new NegativeRollAmountException("Roll's left is negative!");
+            }
+        } else {
+            return rollOperation.getRollAmount();
+        }
     }
 }

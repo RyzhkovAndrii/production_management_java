@@ -49,7 +49,11 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
 
     @Override
     public void delete(Long id) {
-
     }
 
+    public void changeRollLeftOverAmount(RollLeftOver rollLeftOver, Integer positiveOrNegativeChanges) {
+        Integer oldAmount = rollLeftOver.getAmount();
+        rollLeftOver.setAmount(oldAmount + positiveOrNegativeChanges);
+        update(rollLeftOver);
+    }
 }
