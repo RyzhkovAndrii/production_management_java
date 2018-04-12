@@ -3,6 +3,7 @@ package ua.com.novopacksv.production.service.roll;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.model.rollModel.RollLeftOver;
+import ua.com.novopacksv.production.model.rollModel.RollType;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,6 +19,11 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
 
     @Override
     public RollLeftOver findByRollTypeIdAndDate(Long rollTypeId, LocalDate date) {
+        return null;
+    }
+
+    @Override
+    public RollLeftOver findLastRollLeftOverByRollTypeOrGetNew(RollType rollType) {
         return null;
     }
 
