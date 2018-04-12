@@ -17,7 +17,7 @@ public class RollTypeServiceImpl implements RollTypeService {
     private final RollTypeRepository rollTypeRepository;
 
     @Override
-    public RollType findById(Long id) {
+    public RollType findById(Long id) throws ResourceNotFoundException {
         return rollTypeRepository.findById(id).orElseThrow(() -> {
             String message = String.format("Roll Type whit id = %d not found!", id);
             return new ResourceNotFoundException(message);
