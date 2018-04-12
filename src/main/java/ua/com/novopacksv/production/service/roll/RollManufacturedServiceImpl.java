@@ -61,7 +61,7 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
         return rollManufacturedRepository.findByManufacturedDateAndRollType(manufacturedDate, rollType)
                 .orElseThrow(() -> {
                     String formatDate = conversionService.convert(manufacturedDate, String.class);
-                    String message = String.format("Roll batch whit roll type id = %d" +
+                    String message = String.format("Roll manufactured whit roll type id = %d" +
                             " and manufactured date = %s not found!", rollType.getId(), formatDate);
                     return new ResourceNotFoundException(message);
                 });
