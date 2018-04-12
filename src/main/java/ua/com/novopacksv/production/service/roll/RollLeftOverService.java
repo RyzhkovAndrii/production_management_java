@@ -13,6 +13,6 @@ public interface RollLeftOverService extends BaseEntityService<RollLeftOver> {
 
     RollLeftOver findByRollTypeIdAndDate(Long rollTypeId, LocalDate date);
 
-    RollLeftOver findLastRollLeftOverByRollTypeOrGetNew(RollType rollType);
+    RollLeftOver findLastRollLeftOverByRollType(RollType rollType);
 
 }

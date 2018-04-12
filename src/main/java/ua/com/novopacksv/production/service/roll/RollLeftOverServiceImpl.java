@@ -23,7 +23,7 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
     }
 
     @Override
-    public RollLeftOver findLastRollLeftOverByRollTypeOrGetNew(RollType rollType) {
+    public RollLeftOver findLastRollLeftOverByRollType(RollType rollType) {
         return null;
     }
 
