@@ -42,7 +42,7 @@ public class RollBatchServiceImpl implements RollBatchService {
     public RollBatch findByRollTypeIdAndManufacturedDate(Long rollTypeId, LocalDate date) {
         RollType rollType = rollTypeService.findById(rollTypeId);
         RollManufactured rollManufactured =
-                rollManufacturedService.findByManufacturedDateAndRollTypeOrCreateNew(date, rollType);
+                rollManufacturedService.findByManufacturedDateAndRollType(date, rollType);
         return getByRollManufactured(rollManufactured);
     }
 
