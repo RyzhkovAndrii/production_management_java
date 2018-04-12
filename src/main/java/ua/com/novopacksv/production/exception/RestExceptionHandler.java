@@ -22,4 +22,12 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(NegativeRollAmountException.class)
+    public ResponseEntity<ExceptionResponse> handleNegativeRollAmount(NegativeRollAmountException ex){
+        String message = Optional.of(ex.getMessage()).orElse(ex.getClass().getSimpleName());
+        ExceptionResponse response = new ExceptionResponse();
+        response.setMessage(message);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
 }
