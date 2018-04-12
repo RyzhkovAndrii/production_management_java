@@ -47,33 +47,34 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
             rollManufactured.setManufacturedDate(manufacturedDate);
             rollManufactured.setRollType(rollType);
             rollManufactured.setReadyToUse(isRollReadyToUse(manufacturedDate));
+            rollManufacturedRepository.save(rollManufactured); // TODO need save??? or hibernate save it when save roll operation
         }
         return rollManufactured;
     }
 
     @Override
-    public RollManufactured findById(Long id) {
+    public List<RollManufactured> findAllByManufacturedDate(LocalDate date) {
         return null;
     }
 
     @Override
-    public List<RollManufactured> findAll() {
+    public List<RollManufactured> findAllByManufacturedPeriod(LocalDate fromDate, LocalDate toDate) {
         return null;
     }
 
     @Override
-    public RollManufactured save(RollManufactured rollManufactured) {
+    public List<RollManufactured> findAllByRollTypeIdAndManufacturedPeriod(Long rollTypeId, LocalDate fromDate, LocalDate toDate) {
         return null;
     }
 
     @Override
-    public RollManufactured update(RollManufactured rollManufactured) {
+    public Integer getManufacturedRollAmount(RollManufactured rollManufactured) {
         return null;
     }
 
     @Override
-    public void delete(Long id) {
-
+    public Integer getUsedRollAmount(RollManufactured rollManufactured) {
+        return null;
     }
 
 }
