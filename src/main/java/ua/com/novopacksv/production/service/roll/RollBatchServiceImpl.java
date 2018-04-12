@@ -3,6 +3,7 @@ package ua.com.novopacksv.production.service.roll;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.rollModel.RollBatch;
 import ua.com.novopacksv.production.model.rollModel.RollManufactured;
 import ua.com.novopacksv.production.model.rollModel.RollType;
@@ -39,7 +40,8 @@ public class RollBatchServiceImpl implements RollBatchService {
     }
 
     @Override
-    public RollBatch findByRollTypeIdAndManufacturedDate(Long rollTypeId, LocalDate date) {
+    public RollBatch findByRollTypeIdAndManufacturedDate(Long rollTypeId, LocalDate date)
+            throws ResourceNotFoundException {
         RollType rollType = rollTypeService.findById(rollTypeId);
         RollManufactured rollManufactured =
                 rollManufacturedService.findByManufacturedDateAndRollType(date, rollType);

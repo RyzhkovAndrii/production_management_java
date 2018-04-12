@@ -1,5 +1,6 @@
 package ua.com.novopacksv.production.service.roll;
 
+import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.rollModel.RollBatch;
 
 import java.time.LocalDate;
@@ -13,6 +14,6 @@ public interface RollBatchService {
 
     List<RollBatch> findAllByManufacturedPeriod(LocalDate fromDate, LocalDate toDate);
 
-    RollBatch findByRollTypeIdAndManufacturedDate(Long rollTypeId, LocalDate date);
+    RollBatch findByRollTypeIdAndManufacturedDate(Long rollTypeId, LocalDate date) throws ResourceNotFoundException;
 
 }
