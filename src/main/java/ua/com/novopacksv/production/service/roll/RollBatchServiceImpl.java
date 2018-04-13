@@ -29,8 +29,9 @@ public class RollBatchServiceImpl implements RollBatchService {
     @Override
     public List<RollBatch> findAllByRollTypeIdAndManufacturedPeriod(
             Long rollTypeId, LocalDate fromDate, LocalDate toDate) {
+        RollType rollType = rollTypeService.findById(rollTypeId);
         List<RollManufactured> rollManufacturedList =
-                rollManufacturedService.findAllByRollTypeIdAndManufacturedPeriod(rollTypeId, fromDate, toDate);
+                rollManufacturedService.findAllByManufacturedPeriodAndRollType(fromDate, toDate, rollType);
         return getAllFromRollManufacturedList(rollManufacturedList);
     }
 

@@ -20,7 +20,8 @@ public interface RollManufacturedService {
 
     List<RollManufactured> findAllByManufacturedPeriod(LocalDate fromDate, LocalDate toDate);
 
-    List<RollManufactured> findAllByRollTypeIdAndManufacturedPeriod(Long rollTypeId, LocalDate fromDate, LocalDate toDate);
+    List<RollManufactured> findAllByManufacturedPeriodAndRollType(
+            LocalDate fromDate, LocalDate toDate, RollType rollType);
 
     Integer getManufacturedRollAmount(RollManufactured rollManufactured);
 

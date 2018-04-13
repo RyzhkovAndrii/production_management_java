@@ -79,7 +79,8 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
     }
 
     @Override
-    public List<RollManufactured> findAllByRollTypeIdAndManufacturedPeriod(Long rollTypeId, LocalDate fromDate, LocalDate toDate) {
+    public List<RollManufactured> findAllByManufacturedPeriodAndRollType(
+            LocalDate fromDate, LocalDate toDate, RollType rollType) {
         return null;
     }
 
