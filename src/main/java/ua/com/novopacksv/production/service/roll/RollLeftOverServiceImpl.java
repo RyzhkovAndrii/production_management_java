@@ -28,9 +28,9 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
     @Override
     public List<RollLeftOver> findAllByDate(LocalDate date) {
 
-            return findAll().stream().map((rollLeftOver) -> checkLeftOverOnDate(rollLeftOver, date))
-                    .collect(Collectors.toList());
-        
+        return findAll().stream().map((rollLeftOver) -> checkLeftOverOnDate(rollLeftOver, date))
+                .collect(Collectors.toList());
+
     }
 
     private RollLeftOver checkLeftOverOnDate(RollLeftOver rollLeftOver, LocalDate date) {
