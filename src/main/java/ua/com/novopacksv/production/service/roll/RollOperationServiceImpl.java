@@ -2,6 +2,7 @@ package ua.com.novopacksv.production.service.roll;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.novopacksv.production.model.rollModel.RollManufactured;
 import ua.com.novopacksv.production.model.rollModel.RollOperation;
 
 import java.util.List;
@@ -35,4 +36,13 @@ public class RollOperationServiceImpl implements RollOperationService {
 
     }
 
+    @Override
+    public List<RollOperation> getAllManufacturedOperationsByRollManufactured(RollManufactured rollManufactured) {
+        return null;
+    }
+
+    @Override
+    public List<RollOperation> getAllUsedOperationsByRollManufactured(RollManufactured rollManufactured) {
+        return null;
+    }
 }
