@@ -27,12 +27,10 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
 
     @Override
     public List<RollLeftOver> findAllByDate(LocalDate date) {
-        if (!findAll().isEmpty()) {
+
             return findAll().stream().map((rollLeftOver) -> checkLeftOverOnDate(rollLeftOver, date))
                     .collect(Collectors.toList());
-        } else {
-            throw new ResourceNotFoundException("There are not rolls on this date!");
-        }
+        
     }
 
     private RollLeftOver checkLeftOverOnDate(RollLeftOver rollLeftOver, LocalDate date) {
