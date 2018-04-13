@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.rollModel.RollManufactured;
+import ua.com.novopacksv.production.model.rollModel.RollOperation;
 import ua.com.novopacksv.production.model.rollModel.RollType;
 import ua.com.novopacksv.production.repository.rollRepository.RollManufacturedRepository;
 
@@ -19,21 +20,21 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
 
     private final RollManufacturedRepository rollManufacturedRepository;
 
-    private final Integer rollReadyToUseDaysPeriod = 14; // todo move to madel ???
+    private final RollOperationService rollOperationService;
 
     private final ConversionService conversionService;
 
     private boolean isRollReadyToUse(LocalDate manufacturedDate) {
         LocalDate now = LocalDate.now();
         return manufacturedDate
-                .plusDays(rollReadyToUseDaysPeriod - 1)
+                .plusDays(RollType.READY_TO_USE_DAYS_PERIOD - 1)
                 .isBefore(now);
     }
 
     // todo every day in 00-00
     private void rollsBecomeReadyToUseForNow() { // todo another method name
         LocalDate manufacturedDateWhenRollsBecomeReadyToUseForNow
-                = LocalDate.now().minusDays(rollReadyToUseDaysPeriod);
+                = LocalDate.now().minusDays(RollType.READY_TO_USE_DAYS_PERIOD);
         rollManufacturedRepository
                 .findAllByManufacturedDate(manufacturedDateWhenRollsBecomeReadyToUseForNow) // todo period 7 days
                 .forEach(rollManufactured -> {
@@ -84,12 +85,18 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
 
     @Override
     public Integer getManufacturedRollAmount(RollManufactured rollManufactured) {
-        return null;
+        return rollOperationService.getAllManufacturedOperationsByRollManufactured(rollManufactured)
+                .stream()
+                .mapToInt(RollOperation::getRollAmount)
+                .sum();
     }
 
     @Override
     public Integer getUsedRollAmount(RollManufactured rollManufactured) {
-        return null;
+        return rollOperationService.getAllUsedOperationsByRollManufactured(rollManufactured)
+                .stream()
+                .mapToInt(RollOperation::getRollAmount)
+                .sum();
     }
 
 }
