@@ -30,7 +30,7 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
     private boolean isRollReadyToUse(LocalDate manufacturedDate) {
         LocalDate now = LocalDate.now();
         return manufacturedDate
-                .plusDays(RollType.ROLL_WAITING_PERIOD_IN_DAYS - 1)
+                .plusDays(RollType.ROLL_WAITING_PERIOD_FOR_READY_TO_USE_IN_DAYS - 1)
                 .isBefore(now);
     }
 
@@ -44,7 +44,7 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
 
     private List<RollManufactured> findAllNotHaveReadyToUseStatusButShouldHave() {
         LocalDate manufacturedDateForRollsWhichBecomeReadyToUseForToday
-                = LocalDate.now().minusDays(RollType.ROLL_WAITING_PERIOD_IN_DAYS);
+                = LocalDate.now().minusDays(RollType.ROLL_WAITING_PERIOD_FOR_READY_TO_USE_IN_DAYS);
         return rollManufacturedRepository.findAllByManufacturedDateBetweenAndReadyToUseIsFalse(
                 manufacturedDateForRollsWhichBecomeReadyToUseForToday.minusDays(PERIOD_IN_DAYS_FOR_CHECK_ROLL_READY_TO_USE),
                 manufacturedDateForRollsWhichBecomeReadyToUseForToday);
