@@ -68,7 +68,7 @@ public class RollOperationServiceImpl implements RollOperationService {
         RollLeftOver rollLeftOver = rollLeftOverService
                 .findLastRollLeftOverByRollType(rollManufactured.getRollType());
         rollLeftOverService.getRollLeftOverAmount(rollLeftOver,
-                checkOperationOfNegativeAmount(rollManufactured, rollOperation));
+                checkOperationOfNegativeAmount(rollOperation));
         return rollOperationRepository.save(rollOperation);
     }
 
@@ -104,10 +104,10 @@ public class RollOperationServiceImpl implements RollOperationService {
         return rollOperationRepository.findAllByOperationTypeAndRollManufactured(OperationType.USE, rollManufactured);
     }
 
-    private Integer checkOperationOfNegativeAmount(RollManufactured rollManufactured, RollOperation rollOperation)
+    private Integer checkOperationOfNegativeAmount(RollOperation rollOperation)
             throws NegativeRollAmountException {
-        Integer rollManufacturedAmount = rollManufacturedService.getManufacturedRollAmount(rollManufactured);
-        Integer rollUsedAmount = rollManufacturedService.getUsedRollAmount(rollManufactured);
+        Integer rollManufacturedAmount = rollManufacturedService.getManufacturedRollAmount(rollOperation.getRollManufactured());
+        Integer rollUsedAmount = rollManufacturedService.getUsedRollAmount(rollOperation.getRollManufactured());
 
         if (rollOperation.getOperationType().equals(OperationType.USE)) {
             Integer resultOfAmount = rollManufacturedAmount - rollUsedAmount - rollOperation.getRollAmount();
