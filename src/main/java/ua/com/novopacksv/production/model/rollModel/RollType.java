@@ -18,6 +18,8 @@ import javax.persistence.Table;
 @Table(name = "roll_type")
 public class RollType extends BaseEntity {
 
+    public final static Integer ROLL_WAITING_PERIOD_IN_DAYS = 14;
+
     @Column(name = "name", nullable = false, unique = true)
     private String name;
 
