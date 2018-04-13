@@ -13,6 +13,7 @@ import ua.com.novopacksv.production.repository.rollRepository.RollLeftOverReposi
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -57,20 +58,21 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
         if (rollLeftOver != null) {
             return checkLeftOverOnDate(rollLeftOver, date);
         } else {
-            String message = String.format("RollType with id = %d is not found", rollTypeId);
+            String message = String.format("RollLeftOver with id = %d is not found", rollLeftOver.getId());
             throw new ResourceNotFoundException(message);
         }
     }
 
     @Override
     public RollLeftOver findLastRollLeftOverByRollType(RollType rollType) {
-        RollLeftOver rollLeftOver = rollLeftOverRepository.findByRollType_Id(rollType.getId());
-        if (rollLeftOver != null) {
-            return rollLeftOver;
-        } else {
+        Optional<RollLeftOver> rollLeftOver = Optional.ofNullable(rollLeftOverRepository
+                .findByRollType_Id(rollType.getId()));
+
+        return rollLeftOver.orElseThrow(() ->
+        {
             String message = String.format("RollType with name = %s is not found", rollType.getName());
-            throw new ResourceNotFoundException(message);
-        }
+            return new ResourceNotFoundException(message);
+        });
     }
 
     @Override
