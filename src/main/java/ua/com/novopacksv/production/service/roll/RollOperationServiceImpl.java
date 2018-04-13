@@ -67,7 +67,7 @@ public class RollOperationServiceImpl implements RollOperationService {
         RollManufactured rollManufactured = rollOperation.getRollManufactured();
         RollLeftOver rollLeftOver = rollLeftOverService
                 .findLastRollLeftOverByRollType(rollManufactured.getRollType());
-        rollLeftOverService.changeRollLeftOverAmount(rollLeftOver,
+        rollLeftOverService.getRollLeftOverAmount(rollLeftOver,
                 checkOperationOfNegativeAmount(rollManufactured, rollOperation));
         return rollOperationRepository.save(rollOperation);
     }
@@ -81,7 +81,7 @@ public class RollOperationServiceImpl implements RollOperationService {
         RollManufactured rollManufactured = rollOperation.getRollManufactured();
         RollLeftOver rollLeftOver = rollLeftOverService
                 .findLastRollLeftOverByRollType(rollManufactured.getRollType());
-        rollLeftOverService.changeRollLeftOverAmount(rollLeftOver,
+        rollLeftOverService.getRollLeftOverAmount(rollLeftOver,
                 rollOperation.getRollAmount() - rollOperationOld.getRollAmount());
         return rollOperationRepository.save(rollOperation);
     }
@@ -90,7 +90,7 @@ public class RollOperationServiceImpl implements RollOperationService {
     public void delete(Long id) {
         RollLeftOver rollLeftOver = rollLeftOverService
                 .findLastRollLeftOverByRollType(findById(id).getRollManufactured().getRollType());
-        rollLeftOverService.changeRollLeftOverAmount(rollLeftOver, -findById(id).getRollAmount());
+        rollLeftOverService.getRollLeftOverAmount(rollLeftOver, -findById(id).getRollAmount());
         rollOperationRepository.deleteById(id);
     }
 

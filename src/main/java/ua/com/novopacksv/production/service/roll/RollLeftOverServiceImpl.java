@@ -103,7 +103,7 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
         log.error("RollLeftOver with id = %d is not deleted", id);
     }
 
-    public void changeRollLeftOverAmount(RollLeftOver rollLeftOver, Integer positiveOrNegativeChanges) {
+    public void getRollLeftOverAmount(RollLeftOver rollLeftOver, Integer positiveOrNegativeChanges) {
         Integer oldAmount = rollLeftOver.getAmount();
         rollLeftOver.setAmount(oldAmount + positiveOrNegativeChanges);
         update(rollLeftOver);
