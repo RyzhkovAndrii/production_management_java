@@ -18,7 +18,7 @@ public class RollOperationServiceImpl implements RollOperationService {
 
     private final RollOperationRepository rollOperationRepository;
     private final RollLeftOverServiceImpl rollLeftOverService;
-    private final RollManufacturedService rollManufacturedService;
+    private final RollManufacturedServiceImpl rollManufacturedService;
 
     /*
     Research all operations by RollType for count RollLeftOver
@@ -64,6 +64,9 @@ public class RollOperationServiceImpl implements RollOperationService {
         return rollOperationRepository.save(rollOperation);
     }
 
+    /*
+    Not checked rollOperation if rollOperation.getRollAmount <0, not sure that it is necessary
+     */
     @Override
     public RollOperation update(RollOperation rollOperation) {
         RollOperation rollOperationOld = rollOperationRepository.getOne(rollOperation.getId());

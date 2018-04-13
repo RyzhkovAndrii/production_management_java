@@ -1,6 +1,7 @@
 package ua.com.novopacksv.production.service.roll;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class RollLeftOverServiceImpl implements RollLeftOverService {
 
     private final RollLeftOverRepository rollLeftOverRepository;
@@ -50,13 +52,25 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
     }
 
     @Override
-    public RollLeftOver findByRollTypeIdAndDate(Long rollTypeId, LocalDate date) {
-        return null;
+    public RollLeftOver findByRollTypeIdAndDate(Long rollTypeId, LocalDate date) throws ResourceNotFoundException {
+        RollLeftOver rollLeftOver = rollLeftOverRepository.findByRollType_Id(rollTypeId);
+        if (rollLeftOver != null) {
+            return checkLeftOverOnDate(rollLeftOver, date);
+        } else {
+            String message = String.format("RollType with id = %d is not found", rollTypeId);
+            throw new ResourceNotFoundException(message);
+        }
     }
 
     @Override
     public RollLeftOver findLastRollLeftOverByRollType(RollType rollType) {
-        return null;
+        RollLeftOver rollLeftOver = rollLeftOverRepository.findByRollType_Id(rollType.getId());
+        if (rollLeftOver != null) {
+            return rollLeftOver;
+        } else {
+            String message = String.format("RollType with name = %s is not found", rollType.getName());
+            throw new ResourceNotFoundException(message);
+        }
     }
 
     @Override
@@ -70,21 +84,23 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
 
     @Override
     public List<RollLeftOver> findAll() {
-        return null;
+        return rollLeftOverRepository.findAll();
     }
 
     @Override
     public RollLeftOver save(RollLeftOver rollLeftOver) {
-        return null;
+        return rollLeftOverRepository.save(rollLeftOver);
     }
 
     @Override
     public RollLeftOver update(RollLeftOver rollLeftOver) {
-        return null;
+        return rollLeftOverRepository.save(rollLeftOver);
     }
 
     @Override
     public void delete(Long id) {
+        rollLeftOverRepository.deleteById(id);
+        log.error("RollLeftOver with id = %d is not deleted", id);
     }
 
     public void changeRollLeftOverAmount(RollLeftOver rollLeftOver, Integer positiveOrNegativeChanges) {
