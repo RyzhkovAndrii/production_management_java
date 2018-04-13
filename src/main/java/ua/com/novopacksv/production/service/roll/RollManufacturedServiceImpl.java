@@ -35,7 +35,7 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
     }
 
     @Scheduled(cron = "0 0 0 * * *")
-    private void rollsBecomeReadyToUseForNow() {
+    public void rollsBecomeReadyToUseForNow() {
         findAllNotHaveReadyToUseStatusButShouldHave().forEach(rollManufactured -> {
             rollManufactured.setReadyToUse(true);
             rollManufacturedRepository.save(rollManufactured);
