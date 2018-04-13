@@ -3,6 +3,7 @@ package ua.com.novopacksv.production.repository.rollRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ua.com.novopacksv.production.model.rollModel.OperationType;
+import ua.com.novopacksv.production.model.rollModel.RollManufactured;
 import ua.com.novopacksv.production.model.rollModel.RollOperation;
 import ua.com.novopacksv.production.model.rollModel.RollType;
 
@@ -20,4 +21,5 @@ public interface RollOperationRepository extends JpaRepository <RollOperation, L
 
     List<RollOperation> findAllByRollManufactured_RollType(RollType rollType);
 
+    List<RollOperation> findAllByOperationTypeAndRollManufactured(OperationType operationType, RollManufactured rollManufactured);
 }

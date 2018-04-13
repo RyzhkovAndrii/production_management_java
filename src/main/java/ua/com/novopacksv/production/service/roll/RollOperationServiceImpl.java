@@ -96,12 +96,12 @@ public class RollOperationServiceImpl implements RollOperationService {
 
     @Override
     public List<RollOperation> getAllManufacturedOperationsByRollManufactured(RollManufactured rollManufactured) {
-        return null;
+        return rollOperationRepository.findAllByOperationTypeAndRollManufactured(OperationType.MANUFACTURE, rollManufactured);
     }
 
     @Override
     public List<RollOperation> getAllUsedOperationsByRollManufactured(RollManufactured rollManufactured) {
-        return null;
+        return rollOperationRepository.findAllByOperationTypeAndRollManufactured(OperationType.USE, rollManufactured);
     }
 
     private Integer checkOperationOfNegativeAmount(RollManufactured rollManufactured, RollOperation rollOperation)
