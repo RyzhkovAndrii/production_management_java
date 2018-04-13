@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class RollLeftOverServiceImpl implements RollLeftOverService {
 
     private final RollLeftOverRepository rollLeftOverRepository;
-    private final RollOperationServiceImpl rollOperationService;
+    private RollOperationServiceImpl rollOperationService;
 
     @Override
     public List<RollLeftOver> findAllByDate(LocalDate date) {

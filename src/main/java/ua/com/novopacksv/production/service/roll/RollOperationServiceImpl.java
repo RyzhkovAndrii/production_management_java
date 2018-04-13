@@ -17,8 +17,8 @@ import java.util.List;
 public class RollOperationServiceImpl implements RollOperationService {
 
     private final RollOperationRepository rollOperationRepository;
-    private final RollLeftOverServiceImpl rollLeftOverService;
-    private final RollManufacturedServiceImpl rollManufacturedService;
+    private RollLeftOverServiceImpl rollLeftOverService;
+    private RollManufacturedServiceImpl rollManufacturedService;
 
     /*
     Research all operations by RollType for count RollLeftOver
