@@ -2,6 +2,7 @@ package ua.com.novopacksv.production.service.roll;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
@@ -18,6 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RollManufacturedServiceImpl implements RollManufacturedService {
 
+    private final static Integer PERIOD_IN_DAYS_FOR_CHECK_ROLL_READY_TO_USE = 7;
+
     private final RollManufacturedRepository rollManufacturedRepository;
 
     private final RollOperationService rollOperationService;
@@ -27,20 +30,24 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
     private boolean isRollReadyToUse(LocalDate manufacturedDate) {
         LocalDate now = LocalDate.now();
         return manufacturedDate
-                .plusDays(RollType.READY_TO_USE_DAYS_PERIOD - 1)
+                .plusDays(RollType.ROLL_WAITING_PERIOD_IN_DAYS - 1)
                 .isBefore(now);
     }
 
-    // todo every day in 00-00
-    private void rollsBecomeReadyToUseForNow() { // todo another method name
-        LocalDate manufacturedDateWhenRollsBecomeReadyToUseForNow
-                = LocalDate.now().minusDays(RollType.READY_TO_USE_DAYS_PERIOD);
-        rollManufacturedRepository
-                .findAllByManufacturedDate(manufacturedDateWhenRollsBecomeReadyToUseForNow) // todo period 7 days
-                .forEach(rollManufactured -> {
-                    rollManufactured.setReadyToUse(true);
-                    rollManufacturedRepository.save(rollManufactured);
-                });
+    @Scheduled(cron = "0 0 0 * * *")
+    private void rollsBecomeReadyToUseForNow() {
+        findAllNotHaveReadyToUseStatusButShouldHave().forEach(rollManufactured -> {
+            rollManufactured.setReadyToUse(true);
+            rollManufacturedRepository.save(rollManufactured);
+        });
+    }
+
+    private List<RollManufactured> findAllNotHaveReadyToUseStatusButShouldHave() {
+        LocalDate manufacturedDateForRollsWhichBecomeReadyToUseForToday
+                = LocalDate.now().minusDays(RollType.ROLL_WAITING_PERIOD_IN_DAYS);
+        return rollManufacturedRepository.findAllByManufacturedDateBetweenAndReadyToUseIsFalse(
+                manufacturedDateForRollsWhichBecomeReadyToUseForToday.minusDays(PERIOD_IN_DAYS_FOR_CHECK_ROLL_READY_TO_USE),
+                manufacturedDateForRollsWhichBecomeReadyToUseForToday);
     }
 
     @Override
@@ -70,18 +77,18 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
 
     @Override
     public List<RollManufactured> findAllByManufacturedDate(LocalDate date) {
-        return null;
+        return rollManufacturedRepository.findAllByManufacturedDate(date);
     }
 
     @Override
     public List<RollManufactured> findAllByManufacturedPeriod(LocalDate fromDate, LocalDate toDate) {
-        return null;
+        return rollManufacturedRepository.findAllByManufacturedDateBetween(fromDate, toDate);
     }
 
     @Override
     public List<RollManufactured> findAllByManufacturedPeriodAndRollType(
             LocalDate fromDate, LocalDate toDate, RollType rollType) {
-        return null;
+        return rollManufacturedRepository.findAllByManufacturedDateBetweenAndRollType(fromDate, toDate, rollType);
     }
 
     @Override
