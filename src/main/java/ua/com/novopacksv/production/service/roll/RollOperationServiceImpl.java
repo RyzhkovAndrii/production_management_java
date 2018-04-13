@@ -1,10 +1,10 @@
 package ua.com.novopacksv.production.service.roll;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.com.novopacksv.production.model.rollModel.RollManufactured;
-import ua.com.novopacksv.production.model.rollModel.RollOperation;
 import ua.com.novopacksv.production.exception.NegativeRollAmountException;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.rollModel.*;
@@ -19,8 +19,14 @@ import java.util.List;
 public class RollOperationServiceImpl implements RollOperationService {
 
     private final RollOperationRepository rollOperationRepository;
-    private RollLeftOverServiceImpl rollLeftOverService;
-    private RollManufacturedServiceImpl rollManufacturedService;
+
+    @Autowired
+    @Lazy
+    private RollLeftOverServiceImpl rollLeftOverService; // todo circular dependencies remove
+
+    @Autowired
+    @Lazy
+    private RollManufacturedServiceImpl rollManufacturedService; // todo circular dependencies remove
 
     /*
     Research all operations by RollType for count RollLeftOver
