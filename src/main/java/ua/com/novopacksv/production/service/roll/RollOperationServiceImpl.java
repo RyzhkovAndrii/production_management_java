@@ -78,9 +78,8 @@ public class RollOperationServiceImpl implements RollOperationService {
     @Override
     public RollOperation update(RollOperation rollOperation) {
         RollOperation rollOperationOld = rollOperationRepository.getOne(rollOperation.getId());
-        RollManufactured rollManufactured = rollOperation.getRollManufactured();
         RollLeftOver rollLeftOver = rollLeftOverService
-                .findLastRollLeftOverByRollType(rollManufactured.getRollType());
+                .findLastRollLeftOverByRollType(rollOperation.getRollManufactured().getRollType());
         rollLeftOverService.getRollLeftOverAmount(rollLeftOver,
                 rollOperation.getRollAmount() - rollOperationOld.getRollAmount());
         return rollOperationRepository.save(rollOperation);
