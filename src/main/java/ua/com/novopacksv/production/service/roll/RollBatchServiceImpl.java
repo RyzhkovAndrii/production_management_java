@@ -22,34 +22,35 @@ public class RollBatchServiceImpl implements RollBatchService {
     private final RollManufacturedService rollManufacturedService;
 
     @Override
-    public List<RollBatch> findAllByManufacturedDate(LocalDate date) {
-        return getAllFromRollManufacturedList(rollManufacturedService.findAllByManufacturedDate(date));
-    }
-
-    @Override
-    public List<RollBatch> findAllByRollTypeIdAndManufacturedPeriod(
-            Long rollTypeId, LocalDate fromDate, LocalDate toDate) {
-        RollType rollType = rollTypeService.findById(rollTypeId);
+    public List<RollBatch> createAll(LocalDate manufacturedDate) {
         List<RollManufactured> rollManufacturedList =
-                rollManufacturedService.findAllByManufacturedPeriodAndRollType(fromDate, toDate, rollType);
-        return getAllFromRollManufacturedList(rollManufacturedList);
+                rollManufacturedService.findAllByManufacturedDate(manufacturedDate);
+        return this.createAll(rollManufacturedList);
     }
 
     @Override
-    public List<RollBatch> findAllByManufacturedPeriod(LocalDate fromDate, LocalDate toDate) {
-        return getAllFromRollManufacturedList(rollManufacturedService.findAllByManufacturedPeriod(fromDate, toDate));
+    public List<RollBatch> createAll(Long rollTypeId, LocalDate manufacturedPeriodBegin, LocalDate manufacturedPeriodEnd) {
+        RollType rollType = rollTypeService.findById(rollTypeId);
+        List<RollManufactured> rollManufacturedList = rollManufacturedService
+                .findAllByManufacturedPeriodAndRollType(manufacturedPeriodBegin, manufacturedPeriodEnd, rollType);
+        return createAll(rollManufacturedList);
     }
 
     @Override
-    public RollBatch findByRollTypeIdAndManufacturedDate(Long rollTypeId, LocalDate date)
-            throws ResourceNotFoundException {
+    public List<RollBatch> createAll(LocalDate manufacturedPeriodBegin, LocalDate manufacturedPeriodEnd) {
+        return createAll(rollManufacturedService
+                .findAllByManufacturedPeriod(manufacturedPeriodBegin, manufacturedPeriodEnd));
+    }
+
+    @Override
+    public RollBatch create(Long rollTypeId, LocalDate manufacturedDate) throws ResourceNotFoundException {
         RollType rollType = rollTypeService.findById(rollTypeId);
         RollManufactured rollManufactured =
-                rollManufacturedService.findByManufacturedDateAndRollType(date, rollType);
-        return getByRollManufactured(rollManufactured);
+                rollManufacturedService.findByManufacturedDateAndRollType(manufacturedDate, rollType);
+        return this.create(rollManufactured);
     }
 
-    private RollBatch getByRollManufactured(RollManufactured rollManufactured) {
+    private RollBatch create(RollManufactured rollManufactured) {
         Integer manufacturedAmount = rollManufacturedService.getManufacturedRollAmount(rollManufactured);
         Integer usedAmount = rollManufacturedService.getUsedRollAmount(rollManufactured);
         RollBatch rollBatch = new RollBatch();
@@ -59,9 +60,9 @@ public class RollBatchServiceImpl implements RollBatchService {
         return rollBatch;
     }
 
-    private List<RollBatch> getAllFromRollManufacturedList(List<RollManufactured> rollManufacturedList) {
+    private List<RollBatch> createAll(List<RollManufactured> rollManufacturedList) {
         return rollManufacturedList.stream()
-                .map(this::getByRollManufactured)
+                .map(this::create)
                 .collect(Collectors.toList());
     }
 
