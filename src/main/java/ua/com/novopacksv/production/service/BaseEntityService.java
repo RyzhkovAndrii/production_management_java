@@ -15,6 +15,6 @@ public interface BaseEntityService<T extends BaseEntity> {
 
     T update(T t);
 
-    void delete(Long id);
+    void delete(Long id) throws ResourceNotFoundException;
 
 }

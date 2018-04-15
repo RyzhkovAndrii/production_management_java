@@ -82,9 +82,8 @@ public class RollTypeServiceImpl implements RollTypeService {
      * @throws ResourceNotFoundException если удаляемый тип рулона с указанным id не найден
      */
     @Override
-    public void delete(Long id) {
-        RollType rollType = findById(id);
-        rollTypeRepository.delete(rollType);
+    public void delete(Long id) throws ResourceNotFoundException {
+        rollTypeRepository.delete(findById(id));
     }
 
 }
