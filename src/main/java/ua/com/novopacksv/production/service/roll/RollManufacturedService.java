@@ -11,17 +11,15 @@ import java.util.List;
 @Service
 public interface RollManufacturedService {
 
+    RollManufactured findOne(LocalDate manufacturedDate, RollType rollType) throws ResourceNotFoundException;
+
     RollManufactured findOneOrCreate(LocalDate manufacturedDate, RollType rollType);
 
-    RollManufactured findOne(LocalDate manufacturedDate, RollType rollType)
-            throws ResourceNotFoundException;
+    List<RollManufactured> findAll(LocalDate manufacturedDate);
 
-    List<RollManufactured> findAll(LocalDate date);
+    List<RollManufactured> findAll(LocalDate fromManufacturedDate, LocalDate toManufacturedDate);
 
-    List<RollManufactured> findAll(LocalDate fromDate, LocalDate toDate);
-
-    List<RollManufactured> findAll(
-            LocalDate fromDate, LocalDate toDate, RollType rollType);
+    List<RollManufactured> findAll(LocalDate fromManufacturedDate, LocalDate toManufacturedDate, RollType rollType);
 
     Integer getManufacturedRollAmount(RollManufactured rollManufactured);
 

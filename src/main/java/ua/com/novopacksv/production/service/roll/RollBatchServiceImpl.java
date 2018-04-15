@@ -38,16 +38,15 @@ public class RollBatchServiceImpl implements RollBatchService {
     }
 
     @Override
-    public List<RollBatch> getAll(LocalDate manufacturedDate) {
-        List<RollManufactured> rollManufacturedList = rollManufacturedService.findAll(manufacturedDate);
-        return this.getAll(rollManufacturedList);
+    public RollBatch getOne(Long rollTypeId, LocalDate manufacturedDate) throws ResourceNotFoundException {
+        RollType rollType = rollTypeService.findById(rollTypeId);
+        RollManufactured rollManufactured = rollManufacturedService.findOne(manufacturedDate, rollType);
+        return this.getOne(rollManufactured);
     }
 
     @Override
-    public List<RollBatch> getAll(Long rollTypeId, LocalDate fromManufacturedDate, LocalDate toManufacturedDate) {
-        RollType rollType = rollTypeService.findById(rollTypeId);
-        List<RollManufactured> rollManufacturedList =
-                rollManufacturedService.findAll(fromManufacturedDate, toManufacturedDate, rollType);
+    public List<RollBatch> getAll(LocalDate manufacturedDate) {
+        List<RollManufactured> rollManufacturedList = rollManufacturedService.findAll(manufacturedDate);
         return this.getAll(rollManufacturedList);
     }
 
@@ -59,10 +58,11 @@ public class RollBatchServiceImpl implements RollBatchService {
     }
 
     @Override
-    public RollBatch getOne(Long rollTypeId, LocalDate manufacturedDate) throws ResourceNotFoundException {
+    public List<RollBatch> getAll(Long rollTypeId, LocalDate fromManufacturedDate, LocalDate toManufacturedDate) {
         RollType rollType = rollTypeService.findById(rollTypeId);
-        RollManufactured rollManufactured = rollManufacturedService.findOne(manufacturedDate, rollType);
-        return this.getOne(rollManufactured);
+        List<RollManufactured> rollManufacturedList =
+                rollManufacturedService.findAll(fromManufacturedDate, toManufacturedDate, rollType);
+        return this.getAll(rollManufacturedList);
     }
 
 }

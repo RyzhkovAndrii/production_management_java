@@ -50,6 +50,17 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
     }
 
     @Override
+    public RollManufactured findOne(LocalDate manufacturedDate, RollType rollType) throws ResourceNotFoundException {
+        return rollManufacturedRepository.findByManufacturedDateAndRollType(manufacturedDate, rollType)
+                .orElseThrow(() -> {
+                    String formatDate = conversionService.convert(manufacturedDate, String.class);
+                    String message = String.format("Roll manufactured whit roll type id = %d" +
+                            " and manufactured date = %s is not found!", rollType.getId(), formatDate);
+                    return new ResourceNotFoundException(message);
+                });
+    }
+
+    @Override
     public RollManufactured findOneOrCreate(LocalDate manufacturedDate, RollType rollType) {
         return rollManufacturedRepository.findByManufacturedDateAndRollType(manufacturedDate, rollType)
                 .orElseGet(() -> {
@@ -63,32 +74,19 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
     }
 
     @Override
-    public RollManufactured findOne(LocalDate manufacturedDate, RollType rollType)
-            throws ResourceNotFoundException {
-        return rollManufacturedRepository.findByManufacturedDateAndRollType(manufacturedDate, rollType)
-                .orElseThrow(() -> {
-                    String formatDate = conversionService.convert(manufacturedDate, String.class);
-                    String message = String.format("Roll manufactured whit roll type id = %d" +
-                            " and manufactured date = %s not found!", rollType.getId(), formatDate);
-                    return new ResourceNotFoundException(message);
-                });
+    public List<RollManufactured> findAll(LocalDate date) {
+        return rollManufacturedRepository.findAllByManufacturedDate(date);
     }
 
     @Override
-    public List<RollManufactured> findAll(LocalDate manufacturedDate) {
-        return rollManufacturedRepository.findAllByManufacturedDate(manufacturedDate);
+    public List<RollManufactured> findAll(LocalDate fromDate, LocalDate toDate) {
+        return rollManufacturedRepository.findAllByManufacturedDateBetween(fromDate, toDate);
     }
 
     @Override
-    public List<RollManufactured> findAll(LocalDate fromManufacturedDate, LocalDate toManufacturedDate) {
-        return rollManufacturedRepository.findAllByManufacturedDateBetween(fromManufacturedDate, toManufacturedDate);
-    }
-
-    @Override
-    public List<RollManufactured> findAll(
-            LocalDate fromManufacturedDate, LocalDate toManufacturedDate, RollType rollType) {
+    public List<RollManufactured> findAll(LocalDate fromDate, LocalDate toDate, RollType rollType) {
         return rollManufacturedRepository
-                .findAllByManufacturedDateBetweenAndRollType(fromManufacturedDate, toManufacturedDate, rollType);
+                .findAllByManufacturedDateBetweenAndRollType(fromDate, toDate, rollType);
     }
 
     @Override
