@@ -13,29 +13,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class RollBatchServiceImpl implements RollBatchService {
 
     private final RollTypeService rollTypeService;
 
     private final RollManufacturedService rollManufacturedService;
-
-    private RollBatch getOne(RollManufactured rollManufactured) {
-        Integer manufacturedAmount = rollManufacturedService.getManufacturedRollAmount(rollManufactured);
-        Integer usedAmount = rollManufacturedService.getUsedRollAmount(rollManufactured);
-        RollBatch rollBatch = new RollBatch();
-        rollBatch.setRollManufactured(rollManufactured);
-        rollBatch.setManufacturedAmount(manufacturedAmount);
-        rollBatch.setUsedAmount(usedAmount);
-        return rollBatch;
-    }
-
-    private List<RollBatch> getAll(List<RollManufactured> rollManufacturedList) {
-        return rollManufacturedList.stream()
-                .map(this::getOne)
-                .collect(Collectors.toList());
-    }
 
     @Override
     public RollBatch getOne(Long rollTypeId, LocalDate manufacturedDate) throws ResourceNotFoundException {
@@ -63,6 +47,22 @@ public class RollBatchServiceImpl implements RollBatchService {
         List<RollManufactured> rollManufacturedList =
                 rollManufacturedService.findAll(fromManufacturedDate, toManufacturedDate, rollType);
         return this.getAll(rollManufacturedList);
+    }
+
+    private RollBatch getOne(RollManufactured rollManufactured) {
+        Integer manufacturedAmount = rollManufacturedService.getManufacturedRollAmount(rollManufactured);
+        Integer usedAmount = rollManufacturedService.getUsedRollAmount(rollManufactured);
+        RollBatch rollBatch = new RollBatch();
+        rollBatch.setRollManufactured(rollManufactured);
+        rollBatch.setManufacturedAmount(manufacturedAmount);
+        rollBatch.setUsedAmount(usedAmount);
+        return rollBatch;
+    }
+
+    private List<RollBatch> getAll(List<RollManufactured> rollManufacturedList) {
+        return rollManufacturedList.stream()
+                .map(this::getOne)
+                .collect(Collectors.toList());
     }
 
 }

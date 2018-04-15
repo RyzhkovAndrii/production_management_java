@@ -17,6 +17,7 @@ public class RollTypeServiceImpl implements RollTypeService {
     private final RollTypeRepository rollTypeRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public RollType findById(Long id) throws ResourceNotFoundException {
         return rollTypeRepository.findById(id).orElseThrow(() -> {
             String message = String.format("Roll Type whit id = %d not found!", id);
@@ -25,6 +26,7 @@ public class RollTypeServiceImpl implements RollTypeService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<RollType> findAll() {
         return rollTypeRepository.findAll();
     }
