@@ -43,14 +43,14 @@ public class RollBatchServiceImpl implements RollBatchService {
     }
 
     @Override
-    public RollBatch get(Long rollTypeId, LocalDate manufacturedDate) throws ResourceNotFoundException {
+    public RollBatch getOne(Long rollTypeId, LocalDate manufacturedDate) throws ResourceNotFoundException {
         RollType rollType = rollTypeService.findById(rollTypeId);
         RollManufactured rollManufactured =
                 rollManufacturedService.findByManufacturedDateAndRollType(manufacturedDate, rollType);
-        return this.get(rollManufactured);
+        return this.getOne(rollManufactured);
     }
 
-    private RollBatch get(RollManufactured rollManufactured) {
+    private RollBatch getOne(RollManufactured rollManufactured) {
         Integer manufacturedAmount = rollManufacturedService.getManufacturedRollAmount(rollManufactured);
         Integer usedAmount = rollManufacturedService.getUsedRollAmount(rollManufactured);
         RollBatch rollBatch = new RollBatch();
@@ -62,7 +62,7 @@ public class RollBatchServiceImpl implements RollBatchService {
 
     private List<RollBatch> getAll(List<RollManufactured> rollManufacturedList) {
         return rollManufacturedList.stream()
-                .map(this::get)
+                .map(this::getOne)
                 .collect(Collectors.toList());
     }
 

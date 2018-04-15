@@ -50,9 +50,9 @@ public class RollBatchController {
     }
 
     @GetMapping(params = {"roll_type_id", "date"})
-    public ResponseEntity<RollBatchResponse> get(@RequestParam("roll_type_id") Long rollTypeId,
-                                                 @RequestParam("date") LocalDate date) {
-        RollBatch rollBatch = rollBatchService.get(rollTypeId, date);
+    public ResponseEntity<RollBatchResponse> getOne(@RequestParam("roll_type_id") Long rollTypeId,
+                                                    @RequestParam("date") LocalDate date) {
+        RollBatch rollBatch = rollBatchService.getOne(rollTypeId, date);
         RollBatchResponse response = conversionService.convert(rollBatch, RollBatchResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

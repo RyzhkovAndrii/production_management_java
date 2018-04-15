@@ -14,6 +14,6 @@ public interface RollBatchService {
 
     List<RollBatch> getAll(Long rollTypeId, LocalDate manufacturedPeriodBegin, LocalDate manufacturedPeriodEnd);
 
-    RollBatch get(Long rollTypeId, LocalDate manufacturedDate) throws ResourceNotFoundException;
+    RollBatch getOne(Long rollTypeId, LocalDate manufacturedDate) throws ResourceNotFoundException;
 
 }
