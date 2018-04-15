@@ -76,7 +76,8 @@ public class RollTypeServiceImpl implements RollTypeService {
      * @throws IllegalArgumentException если rollType - null
      */
     @Override
-    public RollType update(RollType rollType) {
+    public RollType update(RollType rollType) throws ResourceNotFoundException {
+        this.findById(rollType.getId());
         return this.save(rollType);
     }
 

@@ -13,7 +13,7 @@ public interface BaseEntityService<T extends BaseEntity> {
 
     T save(T t);
 
-    T update(T t);
+    T update(T t) throws ResourceNotFoundException;
 
     void delete(Long id) throws ResourceNotFoundException;
 
