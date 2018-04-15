@@ -74,19 +74,19 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
     }
 
     @Override
-    public List<RollManufactured> findAll(LocalDate date) {
-        return rollManufacturedRepository.findAllByManufacturedDate(date);
+    public List<RollManufactured> findAll(LocalDate manufacturedDate) {
+        return rollManufacturedRepository.findAllByManufacturedDate(manufacturedDate);
     }
 
     @Override
-    public List<RollManufactured> findAll(LocalDate fromDate, LocalDate toDate) {
-        return rollManufacturedRepository.findAllByManufacturedDateBetween(fromDate, toDate);
+    public List<RollManufactured> findAll(LocalDate fromManufacturedDate, LocalDate toManufacturedDate) {
+        return rollManufacturedRepository.findAllByManufacturedDateBetween(fromManufacturedDate, toManufacturedDate);
     }
 
     @Override
-    public List<RollManufactured> findAll(LocalDate fromDate, LocalDate toDate, RollType rollType) {
+    public List<RollManufactured> findAll(LocalDate fromManufacturedDate, LocalDate toManufacturedDate, RollType rollType) {
         return rollManufacturedRepository
-                .findAllByManufacturedDateBetweenAndRollType(fromDate, toDate, rollType);
+                .findAllByManufacturedDateBetweenAndRollType(fromManufacturedDate, fromManufacturedDate, rollType);
     }
 
     @Override
