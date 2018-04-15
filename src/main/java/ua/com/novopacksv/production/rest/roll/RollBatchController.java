@@ -26,34 +26,33 @@ public class RollBatchController {
     private final ModelConversionService conversionService;
 
     @GetMapping(params = {"date"})
-    public ResponseEntity<List<RollBatchResponse>> getAllRollBatches(@RequestParam("date") LocalDate manufacturedDate) {
-        List<RollBatch> rollBatches =
-                rollBatchService.createAll(manufacturedDate);
+    public ResponseEntity<List<RollBatchResponse>> getAll(@RequestParam("date") LocalDate manufacturedDate) {
+        List<RollBatch> rollBatches = rollBatchService.getAll(manufacturedDate);
         List<RollBatchResponse> response = conversionService.convert(rollBatches, RollBatchResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping(params = {"roll_type_id", "from", "to"})
-    public ResponseEntity<List<RollBatchResponse>> getAllRollBatches(@RequestParam("roll_type_id") Long rollTypeId,
-                                                                     @RequestParam("from") LocalDate fromManufacturedDate,
-                                                                     @RequestParam("to") LocalDate toManufacturedDate) {
-        List<RollBatch> rollBatches = rollBatchService.createAll(rollTypeId, fromManufacturedDate, toManufacturedDate);
+    public ResponseEntity<List<RollBatchResponse>> getAll(@RequestParam("roll_type_id") Long rollTypeId,
+                                                          @RequestParam("from") LocalDate fromManufacturedDate,
+                                                          @RequestParam("to") LocalDate toManufacturedDate) {
+        List<RollBatch> rollBatches = rollBatchService.getAll(rollTypeId, fromManufacturedDate, toManufacturedDate);
         List<RollBatchResponse> response = conversionService.convert(rollBatches, RollBatchResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping(params = {"from", "to"})
-    public ResponseEntity<List<RollBatchResponse>> getAllRollBatches(@RequestParam("from") LocalDate fromManufacturedDate,
-                                                                     @RequestParam("to") LocalDate toManufacturedDate) {
-        List<RollBatch> rollBatches = rollBatchService.createAll(fromManufacturedDate, toManufacturedDate);
+    public ResponseEntity<List<RollBatchResponse>> getAll(@RequestParam("from") LocalDate fromManufacturedDate,
+                                                          @RequestParam("to") LocalDate toManufacturedDate) {
+        List<RollBatch> rollBatches = rollBatchService.getAll(fromManufacturedDate, toManufacturedDate);
         List<RollBatchResponse> response = conversionService.convert(rollBatches, RollBatchResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping(params = {"roll_type_id", "date"})
-    public ResponseEntity<RollBatchResponse> getRollBatch(@RequestParam("roll_type_id") Long rollTypeId,
-                                                          @RequestParam("date") LocalDate date) {
-        RollBatch rollBatch = rollBatchService.create(rollTypeId, date);
+    public ResponseEntity<RollBatchResponse> get(@RequestParam("roll_type_id") Long rollTypeId,
+                                                 @RequestParam("date") LocalDate date) {
+        RollBatch rollBatch = rollBatchService.get(rollTypeId, date);
         RollBatchResponse response = conversionService.convert(rollBatch, RollBatchResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

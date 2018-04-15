@@ -8,12 +8,12 @@ import java.util.List;
 
 public interface RollBatchService {
 
-    List<RollBatch> createAll(LocalDate manufacturedDate);
+    List<RollBatch> getAll(LocalDate manufacturedDate);
 
-    List<RollBatch> createAll(LocalDate manufacturedPeriodBegin, LocalDate manufacturedPeriodEnd);
+    List<RollBatch> getAll(LocalDate manufacturedPeriodBegin, LocalDate manufacturedPeriodEnd);
 
-    List<RollBatch> createAll(Long rollTypeId, LocalDate manufacturedPeriodBegin, LocalDate manufacturedPeriodEnd);
+    List<RollBatch> getAll(Long rollTypeId, LocalDate manufacturedPeriodBegin, LocalDate manufacturedPeriodEnd);
 
-    RollBatch create(Long rollTypeId, LocalDate manufacturedDate) throws ResourceNotFoundException;
+    RollBatch get(Long rollTypeId, LocalDate manufacturedDate) throws ResourceNotFoundException;
 
 }
