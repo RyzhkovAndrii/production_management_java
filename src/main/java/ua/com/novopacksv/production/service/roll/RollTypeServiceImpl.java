@@ -11,8 +11,8 @@ import java.util.List;
 
 /**
  * Класс имплементирует методы интерфейса {@code RollTypeService}.
- * Содержит бизнес логику для работы с типами рулонов производимых на передприятии
- * На данный момент содержит только CRUD операции
+ * Содержит бизнес логику для работы с типами рулонов производимых на передприятии.
+ * На данный момент содержит только CRUD операции.
  */
 @Service
 @Transactional
@@ -28,15 +28,16 @@ public class RollTypeServiceImpl implements RollTypeService {
      * Ищет в базе и возвращает тип произоводимого на предприятии рулона по указанному id.
      * Не изменяет содержимого базы данных.
      *
-     * @param id идентифифкационный номер типа рулоно в базе данных
+     * @param id ID типа рулона в базе данных, должен быть не null
      * @return тип рулона с указанным id
      * @throws ResourceNotFoundException если тип рулона с указанным id не найден
+     * @throws IllegalArgumentException если id - null
      */
     @Override
     @Transactional(readOnly = true)
     public RollType findById(Long id) throws ResourceNotFoundException {
         return rollTypeRepository.findById(id).orElseThrow(() -> {
-            String message = String.format("Roll Type whit id = %d not found!", id);
+            String message = String.format("Roll type whit id = %d is not found!", id);
             return new ResourceNotFoundException(message);
         });
     }
@@ -54,10 +55,11 @@ public class RollTypeServiceImpl implements RollTypeService {
     }
 
     /**
-     * Сохраняет в базу новый тип производимого на предприятии рулона
+     * Сохраняет в базу новый тип производимого на предприятии рулона.
      *
-     * @param rollType новый тип рулона
+     * @param rollType новый тип рулона, должен быть не null
      * @return новый тип рулона, с указанием присвоенного в базе id
+     * @throws IllegalArgumentException если rollType - null
      */
     @Override
     public RollType save(RollType rollType) {
@@ -66,9 +68,12 @@ public class RollTypeServiceImpl implements RollTypeService {
 
     /**
      * Изменяет данные о типе производимого на предприятии рулона.
+     * Объект передаваемый в качестве параметра должен содержать id изменяемого типа рулона.
      *
-     * @param rollType изменный тип рулона, который должен содержать id изменяемого типа рулона
+     * @param rollType изменный тип рулона, должен быть не null
      * @return измененный тип рулона
+     * @throws ResourceNotFoundException если изменяемый тип рулона не найден (по id)
+     * @throws IllegalArgumentException если rollType - null
      */
     @Override
     public RollType update(RollType rollType) {
@@ -78,8 +83,9 @@ public class RollTypeServiceImpl implements RollTypeService {
     /**
      * Удаляет из базы тип производимого на предприятии рулона по указанному id
      *
-     * @param id идентифифкационный номер типа рулоно в базе данных
+     * @param id ID типа рулона в базе данных
      * @throws ResourceNotFoundException если удаляемый тип рулона с указанным id не найден
+     * @throws IllegalArgumentException если id - null
      */
     @Override
     public void delete(Long id) throws ResourceNotFoundException {
