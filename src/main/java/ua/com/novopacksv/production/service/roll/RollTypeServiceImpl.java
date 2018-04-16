@@ -24,6 +24,9 @@ public class RollTypeServiceImpl implements RollTypeService {
      */
     private final RollTypeRepository rollTypeRepository;
 
+    /**
+     * Содержит методы для работы с сущностью {@code RollLeftOver}
+     */
     private final RollLeftOverService rollLeftOverService;
 
     /**
