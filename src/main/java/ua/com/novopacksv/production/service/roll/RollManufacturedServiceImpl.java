@@ -29,12 +29,12 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
 
     @Override
     @Transactional(readOnly = true)
-    public RollManufactured findOne(LocalDate manufacturedDate, RollType rollType) throws ResourceNotFoundException {
-        return rollManufacturedRepository.findByManufacturedDateAndRollType(manufacturedDate, rollType)
+    public RollManufactured findOne(LocalDate manufacturedDate, Long rollTypeId) throws ResourceNotFoundException {
+        return rollManufacturedRepository.findByManufacturedDateAndRollType_Id(manufacturedDate, rollTypeId)
                 .orElseThrow(() -> {
                     String formatDate = conversionService.convert(manufacturedDate, String.class);
                     String message = String.format("Roll manufactured whit roll type id = %d" +
-                            " and manufactured date = %s is not found!", rollType.getId(), formatDate);
+                            " and manufactured date = %s is not found!", rollTypeId, formatDate);
                     return new ResourceNotFoundException(message);
                 });
     }
@@ -69,6 +69,12 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
     public List<RollManufactured> findAll(LocalDate fromManufacturedDate, LocalDate toManufacturedDate, RollType rollType) {
         return rollManufacturedRepository
                 .findAllByManufacturedDateBetweenAndRollType(fromManufacturedDate, fromManufacturedDate, rollType);
+    }
+
+    @Override
+    public List<RollManufactured> findAll(LocalDate fromManufacturedDate, LocalDate toManufacturedDate, Long rollTypeId) {
+        return rollManufacturedRepository
+                .findAllByManufacturedDateBetweenAndRollType_Id(fromManufacturedDate, toManufacturedDate, rollTypeId);
     }
 
     @Override
