@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 /**
  * Класс имплементирует методы интерфейса {@code RollBatchService}.
- * Содержит методы возвращающие информацию о количестве произведнных, списанных в производство и оставшихся
+ * Содержит методы возвращающие информацию о количестве произведенных, списанных в производство и оставшихся
  * на данный момент рулонов определенного типа, даты производства, периода производства и т.п.
  * Методы класса возвращают сущность {@see RollBatch}, содержащую вышеуказнную информацию,
  * либо {@code List} таких сущностей
@@ -29,7 +29,7 @@ public class RollBatchServiceImpl implements RollBatchService {
     private final RollManufacturedService rollManufacturedService;
 
     /**
-     * Вычисляет и возвращает информацию о количестве произведнных, списанных в производство и оставшихся
+     * Вычисляет и возвращает информацию о количестве произведенных, списанных в производство и оставшихся
      * на данный момент рулонов для указанных типа рулона и даты производства
      * 
      * @param rollTypeId ID типа рулона
@@ -45,7 +45,7 @@ public class RollBatchServiceImpl implements RollBatchService {
     }
 
     /**
-     * Вычисляет и возвращает информацию о количестве произведнных, списанных в производство и оставшихся
+     * Вычисляет и возвращает информацию о количестве произведенных, списанных в производство и оставшихся
      * на данный момент рулонов указанной даты производства
      * 
      * @param manufacturedDate дата производства рулона
@@ -60,7 +60,7 @@ public class RollBatchServiceImpl implements RollBatchService {
     }
 
     /**
-     * Вычисляет и возвращает информацию о количестве произведнных, списанных в производство и оставшихся
+     * Вычисляет и возвращает информацию о количестве произведенных, списанных в производство и оставшихся
      * на данный момент рулонов, произведенных в указанный период времени
      *
      * @param fromManufacturedDate начало периода даты производства рулонов
@@ -77,7 +77,7 @@ public class RollBatchServiceImpl implements RollBatchService {
     }
 
     /**
-     * Вычисляет и возвращает информацию о количестве произведнных, списанных в производство и оставшихся
+     * Вычисляет и возвращает информацию о количестве произведенных, списанных в производство и оставшихся
      * на данный момент рулонов указанного типа, произведенных в указанный период времени
      *
      * @param rollTypeId ID типа рулона
@@ -85,7 +85,8 @@ public class RollBatchServiceImpl implements RollBatchService {
      * @param toManufacturedDate окончание периода даты производства рулонов
      * @return {@code List} {@code RollBatch} для рулонов указанного типа, произведенных в указанный период времени
      * или empty {@code List}, если в базе отсутствуют рулоны с указанным типом, произведенные в указанный период
-     * @throws IllegalArgumentException если fromManufacturedDate - null и/или toManufacturedDate - null
+     * @throws IllegalArgumentException если rollTypeId - null, и/или fromManufacturedDate - null,
+     * и/или toManufacturedDate - null
      */
     @Override
     public List<RollBatch> getAll(Long rollTypeId, LocalDate fromManufacturedDate, LocalDate toManufacturedDate) {
@@ -95,11 +96,12 @@ public class RollBatchServiceImpl implements RollBatchService {
     }
 
     /**
-     * Вычисляет и возвращает информацию о количестве произведнных, списанных в производство и оставшихся
+     * Вычисляет и возвращает информацию о количестве произведенных, списанных в производство и оставшихся
      * на данный момент рулонов для указанного рулона {@code RollManufactured}
      * // todo description for RollManufactured
      * @param rollManufactured рулон {@code RollManufactured}
      * @return {@code RollBatch} для указанного рулона
+     * @throws IllegalArgumentException если rollManufactured - null
      */
     private RollBatch getOne(RollManufactured rollManufactured) {
         Integer manufacturedAmount = rollManufacturedService.getManufacturedRollAmount(rollManufactured);
@@ -112,11 +114,12 @@ public class RollBatchServiceImpl implements RollBatchService {
     }
 
     /**
-     * Вычисляет и возвращает информацию о количестве произведнных, списанных в производство и оставшихся
+     * Вычисляет и возвращает информацию о количестве произведенных, списанных в производство и оставшихся
      * на данный момент рулонов для указанного списка рулонов {@code RollManufactured}
      * // todo description for RollManufactured
      * @param rollManufacturedList {@code List} рулонов {@code RollManufactured}
      * @return {@code List} {@code RollBatch} для указанного списка рулона
+     * @throws NullPointerException если rollManufacturedList - null 
      */
     private List<RollBatch> getAll(List<RollManufactured> rollManufacturedList) {
         return rollManufacturedList.stream()
