@@ -74,6 +74,15 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
     }
 
     @Override
+    public void createNewLeftOverAndSave(RollType rollType) {
+        RollLeftOver leftOver = new RollLeftOver();
+        leftOver.setDate(LocalDate.now());
+        leftOver.setRollType(rollType);
+        leftOver.setAmount(0);
+        rollLeftOverRepository.save(leftOver);
+    }
+
+    @Override
     public RollLeftOver findById(Long id) {
         return rollLeftOverRepository.findById(id).orElseThrow(() ->
         {

@@ -24,6 +24,8 @@ public class RollTypeServiceImpl implements RollTypeService {
      */
     private final RollTypeRepository rollTypeRepository;
 
+    private final RollLeftOverService rollLeftOverService;
+
     /**
      * Ищет в базе и возвращает тип произоводимого на предприятии рулона по указанному id.
      * Не изменяет содержимого базы данных.
@@ -56,6 +58,9 @@ public class RollTypeServiceImpl implements RollTypeService {
 
     /**
      * Сохраняет в базу новый тип производимого на предприятии рулона.
+     * При сохранении также создается и сохраняется в базу остаток для данного типа рулона {@see RollLeftOver}.
+     * Количество остатка для данного типа рулона устанавливается равным 0, так как никакие операции с данным
+     * типом рулона еще не осуществлялись.
      *
      * @param rollType новый тип рулона, должен быть не null
      * @return новый тип рулона, с указанием присвоенного в базе id
@@ -63,7 +68,9 @@ public class RollTypeServiceImpl implements RollTypeService {
      */
     @Override
     public RollType save(RollType rollType) {
-        return rollTypeRepository.save(rollType);
+        RollType entityRollType = rollTypeRepository.save(rollType);
+        rollLeftOverService.createNewLeftOverAndSave(entityRollType);
+        return entityRollType;
     }
 
     /**
@@ -77,12 +84,13 @@ public class RollTypeServiceImpl implements RollTypeService {
      */
     @Override
     public RollType update(RollType rollType) throws ResourceNotFoundException {
-        this.findById(rollType.getId());
-        return this.save(rollType);
+        findById(rollType.getId());
+        return save(rollType);
     }
 
     /**
-     * Удаляет из базы тип производимого на предприятии рулона по указанному id
+     * Удаляет из базы тип производимого на предприятии рулона по указанному id.
+     * При удалении типа рулона также удаляется информация об остатаке рулоно данного типа.
      *
      * @param id ID типа рулона в базе данных
      * @throws ResourceNotFoundException если удаляемый тип рулона с указанным id не найден
