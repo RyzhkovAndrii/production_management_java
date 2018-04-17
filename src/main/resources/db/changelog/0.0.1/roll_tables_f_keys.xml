@@ -24,6 +24,7 @@
                                  onDelete="CASCADE"
                                  referencedTableName="roll_type"
                                  referencedColumnNames="id"/>
+        <addUniqueConstraint tableName="roll_manufactured" columnNames="manufactured_date, roll_type_id"/>
     </changeSet>
     <changeSet id="3" author="pryadilnikova@gmail.com">
         <addForeignKeyConstraint baseTableName="roll_left_over"
