@@ -12,6 +12,7 @@ import ua.com.novopacksv.production.repository.rollRepository.RollOperationRepos
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -106,19 +107,27 @@ public class RollOperationServiceImpl implements RollOperationService {
 
     private Integer checkOperationOfNegativeAmount(RollManufactured rollManufactured, RollOperation rollOperation)
             throws NegativeRollAmountException {
-        Integer rollManufacturedAmount = rollManufacturedService.getManufacturedRollAmount(rollManufactured);
-        Integer rollUsedAmount = rollManufacturedService.getUsedRollAmount(rollManufactured);
-
-        if (rollOperation.getOperationType().equals(OperationType.USE)) {
-            Integer resultOfAmount = rollManufacturedAmount - rollUsedAmount - rollOperation.getRollAmount();
-            if (resultOfAmount >= 0) {
-                return -rollOperation.getRollAmount();
-            } else {
-                throw new NegativeRollAmountException("Roll's left is negative!");
-            }
-        } else {
+        if (isItManufactureOperation(rollOperation)) {
             return rollOperation.getRollAmount();
         }
+        Integer rollManufacturedAmount
+                = isRollNew(rollManufactured) ? 0 : rollManufacturedService.getManufacturedRollAmount(rollManufactured);
+        Integer rollUsedAmount
+                = isRollNew(rollManufactured) ? 0 : rollManufacturedService.getUsedRollAmount(rollManufactured);
+        Integer resultOfAmount = rollManufacturedAmount - rollUsedAmount - rollOperation.getRollAmount();
+        if (resultOfAmount >= 0) {
+            return -rollOperation.getRollAmount();
+        } else {
+            throw new NegativeRollAmountException("Roll's left is negative!");
+        }
+    }
+
+    private boolean isItManufactureOperation(RollOperation rollOperation) {
+        return rollOperation.getOperationType().equals(OperationType.MANUFACTURE);
+    }
+
+    private Boolean isRollNew(RollManufactured rollManufactured) {
+        return Objects.isNull(rollManufactured.getId());
     }
 
 }
