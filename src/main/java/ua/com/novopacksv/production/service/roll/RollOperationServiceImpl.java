@@ -48,8 +48,7 @@ public class RollOperationServiceImpl implements RollOperationService {
 
     @Override
     public RollOperation findById(Long id) {
-        return rollOperationRepository.findById(id).orElseThrow(() ->
-        {
+        return rollOperationRepository.findById(id).orElseThrow(() -> {
             String message = String.format("Roll operation with id = %d is not found", id);
             return new ResourceNotFoundException(message);
         });
@@ -65,11 +64,12 @@ public class RollOperationServiceImpl implements RollOperationService {
      */
     @Override
     public RollOperation save(RollOperation rollOperation) throws NegativeRollAmountException {
+        checkOperationSaveAllowed(rollOperation);
         RollManufactured rollManufactured = rollOperation.getRollManufactured();
+        Integer changingAmount = getOperationAmountWithSign(rollOperation);
         RollLeftOver rollLeftOver = rollLeftOverService
                 .findLastRollLeftOverByRollType(rollManufactured.getRollType());
-        rollLeftOverService.changeRollLeftOverAmount(rollLeftOver,
-                checkOperationOfNegativeAmount(rollManufactured, rollOperation));
+        rollLeftOverService.changeRollLeftOverAmount(rollLeftOver, changingAmount);
         return rollOperationRepository.save(rollOperation);
     }
 
@@ -77,9 +77,10 @@ public class RollOperationServiceImpl implements RollOperationService {
     Not checked rollOperation if rollOperation.getRollAmount <0, not sure that it is necessary
      */
     @Override
-    public RollOperation update(RollOperation rollOperation) {
-        RollOperation rollOperationOld = rollOperationRepository.getOne(rollOperation.getId());
-        RollManufactured rollManufactured = rollOperation.getRollManufactured();
+    public RollOperation update(RollOperation rollOperation) throws NegativeRollAmountException {
+        checkOperationSaveAllowed(rollOperation);
+        RollOperation rollOperationOld = rollOperationRepository.getOne(rollOperation.getId());//update only for amount
+        RollManufactured rollManufactured = rollOperation.getRollManufactured();// what kind of operation
         RollLeftOver rollLeftOver = rollLeftOverService
                 .findLastRollLeftOverByRollType(rollManufactured.getRollType());
         rollLeftOverService.changeRollLeftOverAmount(rollLeftOver,
@@ -88,10 +89,12 @@ public class RollOperationServiceImpl implements RollOperationService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws ResourceNotFoundException, NegativeRollAmountException {
+        RollOperation rollOperation = findById(id);
+        checkOperationDeleteAllowed(rollOperation);
         RollLeftOver rollLeftOver = rollLeftOverService
                 .findLastRollLeftOverByRollType(findById(id).getRollManufactured().getRollType());
-        rollLeftOverService.changeRollLeftOverAmount(rollLeftOver, -findById(id).getRollAmount());
+        rollLeftOverService.changeRollLeftOverAmount(rollLeftOver, -getOperationAmountWithSign(rollOperation));
         rollOperationRepository.deleteById(id);
     }
 
@@ -105,24 +108,38 @@ public class RollOperationServiceImpl implements RollOperationService {
         return rollOperationRepository.findAllByOperationTypeAndRollManufactured(OperationType.USE, rollManufactured);
     }
 
-    private Integer checkOperationOfNegativeAmount(RollManufactured rollManufactured, RollOperation rollOperation)
+    private Integer getOperationAmountWithSign(RollOperation rollOperation) {
+        return isItManufactureOperation(rollOperation) ? rollOperation.getRollAmount() : -rollOperation.getRollAmount();
+    }
+
+    private void checkOperationSaveAllowed(RollOperation rollOperation)
             throws NegativeRollAmountException {
-        if (isItManufactureOperation(rollOperation)) {
-            return rollOperation.getRollAmount();
-        }
-        Integer rollManufacturedAmount
-                = isRollNew(rollManufactured) ? 0 : rollManufacturedService.getManufacturedRollAmount(rollManufactured);
-        Integer rollUsedAmount
-                = isRollNew(rollManufactured) ? 0 : rollManufacturedService.getUsedRollAmount(rollManufactured);
-        Integer resultOfAmount = rollManufacturedAmount - rollUsedAmount - rollOperation.getRollAmount();
-        if (resultOfAmount >= 0) {
-            return -rollOperation.getRollAmount();
-        } else {
-            throw new NegativeRollAmountException("Roll's left is negative!");
+        RollManufactured rollManufactured = rollOperation.getRollManufactured();
+        if (!isItManufactureOperation(rollOperation)) {
+            Integer rollManufacturedAmount
+                    = isRollNew(rollManufactured) ? 0 : rollManufacturedService.getManufacturedRollAmount(rollManufactured);
+            Integer rollUsedAmount
+                    = isRollNew(rollManufactured) ? 0 : rollManufacturedService.getUsedRollAmount(rollManufactured);
+            Integer resultOfAmount = rollManufacturedAmount - rollUsedAmount - rollOperation.getRollAmount();
+            if (resultOfAmount < 0) {
+                throw new NegativeRollAmountException("Roll's left is negative!");
+            }
         }
     }
 
-    private boolean isItManufactureOperation(RollOperation rollOperation) {
+    private void checkOperationDeleteAllowed(RollOperation rollOperation) throws NegativeRollAmountException {
+        if (isItManufactureOperation(rollOperation)) {
+            RollManufactured rollManufactured = rollOperation.getRollManufactured();
+            Integer rollManufacturedAmount = rollManufacturedService.getManufacturedRollAmount(rollManufactured);
+            Integer rollUsedAmount = rollManufacturedService.getUsedRollAmount(rollManufactured);
+            Integer resultOfAmount = rollManufacturedAmount - rollUsedAmount - rollOperation.getRollAmount();
+            if (resultOfAmount < 0) {
+                throw new NegativeRollAmountException("Roll's left is negative!");
+            }
+        }
+    }
+
+    private Boolean isItManufactureOperation(RollOperation rollOperation) {
         return rollOperation.getOperationType().equals(OperationType.MANUFACTURE);
     }
 
