@@ -11,7 +11,9 @@ import java.util.List;
 
 /**
  * Класс имплементирует методы интерфейса {@code RollTypeService}.
+ * <p>
  * Содержит бизнес логику для работы с типами рулонов производимых на передприятии.
+ * <p>
  * На данный момент содержит только CRUD операции.
  */
 @Service
@@ -31,12 +33,13 @@ public class RollTypeServiceImpl implements RollTypeService {
 
     /**
      * Ищет в базе и возвращает тип произоводимого на предприятии рулона по указанному id.
+     * <p>
      * Не изменяет содержимого базы данных.
      *
      * @param id ID типа рулона в базе данных, должен быть не null
      * @return тип рулона с указанным id
      * @throws ResourceNotFoundException если тип рулона с указанным id не найден
-     * @throws IllegalArgumentException если id - null
+     * @throws IllegalArgumentException  если id - null
      */
     @Override
     @Transactional(readOnly = true)
@@ -49,6 +52,7 @@ public class RollTypeServiceImpl implements RollTypeService {
 
     /**
      * Ищет в базе и возвращает все типы производимых на предприятии рулонов.
+     * <p>
      * Не изменяет содержимого базы данных.
      *
      * @return {@code List} всех типов рулонов или empty {@code List}, если в базе отсутствует какой-либо тип рулона
@@ -61,6 +65,7 @@ public class RollTypeServiceImpl implements RollTypeService {
 
     /**
      * Сохраняет в базу новый тип производимого на предприятии рулона.
+     * <p>
      * При сохранении также создается и сохраняется в базу остаток для данного типа рулона {@see RollLeftOver}.
      * Количество остатка для данного типа рулона устанавливается равным 0, так как никакие операции с данным
      * типом рулона еще не осуществлялись.
@@ -78,12 +83,13 @@ public class RollTypeServiceImpl implements RollTypeService {
 
     /**
      * Изменяет данные о типе производимого на предприятии рулона.
+     * <p>
      * Объект передаваемый в качестве параметра должен содержать id изменяемого типа рулона.
      *
-     * @param rollType изменный тип рулона, должен быть не null
+     * @param rollType измененный тип рулона, id должен быть не null
      * @return измененный тип рулона
      * @throws ResourceNotFoundException если изменяемый тип рулона не найден (по id)
-     * @throws IllegalArgumentException если rollType - null
+     * @throws IllegalArgumentException  если rollType - null
      */
     @Override
     public RollType update(RollType rollType) throws ResourceNotFoundException {
@@ -93,11 +99,12 @@ public class RollTypeServiceImpl implements RollTypeService {
 
     /**
      * Удаляет из базы тип производимого на предприятии рулона по указанному id.
+     * <p>
      * При удалении типа рулона также удаляется информация об остатаке рулоно данного типа.
      *
      * @param id ID типа рулона в базе данных
      * @throws ResourceNotFoundException если удаляемый тип рулона с указанным id не найден
-     * @throws IllegalArgumentException если id - null
+     * @throws IllegalArgumentException  если id - null
      */
     @Override
     public void delete(Long id) throws ResourceNotFoundException {
