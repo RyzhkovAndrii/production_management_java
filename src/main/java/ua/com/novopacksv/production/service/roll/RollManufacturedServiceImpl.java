@@ -231,10 +231,7 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
      * @throws NullPointerException если manufacturedDate - null
      */
     private boolean isReadyToUse(LocalDate manufacturedDate) {
-        LocalDate now = LocalDate.now();
-        return manufacturedDate
-                .plusDays(RollType.READY_TO_USE_PERIOD - 1)
-                .isBefore(now);
+        return manufacturedDate.until(LocalDate.now(), ChronoUnit.DAYS) > RollType.READY_TO_USE_PERIOD;
     }
 
 }
