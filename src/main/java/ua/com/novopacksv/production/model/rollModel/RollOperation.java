@@ -23,6 +23,7 @@ public class RollOperation extends BaseEntity {
 
     @ManyToOne
     @PrimaryKeyJoinColumn
+    @MapsId
     private RollManufactured rollManufactured;
 
     @Column(name = "operation_type", nullable = false)

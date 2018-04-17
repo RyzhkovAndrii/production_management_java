@@ -26,7 +26,7 @@ public class RollLeftOverController {
     private final ModelConversionService conversionService;
 
     @GetMapping(params = {"date"})
-    public ResponseEntity<List<RollLeftOverResponse>> findAllByDate(@RequestParam("date") LocalDate date) {
+    public ResponseEntity<List<RollLeftOverResponse>> getAll(@RequestParam("date") LocalDate date) {
         List<RollLeftOver> rollBatches =
                 rollLeftOverService.findAllByDate(date);
         List<RollLeftOverResponse> response = conversionService.convert(rollBatches, RollLeftOverResponse.class);
@@ -34,8 +34,8 @@ public class RollLeftOverController {
     }
 
     @GetMapping(params = {"roll_type_id", "date"})
-    public ResponseEntity<RollLeftOverResponse> findByRollTypeIdAndDate(@RequestParam("roll_type_id") Long rollTypeId,
-                                                                        @RequestParam("date") LocalDate date) {
+    public ResponseEntity<RollLeftOverResponse> getAll(@RequestParam("roll_type_id") Long rollTypeId,
+                                                       @RequestParam("date") LocalDate date) {
         RollLeftOver rollBatch = rollLeftOverService.findByRollTypeIdAndDate(rollTypeId, date);
         RollLeftOverResponse response = conversionService.convert(rollBatch, RollLeftOverResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);

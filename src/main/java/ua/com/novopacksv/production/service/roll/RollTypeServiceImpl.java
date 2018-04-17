@@ -9,40 +9,106 @@ import ua.com.novopacksv.production.repository.rollRepository.RollTypeRepository
 
 import java.util.List;
 
+/**
+ * Класс имплементирует методы интерфейса {@code RollTypeService}.
+ * <p>
+ * Содержит бизнес логику для работы с типами рулонов производимых на передприятии.
+ * <p>
+ * На данный момент содержит только CRUD операции.
+ */
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class RollTypeServiceImpl implements RollTypeService {
 
+    /**
+     * Содержит методы для работы с базой данных (DAO уровень) для сущности {@code RollType}
+     */
     private final RollTypeRepository rollTypeRepository;
 
+    /**
+     * Содержит методы для работы с сущностью {@code RollLeftOver}
+     */
+    private final RollLeftOverService rollLeftOverService;
+
+    /**
+     * Ищет в базе и возвращает тип произоводимого на предприятии рулона по указанному id.
+     * <p>
+     * Не изменяет содержимого базы данных.
+     *
+     * @param id ID типа рулона в базе данных, должен быть не null
+     * @return тип рулона с указанным id
+     * @throws ResourceNotFoundException если тип рулона с указанным id не найден
+     * @throws IllegalArgumentException  если id - null
+     */
     @Override
+    @Transactional(readOnly = true)
     public RollType findById(Long id) throws ResourceNotFoundException {
         return rollTypeRepository.findById(id).orElseThrow(() -> {
-            String message = String.format("Roll Type whit id = %d not found!", id);
+            String message = String.format("Roll type whit id = %d is not found!", id);
             return new ResourceNotFoundException(message);
         });
     }
 
+    /**
+     * Ищет в базе и возвращает все типы производимых на предприятии рулонов.
+     * <p>
+     * Не изменяет содержимого базы данных.
+     *
+     * @return {@code List} всех типов рулонов или empty {@code List}, если в базе отсутствует какой-либо тип рулона
+     */
     @Override
+    @Transactional(readOnly = true)
     public List<RollType> findAll() {
         return rollTypeRepository.findAll();
     }
 
+    /**
+     * Сохраняет в базу новый тип производимого на предприятии рулона.
+     * <p>
+     * При сохранении также создается и сохраняется в базу остаток для данного типа рулона {@see RollLeftOver}.
+     * Количество остатка для данного типа рулона устанавливается равным 0, так как никакие операции с данным
+     * типом рулона еще не осуществлялись.
+     *
+     * @param rollType новый тип рулона, должен быть не null
+     * @return новый тип рулона, с указанием присвоенного в базе id
+     * @throws IllegalArgumentException если rollType - null
+     */
     @Override
     public RollType save(RollType rollType) {
-        return rollTypeRepository.save(rollType);
+        RollType entityRollType = rollTypeRepository.save(rollType);
+        rollLeftOverService.createNewLeftOverAndSave(entityRollType);
+        return entityRollType;
     }
 
+    /**
+     * Изменяет данные о типе производимого на предприятии рулона.
+     * <p>
+     * Объект передаваемый в качестве параметра должен содержать id изменяемого типа рулона.
+     *
+     * @param rollType измененный тип рулона, id должен быть не null
+     * @return измененный тип рулона
+     * @throws ResourceNotFoundException если изменяемый тип рулона не найден (по id)
+     * @throws IllegalArgumentException  если rollType - null
+     */
     @Override
-    public RollType update(RollType rollType) {
-        return this.save(rollType);
+    public RollType update(RollType rollType) throws ResourceNotFoundException {
+        findById(rollType.getId());
+        return save(rollType);
     }
 
+    /**
+     * Удаляет из базы тип производимого на предприятии рулона по указанному id.
+     * <p>
+     * При удалении типа рулона также удаляется информация об остатаке рулоно данного типа.
+     *
+     * @param id ID типа рулона в базе данных
+     * @throws ResourceNotFoundException если удаляемый тип рулона с указанным id не найден
+     * @throws IllegalArgumentException  если id - null
+     */
     @Override
-    public void delete(Long id) {
-        RollType rollType = findById(id);
-        rollTypeRepository.delete(rollType);
+    public void delete(Long id) throws ResourceNotFoundException {
+        rollTypeRepository.delete(findById(id));
     }
 
 }

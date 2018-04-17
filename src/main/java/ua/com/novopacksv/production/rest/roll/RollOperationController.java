@@ -23,14 +23,14 @@ public class RollOperationController {
     private final ModelConversionService conversionService;
 
     @GetMapping
-    public ResponseEntity<List<RollOperationResponse>> getList() {
+    public ResponseEntity<List<RollOperationResponse>> getAll() {
         List<RollOperation> rollOperations = rollOperationService.findAll();
         List<RollOperationResponse> response = conversionService.convert(rollOperations, RollOperationResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RollOperationResponse> getById(@PathVariable Long id) {
+    public ResponseEntity<RollOperationResponse> getOne(@PathVariable Long id) {
         RollOperation rollOperation = rollOperationService.findById(id);
         RollOperationResponse response = conversionService.convert(rollOperation, RollOperationResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
@@ -55,7 +55,7 @@ public class RollOperationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         rollOperationService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

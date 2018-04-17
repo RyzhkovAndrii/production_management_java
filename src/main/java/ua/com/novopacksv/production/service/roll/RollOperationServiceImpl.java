@@ -12,6 +12,7 @@ import ua.com.novopacksv.production.repository.rollRepository.RollOperationRepos
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Transactional
@@ -67,8 +68,8 @@ public class RollOperationServiceImpl implements RollOperationService {
         RollManufactured rollManufactured = rollOperation.getRollManufactured();
         RollLeftOver rollLeftOver = rollLeftOverService
                 .findLastRollLeftOverByRollType(rollManufactured.getRollType());
-        rollLeftOverService.getRollLeftOverAmount(rollLeftOver,
-                checkOperationOfNegativeAmount(rollOperation));
+        rollLeftOverService.changeRollLeftOverAmount(rollLeftOver,
+                checkOperationOfNegativeAmount(rollManufactured, rollOperation));
         return rollOperationRepository.save(rollOperation);
     }
 
@@ -78,9 +79,10 @@ public class RollOperationServiceImpl implements RollOperationService {
     @Override
     public RollOperation update(RollOperation rollOperation) {
         RollOperation rollOperationOld = rollOperationRepository.getOne(rollOperation.getId());
+        RollManufactured rollManufactured = rollOperation.getRollManufactured();
         RollLeftOver rollLeftOver = rollLeftOverService
-                .findLastRollLeftOverByRollType(rollOperation.getRollManufactured().getRollType());
-        rollLeftOverService.getRollLeftOverAmount(rollLeftOver,
+                .findLastRollLeftOverByRollType(rollManufactured.getRollType());
+        rollLeftOverService.changeRollLeftOverAmount(rollLeftOver,
                 rollOperation.getRollAmount() - rollOperationOld.getRollAmount());
         return rollOperationRepository.save(rollOperation);
     }
@@ -89,7 +91,7 @@ public class RollOperationServiceImpl implements RollOperationService {
     public void delete(Long id) {
         RollLeftOver rollLeftOver = rollLeftOverService
                 .findLastRollLeftOverByRollType(findById(id).getRollManufactured().getRollType());
-        rollLeftOverService.getRollLeftOverAmount(rollLeftOver, -findById(id).getRollAmount());
+        rollLeftOverService.changeRollLeftOverAmount(rollLeftOver, -findById(id).getRollAmount());
         rollOperationRepository.deleteById(id);
     }
 
@@ -103,21 +105,29 @@ public class RollOperationServiceImpl implements RollOperationService {
         return rollOperationRepository.findAllByOperationTypeAndRollManufactured(OperationType.USE, rollManufactured);
     }
 
-    private Integer checkOperationOfNegativeAmount(RollOperation rollOperation)
+    private Integer checkOperationOfNegativeAmount(RollManufactured rollManufactured, RollOperation rollOperation)
             throws NegativeRollAmountException {
-        Integer rollManufacturedAmount = rollManufacturedService.getManufacturedRollAmount(rollOperation.getRollManufactured());
-        Integer rollUsedAmount = rollManufacturedService.getUsedRollAmount(rollOperation.getRollManufactured());
-
-        if (rollOperation.getOperationType().equals(OperationType.USE)) {
-            Integer resultOfAmount = rollManufacturedAmount - rollUsedAmount - rollOperation.getRollAmount();
-            if (resultOfAmount >= 0) {
-                return -rollOperation.getRollAmount();
-            } else {
-                throw new NegativeRollAmountException("Roll's left is negative!");
-            }
-        } else {
+        if (isItManufactureOperation(rollOperation)) {
             return rollOperation.getRollAmount();
         }
+        Integer rollManufacturedAmount
+                = isRollNew(rollManufactured) ? 0 : rollManufacturedService.getManufacturedRollAmount(rollManufactured);
+        Integer rollUsedAmount
+                = isRollNew(rollManufactured) ? 0 : rollManufacturedService.getUsedRollAmount(rollManufactured);
+        Integer resultOfAmount = rollManufacturedAmount - rollUsedAmount - rollOperation.getRollAmount();
+        if (resultOfAmount >= 0) {
+            return -rollOperation.getRollAmount();
+        } else {
+            throw new NegativeRollAmountException("Roll's left is negative!");
+        }
+    }
+
+    private boolean isItManufactureOperation(RollOperation rollOperation) {
+        return rollOperation.getOperationType().equals(OperationType.MANUFACTURE);
+    }
+
+    private Boolean isRollNew(RollManufactured rollManufactured) {
+        return Objects.isNull(rollManufactured.getId());
     }
 
 }

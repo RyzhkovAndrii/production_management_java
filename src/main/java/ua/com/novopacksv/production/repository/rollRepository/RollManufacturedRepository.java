@@ -10,17 +10,22 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface RollManufacturedRepository extends JpaRepository <RollManufactured, Long> {
+public interface RollManufacturedRepository extends JpaRepository<RollManufactured, Long> {
+
+    Optional<RollManufactured> findByManufacturedDateAndRollType(LocalDate manufacturedDate, RollType rollType);
+
+    Optional<RollManufactured> findByManufacturedDateAndRollType_Id(LocalDate manufacturedDate, Long rollTypeId);
 
     List<RollManufactured> findAllByManufacturedDateBetween(LocalDate fromDate, LocalDate toDate);
 
     List<RollManufactured> findAllByManufacturedDateBetweenAndReadyToUseIsFalse(LocalDate fromDate, LocalDate toDate);
 
-    Optional<RollManufactured> findByManufacturedDateAndRollType(LocalDate manufacturedDate, RollType rollType);
-
     List<RollManufactured> findAllByManufacturedDate(LocalDate manufacturedDate);
 
     List<RollManufactured> findAllByManufacturedDateBetweenAndRollType(
             LocalDate fromDate, LocalDate toDate, RollType rollType);
+
+    List<RollManufactured> findAllByManufacturedDateBetweenAndRollType_Id(
+            LocalDate fromManufacturedDate, LocalDate toManufacturedDate, Long rollTypeId);
 
 }

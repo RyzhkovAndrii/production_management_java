@@ -15,4 +15,5 @@ public interface RollLeftOverService extends BaseEntityService<RollLeftOver> {
 
     RollLeftOver findLastRollLeftOverByRollType(RollType rollType);
 
+    void createNewLeftOverAndSave(RollType rollType);
 }

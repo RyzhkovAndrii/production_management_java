@@ -23,6 +23,7 @@ public class RollLeftOver extends BaseEntity {
 
     @OneToOne
     @PrimaryKeyJoinColumn
+    @MapsId
     private RollType rollType;
 
     @Column(name = "amount", nullable = false)
