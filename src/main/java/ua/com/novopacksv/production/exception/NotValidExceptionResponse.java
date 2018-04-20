@@ -13,6 +13,7 @@ public class NotValidExceptionResponse {
     @Getter
     @Setter
     private class FieldExceptionResponse {
+        private String resource;
         private String field;
         private String message;
     }
@@ -21,13 +22,16 @@ public class NotValidExceptionResponse {
 
     private String error;
 
-    private List<FieldExceptionResponse> exceptions = new ArrayList<>();
+    private String message;
 
-    public void addFieldException(String field, String message) {
+    private List<FieldExceptionResponse> fieldErrors = new ArrayList<>();
+
+    public void addFieldException(String resource, String field, String message) {
         FieldExceptionResponse fieldException = new FieldExceptionResponse();
+        fieldException.setResource(resource);
         fieldException.setField(field);
         fieldException.setMessage(message);
-        exceptions.add(fieldException);
+        fieldErrors.add(fieldException);
     }
 
 }
