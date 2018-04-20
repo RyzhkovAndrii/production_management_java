@@ -23,8 +23,8 @@ public class UniqueValidator implements ConstraintValidator<Unique, Object> {
     }
 
     public boolean isValid(Object columnValue, ConstraintValidatorContext context) {
-        String query = String.format("from %s where %s = ? ", clazz.getName(), columnName);
-        return entityManager.createQuery(query).setParameter(1, columnValue).getResultList() == null;
+        String query = String.format("from %s where %s = :columnValue", clazz.getName(), columnName);
+        return entityManager.createQuery(query).setParameter("columnValue", columnValue).getResultList().isEmpty();
     }
 
 }
