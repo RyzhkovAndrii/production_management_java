@@ -18,6 +18,8 @@ public class RestExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleEntityNotFound(ResourceNotFoundException ex) {
         String message = Optional.of(ex.getMessage()).orElse(ex.getClass().getSimpleName());
         ExceptionResponse response = new ExceptionResponse();
+        response.setStatus(404);
+        response.setError("Not Found");
         response.setMessage(message);
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
@@ -26,6 +28,8 @@ public class RestExceptionHandler {
     public ResponseEntity<ExceptionResponse> handleNegativeRollAmount(NegativeRollAmountException ex) {
         String message = Optional.of(ex.getMessage()).orElse(ex.getClass().getSimpleName());
         ExceptionResponse response = new ExceptionResponse();
+        response.setStatus(400);
+        response.setError("Bad Request");
         response.setMessage(message);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
