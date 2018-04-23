@@ -92,6 +92,9 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
 
     private RollLeftOver checkLeftOverOnDate(RollLeftOver rollLeftOver, LocalDate date) {
         Integer lastAmount = rollLeftOver.getAmount();
+        RollLeftOver rollLeftOverTemp = new RollLeftOver();
+        rollLeftOverTemp.setDate(date);
+        rollLeftOverTemp.setRollType(rollLeftOver.getRollType());
         List<RollOperation> rollOperations =
                 rollOperationService.findAllByRollTypeAndDateBetween(rollLeftOver.getRollType(),
                         date, rollLeftOver.getDate());
@@ -99,9 +102,9 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
             Integer resultAmount = isItUseOperation(rollOperation)
                     ? lastAmount + rollOperation.getRollAmount()
                     : lastAmount - rollOperation.getRollAmount();
-            rollLeftOver.setAmount(resultAmount);
+            rollLeftOverTemp.setAmount(resultAmount);
         }
-        return rollLeftOver;
+        return rollLeftOverTemp;
     }
 
     private Boolean isItUseOperation(RollOperation rollOperation) {
