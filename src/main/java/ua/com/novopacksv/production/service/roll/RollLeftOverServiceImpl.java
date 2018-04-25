@@ -59,8 +59,7 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
     @Override
     @Transactional(readOnly = true)
     public RollLeftOver findById(Long id) {
-        return rollLeftOverRepository.findById(id).orElseThrow(() ->
-        {
+        return rollLeftOverRepository.findById(id).orElseThrow(() -> {
             String message = String.format("Roll left over with id = %d is not found", id);
             return new ResourceNotFoundException(message);
         });
@@ -106,11 +105,11 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
                 rollOperationService.findAllByRollTypeAndDateBetween(rollLeftOver.getRollType(),
                         date, rollLeftOver.getDate());
         for (RollOperation rollOperation : rollOperations) {
-            Integer resultAmount = isItUseOperation(rollOperation)
+            lastAmount = isItUseOperation(rollOperation)
                     ? lastAmount + rollOperation.getRollAmount()
                     : lastAmount - rollOperation.getRollAmount();
-            rollLeftOverTemp.setAmount(resultAmount);
         }
+        rollLeftOverTemp.setAmount(lastAmount);
         return rollLeftOverTemp;
     }
 
