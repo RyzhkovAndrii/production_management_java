@@ -72,7 +72,6 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED)
     public RollLeftOver save(RollLeftOver rollLeftOver) {
         return rollLeftOverRepository.save(rollLeftOver);
     }
