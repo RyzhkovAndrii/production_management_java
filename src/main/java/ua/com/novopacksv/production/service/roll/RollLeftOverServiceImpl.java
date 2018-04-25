@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.rollModel.OperationType;
@@ -26,6 +27,7 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
     private final ConversionService conversionService;
 
     @Override
+    @Transactional(readOnly = true)
     public List<RollLeftOver> findAllByDate(LocalDate date) {
         return findAll().stream()
                 .map((rollLeftOver) -> checkLeftOverOnDate(rollLeftOver, date))
@@ -33,6 +35,7 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public RollLeftOver findByRollTypeIdAndDate(Long rollTypeId, LocalDate date) throws ResourceNotFoundException {
         RollLeftOver rollLeftOver = rollLeftOverRepository.findByRollType_Id(rollTypeId).orElseThrow(() -> {
             String formatDate = conversionService.convert(date, String.class);
@@ -54,15 +57,16 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public RollLeftOver findById(Long id) {
-        return rollLeftOverRepository.findById(id).orElseThrow(() ->
-        {
+        return rollLeftOverRepository.findById(id).orElseThrow(() -> {
             String message = String.format("Roll left over with id = %d is not found", id);
             return new ResourceNotFoundException(message);
         });
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<RollLeftOver> findAll() {
         return rollLeftOverRepository.findAll();
     }
@@ -83,6 +87,7 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public RollLeftOver findLastRollLeftOverByRollType(RollType rollType) {
         return rollLeftOverRepository.findByRollType_Id(rollType.getId()).orElseThrow(() -> {
             String message = String.format("RollLeftOver with typeId = %d is not found", rollType.getId());
@@ -92,16 +97,19 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
 
     private RollLeftOver checkLeftOverOnDate(RollLeftOver rollLeftOver, LocalDate date) {
         Integer lastAmount = rollLeftOver.getAmount();
+        RollLeftOver rollLeftOverTemp = new RollLeftOver();
+        rollLeftOverTemp.setDate(date);
+        rollLeftOverTemp.setRollType(rollLeftOver.getRollType());
         List<RollOperation> rollOperations =
                 rollOperationService.findAllByRollTypeAndDateBetween(rollLeftOver.getRollType(),
                         date, rollLeftOver.getDate());
         for (RollOperation rollOperation : rollOperations) {
-            Integer resultAmount = isItUseOperation(rollOperation)
+            lastAmount = isItUseOperation(rollOperation)
                     ? lastAmount + rollOperation.getRollAmount()
                     : lastAmount - rollOperation.getRollAmount();
-            rollLeftOver.setAmount(resultAmount);
         }
-        return rollLeftOver;
+        rollLeftOverTemp.setAmount(lastAmount);
+        return rollLeftOverTemp;
     }
 
     private Boolean isItUseOperation(RollOperation rollOperation) {
