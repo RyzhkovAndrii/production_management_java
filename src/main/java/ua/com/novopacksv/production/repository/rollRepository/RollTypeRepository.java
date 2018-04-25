@@ -9,6 +9,6 @@ import java.util.Optional;
 @Repository
 public interface RollTypeRepository extends JpaRepository <RollType, Long> {
 
-    Optional<RollType> findOne(String name);
+    Optional<RollType> findByName(String name);
 
 }
