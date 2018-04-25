@@ -35,12 +35,11 @@ public class RollOperationRequestToRollOperationConverter implements Converter<R
         LocalDate operationDate = conversionService.convert(source.getOperationDate(), LocalDate.class);
         LocalDate manufacturedDate = conversionService.convert(source.getManufacturedDate(), LocalDate.class);
         RollType rollType = rollTypeService.findById(source.getRollTypeId());
-        RollManufactured rollManufactured = rollManufacturedService
-                .findOneOrCreate(manufacturedDate, rollType);
+        RollManufactured rollManufactured = rollManufacturedService.findOneOrCreate(manufacturedDate, rollType);
         RollOperation result = new RollOperation();
         result.setOperationDate(operationDate);
         result.setRollManufactured(rollManufactured);
-        result.setOperationType(OperationType.valueOf(source.getOperationType()));
+        result.setOperationType(OperationType.valueOf(source.getOperationType().toUpperCase()));
         result.setRollAmount(source.getRollAmount());
         return result;
     }
