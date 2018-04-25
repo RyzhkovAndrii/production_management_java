@@ -94,7 +94,7 @@ public class RollTypeServiceImpl implements RollTypeService {
     @Override
     public RollType update(RollType rollType) throws ResourceNotFoundException {
         findById(rollType.getId());
-        return save(rollType);
+        return rollTypeRepository.save(rollType);
     }
 
     /**
