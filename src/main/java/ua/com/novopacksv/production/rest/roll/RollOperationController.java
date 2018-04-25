@@ -11,6 +11,7 @@ import ua.com.novopacksv.production.dto.roll.RollOperationResponse;
 import ua.com.novopacksv.production.model.rollModel.RollOperation;
 import ua.com.novopacksv.production.service.roll.RollOperationService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -37,7 +38,7 @@ public class RollOperationController {
     }
 
     @PostMapping
-    public ResponseEntity<RollOperationResponse> save(@RequestBody RollOperationRequest request) {
+    public ResponseEntity<RollOperationResponse> save(@Valid @RequestBody RollOperationRequest request) {
         RollOperation rollOperation = conversionService.convert(request, RollOperation.class);
         rollOperation = rollOperationService.save(rollOperation);
         RollOperationResponse response = conversionService.convert(rollOperation, RollOperationResponse.class);
@@ -46,7 +47,7 @@ public class RollOperationController {
 
     @PutMapping("/{id}")
     public ResponseEntity<RollOperationResponse> update(@PathVariable Long id,
-                                                        @RequestBody RollOperationRequest request) {
+                                                        @Valid @RequestBody RollOperationRequest request) {
         RollOperation rollOperation = conversionService.convert(request, RollOperation.class);
         rollOperation.setId(id);
         rollOperation = rollOperationService.update(rollOperation);
