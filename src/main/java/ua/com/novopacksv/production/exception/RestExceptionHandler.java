@@ -24,8 +24,8 @@ public class RestExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(NegativeRollAmountException.class)
-    public ResponseEntity<ExceptionResponse> handleNegativeRollAmount(NegativeRollAmountException ex) {
+    @ExceptionHandler({NegativeRollAmountException.class, NotUniqueFieldException.class})
+    public ResponseEntity<ExceptionResponse> handleIncorrectResponseDataException(Exception ex) {
         String message = Optional.of(ex.getMessage()).orElse(ex.getClass().getSimpleName());
         ExceptionResponse response = new ExceptionResponse();
         response.setStatus(400);
@@ -35,7 +35,7 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<NotValidExceptionResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+    public ResponseEntity<NotValidExceptionResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
         NotValidExceptionResponse response = new NotValidExceptionResponse();
         response.setStatus(400);
         response.setError("Bad Request");
