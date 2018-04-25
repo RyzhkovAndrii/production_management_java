@@ -2,8 +2,6 @@ package ua.com.novopacksv.production.dto.roll;
 
 import lombok.Getter;
 import lombok.Setter;
-import ua.com.novopacksv.production.model.rollModel.RollType;
-import ua.com.novopacksv.production.validator.Unique;
 
 import javax.validation.constraints.*;
 
@@ -13,7 +11,6 @@ public class RollTypeRequest {
 
     @NotBlank(message = "roll type name is a required field!")
     @Size(max = 50, message = "roll type name must be less then 50 symbols long!")
-    @Unique(value = RollType.class, column = "name", message = "roll type's name must be unique!")
     private String name;
 
     @NotNull(message = "roll thickness is a required field!")
