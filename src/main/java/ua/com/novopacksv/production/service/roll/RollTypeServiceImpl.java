@@ -3,11 +3,13 @@ package ua.com.novopacksv.production.service.roll;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.novopacksv.production.exception.NotUniqueFieldException;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.rollModel.RollType;
 import ua.com.novopacksv.production.repository.rollRepository.RollTypeRepository;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Класс имплементирует методы интерфейса {@code RollTypeService}.
@@ -76,6 +78,7 @@ public class RollTypeServiceImpl implements RollTypeService {
      */
     @Override
     public RollType save(RollType rollType) {
+        checkNameUnique(rollType);
         RollType entityRollType = rollTypeRepository.save(rollType);
         rollLeftOverService.createNewLeftOverAndSave(entityRollType);
         return entityRollType;
@@ -94,6 +97,7 @@ public class RollTypeServiceImpl implements RollTypeService {
     @Override
     public RollType update(RollType rollType) throws ResourceNotFoundException {
         findById(rollType.getId());
+        checkNameUnique(rollType);
         return rollTypeRepository.save(rollType);
     }
 
@@ -109,6 +113,36 @@ public class RollTypeServiceImpl implements RollTypeService {
     @Override
     public void delete(Long id) throws ResourceNotFoundException {
         rollTypeRepository.delete(findById(id));
+    }
+
+    /**
+     * Проверяет существует ли в базе данных тип рулона с таким же именем, как и у передаваемого в качестве параметра
+     * типа рулона.
+     *
+     * Если такое имя есть в базе данных и создается новый рулон, то бросается исключение.
+     * Если такое имя есть в базе, но происходит операция update для типа рулона (id равны), то исключение не бросается
+     *
+     * @param rollType тип рулона с проверяемям на уникальность именем
+     * @throws NotUniqueFieldException  если имя типа рулона не уникально
+     */
+    private void checkNameUnique(RollType rollType) {
+        RollType entityRollType = rollTypeRepository.findOne(rollType.getName()).orElse(null);
+        if (entityRollType != null && !hasSameId(rollType, entityRollType)) {
+            throw new NotUniqueFieldException("Roll type name must be unique!");
+        }
+    }
+
+    /**
+     * Проверяет равны ли между собой id двух типов рулонов и не равны ли они null
+     *
+     * @param rollType первый сравниваемый тип рулона
+     * @param entityRollType второй сравниваем тип рулона
+     * @return {@code true} если оба id не null и равны {@code false} - если не выполняется хоть одно из условий
+     */
+    private boolean hasSameId(RollType rollType, RollType entityRollType) {
+        Long id = rollType.getId();
+        Long entityId = entityRollType.getId();
+        return id != null && entityId != null && Objects.equals(id, entityId);
     }
 
 }
