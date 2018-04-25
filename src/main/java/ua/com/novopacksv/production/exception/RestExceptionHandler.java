@@ -40,9 +40,7 @@ public class RestExceptionHandler {
         response.setStatus(400);
         response.setError("Bad Request");
         response.setMessage("Invalid " + ex.getBindingResult().getObjectName());
-        ex.getBindingResult().getFieldErrors().forEach((fieldError) ->
-                response.addFieldException(fieldError.getObjectName(), fieldError.getField(),
-                        fieldError.getDefaultMessage()));
+        ex.getBindingResult().getFieldErrors().forEach(response::addFieldException);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 

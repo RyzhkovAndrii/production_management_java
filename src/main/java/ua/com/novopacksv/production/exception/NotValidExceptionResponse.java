@@ -2,6 +2,7 @@ package ua.com.novopacksv.production.exception;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.validation.FieldError;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +27,11 @@ public class NotValidExceptionResponse {
 
     private List<FieldExceptionResponse> fieldErrors = new ArrayList<>();
 
-    public void addFieldException(String resource, String field, String message) {
+    public void addFieldException(FieldError fieldError) {
         FieldExceptionResponse fieldException = new FieldExceptionResponse();
-        fieldException.setResource(resource);
-        fieldException.setField(field);
-        fieldException.setMessage(message);
+        fieldException.setResource(fieldError.getObjectName());
+        fieldException.setField(fieldError.getField());
+        fieldException.setMessage(fieldError.getDefaultMessage());
         fieldErrors.add(fieldException);
     }
 
