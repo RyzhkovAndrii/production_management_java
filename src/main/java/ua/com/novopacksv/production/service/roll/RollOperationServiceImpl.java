@@ -123,15 +123,18 @@ public class RollOperationServiceImpl implements RollOperationService {
     private void checkOperationSaveAllowed(RollOperation rollOperation)
             throws NegativeRollAmountException {
         RollManufactured rollManufactured = rollOperation.getRollManufactured();
+        Integer rollManufacturedAmount = 0;
+        Integer rollUsedAmount = 0;
+        Integer resultOfAmount;
         if (!isItManufactureOperation(rollOperation)) {
-            Integer rollManufacturedAmount
+            rollManufacturedAmount
                     = isRollNew(rollManufactured) ? 0 : rollManufacturedService.getManufacturedRollAmount(rollManufactured);
-            Integer rollUsedAmount
+            rollUsedAmount
                     = isRollNew(rollManufactured) ? 0 : rollManufacturedService.getUsedRollAmount(rollManufactured);
-            Integer resultOfAmount = rollManufacturedAmount - rollUsedAmount - rollOperation.getRollAmount();
-            if (resultOfAmount < 0) {
-                throw new NegativeRollAmountException("Roll's left is negative!");
-            }
+        }
+        resultOfAmount = rollManufacturedAmount - rollUsedAmount - rollOperation.getRollAmount();
+        if (resultOfAmount < 0) {
+            throw new NegativeRollAmountException("Roll's left is negative!");
         }
     }
 
