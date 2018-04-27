@@ -23,14 +23,14 @@ public class OrderController {
     private final ModelConversionService conversionService;
 
     @GetMapping
-    public ResponseEntity<List<OrderResponse>> getList() {
+    public ResponseEntity<List<OrderResponse>> getAll() {
         List<Order> clients = orderService.findAll();
         List<OrderResponse> response = conversionService.convert(clients, OrderResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderResponse> getById(@PathVariable Long id) {
+    public ResponseEntity<OrderResponse> getOne(@PathVariable Long id) {
         Order order = orderService.findById(id);
         OrderResponse response = conversionService.convert(order, OrderResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
