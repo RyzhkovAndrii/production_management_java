@@ -11,6 +11,7 @@ import ua.com.novopacksv.production.dto.order.ClientResponse;
 import ua.com.novopacksv.production.model.orderModel.Client;
 import ua.com.novopacksv.production.service.order.ClientService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -44,7 +45,7 @@ public class ClientController {
     }
 
     @PostMapping
-    public ResponseEntity<ClientResponse> save(@RequestBody ClientRequest request) {
+    public ResponseEntity<ClientResponse> save(@Valid @RequestBody ClientRequest request) {
         Client client = conversionService.convert(request, Client.class);
         client = clientService.save(client);
         ClientResponse response = conversionService.convert(client, ClientResponse.class);
@@ -52,7 +53,7 @@ public class ClientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ClientResponse> update(@PathVariable Long id, @RequestBody ClientRequest request) {
+    public ResponseEntity<ClientResponse> update(@PathVariable Long id, @Valid @RequestBody ClientRequest request) {
         Client client = conversionService.convert(request, Client.class);
         client.setId(id);
         client = clientService.update(client);

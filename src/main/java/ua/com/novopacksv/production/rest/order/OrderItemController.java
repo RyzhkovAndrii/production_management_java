@@ -11,6 +11,7 @@ import ua.com.novopacksv.production.dto.order.OrderItemResponse;
 import ua.com.novopacksv.production.model.orderModel.OrderItem;
 import ua.com.novopacksv.production.service.order.OrderItemService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -37,7 +38,7 @@ public class OrderItemController {
     }
 
     @PostMapping
-    public ResponseEntity<OrderItemResponse> save(@RequestBody OrderItemRequest request) {
+    public ResponseEntity<OrderItemResponse> save(@Valid @RequestBody OrderItemRequest request) {
         OrderItem orderItem = conversionService.convert(request, OrderItem.class);
         orderItem = orderItemService.save(orderItem);
         OrderItemResponse response = conversionService.convert(orderItem, OrderItemResponse.class);
@@ -45,7 +46,7 @@ public class OrderItemController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OrderItemResponse> update(@PathVariable Long id, @RequestBody OrderItemRequest request) {
+    public ResponseEntity<OrderItemResponse> update(@PathVariable Long id, @Valid @RequestBody OrderItemRequest request) {
         OrderItem orderItem = conversionService.convert(request, OrderItem.class);
         orderItem.setId(id);
         orderItem = orderItemService.update(orderItem);
