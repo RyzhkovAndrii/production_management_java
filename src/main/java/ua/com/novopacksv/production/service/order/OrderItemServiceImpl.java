@@ -53,7 +53,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Transactional(readOnly = true)
     public List<OrderItem> findAll(Long orderId) {
         Order order = orderService.findById(orderId);
-        return orderItemRepository.findByOrder(order);
+        return orderItemRepository.findAllByOrder(order);
     }
 
 }
