@@ -23,14 +23,21 @@ public class ClientController {
     private final ModelConversionService conversionService;
 
     @GetMapping
-    public ResponseEntity<List<ClientResponse>> getList() {
+    public ResponseEntity<List<ClientResponse>> getAll() {
         List<Client> clients = clientService.findAll();
         List<ClientResponse> response = conversionService.convert(clients, ClientResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping(params = {"name"})
+    public ResponseEntity<ClientResponse> getOne(@RequestParam String name) {
+        Client client = clientService.findOne(name);
+        ClientResponse response = conversionService.convert(client, ClientResponse.class);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
-    public ResponseEntity<ClientResponse> getById(@PathVariable Long id) {
+    public ResponseEntity<ClientResponse> getOne(@PathVariable Long id) {
         Client client = clientService.findById(id);
         ClientResponse response = conversionService.convert(client, ClientResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
