@@ -6,10 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import ua.com.novopacksv.production.model.BaseEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.List;
 
 @Data
@@ -20,9 +17,20 @@ import java.util.List;
 @Table(name = "client")
 public class Client extends BaseEntity {
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "client")
+    @OneToMany(mappedBy = "client", orphanRemoval = true)
     private List<Order> orders;
+
+    public void addOrder(Order order) {
+        orders.add(order);
+        order.setClient(this);
+    }
+
+    public void removeOrder(Order order) {
+        orders.remove(order);
+        order.setClient(null);
+    }
+
 }

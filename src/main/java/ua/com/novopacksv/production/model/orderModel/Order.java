@@ -1,11 +1,12 @@
 package ua.com.novopacksv.production.model.orderModel;
 
-import lombok.*;
-import org.hibernate.annotations.Type;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import ua.com.novopacksv.production.model.BaseEntity;
 
 import javax.persistence.*;
-import javax.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,17 +23,26 @@ public class Order extends BaseEntity {
     @PrimaryKeyJoinColumn
     private Client client;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", orphanRemoval = true)
     private List<OrderItem> orderItems;
 
-    @Type(type = "true_false")
-    @Column(name = "is_important")
-    @NonNull
+    @Column(name = "is_important", nullable = false)
     private Boolean isImportant;
 
-    @Column(name = "creation_date")
+    @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
 
-    @Column(name = "delivery_date")
+    @Column(name = "delivery_date", nullable = false)
     private LocalDate deliveryDate;
+
+    public void addOrderItem(OrderItem orderItem) {
+        orderItems.add(orderItem);
+        orderItem.setOrder(this);
+    }
+
+    public void removeOrderItem(OrderItem orderItem) {
+        orderItems.remove(orderItem);
+        orderItem.setOrder(null);
+    }
+
 }
