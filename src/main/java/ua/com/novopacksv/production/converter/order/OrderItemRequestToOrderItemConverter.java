@@ -27,7 +27,7 @@ public class OrderItemRequestToOrderItemConverter implements Converter<OrderItem
         ProductType productType = productTypeService.findById(source.getProductTypeId());
         Order order = orderService.findById(source.getOrderId());
         OrderItem result = new OrderItem();
-        result.setProduct(productType);
+        result.setProductType(productType);
         result.setAmount(source.getAmount());
         result.setOrder(order);
         return result;

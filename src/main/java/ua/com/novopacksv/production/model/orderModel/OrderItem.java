@@ -20,7 +20,7 @@ public class OrderItem extends BaseEntity {
 
     @ManyToOne
     @PrimaryKeyJoinColumn
-    private ProductType product;
+    private ProductType productType;
 
     @Column(name = "amount", nullable = false)
     private Integer amount;
