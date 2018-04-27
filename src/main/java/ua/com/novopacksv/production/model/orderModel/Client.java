@@ -23,14 +23,4 @@ public class Client extends BaseEntity {
     @OneToMany(mappedBy = "client", orphanRemoval = true)
     private List<Order> orders;
 
-    public void addOrder(Order order) {
-        orders.add(order);
-        order.setClient(this);
-    }
-
-    public void removeOrder(Order order) {
-        orders.remove(order);
-        order.setClient(null);
-    }
-
 }

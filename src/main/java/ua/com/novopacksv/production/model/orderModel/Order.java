@@ -37,14 +37,4 @@ public class Order extends BaseEntity {
     @Column(name = "delivery_date", nullable = false)
     private LocalDate deliveryDate;
 
-    public void addOrderItem(OrderItem orderItem) {
-        orderItems.add(orderItem);
-        orderItem.setOrder(this);
-    }
-
-    public void removeOrderItem(OrderItem orderItem) {
-        orderItems.remove(orderItem);
-        orderItem.setOrder(null);
-    }
-
 }
