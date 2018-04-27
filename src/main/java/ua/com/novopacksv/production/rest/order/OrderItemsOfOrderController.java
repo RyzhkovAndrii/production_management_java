@@ -30,18 +30,4 @@ public class OrderItemsOfOrderController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PutMapping("/{orderItemId}")
-    public ResponseEntity<Void> addOrderItemToOrder(@PathVariable("orderId") Long orderId,
-                                                    @PathVariable("orderItemId") Long orderItemId) {
-        orderService.addOrderItemToOrder(orderId, orderItemId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{orderItemId}")
-    public ResponseEntity<Void> removeOrderItemFromOrder(@PathVariable("orderId") Long orderId,
-                                                         @PathVariable("orderItemId") Long orderItemId) {
-        orderService.removeOrderItemFromOrder(orderId, orderItemId);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
 }
