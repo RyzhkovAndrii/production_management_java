@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "client")
+@Table(name = "clients")
 public class Client extends BaseEntity {
 
     @Column(name = "name", nullable = false, unique = true)

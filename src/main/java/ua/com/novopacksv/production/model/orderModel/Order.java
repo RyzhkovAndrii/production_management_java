@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "order")
+@Table(name = "orders")
 public class Order extends BaseEntity {
 
     @ManyToOne
