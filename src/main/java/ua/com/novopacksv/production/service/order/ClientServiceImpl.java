@@ -62,7 +62,7 @@ public class ClientServiceImpl implements ClientService {
     private void checkNameUnique(Client client) {
         Client entityClient = clientRepository.findByName(client.getName()).orElse(null);
         if (entityClient != null && !hasSameId(client, entityClient)) {
-            throw new NotUniqueFieldException("Roll type name must be unique!");
+            throw new NotUniqueFieldException("Client name must be unique!");
         }
     }
 
