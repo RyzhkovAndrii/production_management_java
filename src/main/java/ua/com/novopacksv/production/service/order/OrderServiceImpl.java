@@ -7,6 +7,7 @@ import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.orderModel.Order;
 import ua.com.novopacksv.production.repository.orderRepository.OrderRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -44,6 +45,12 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void delete(Long id) {
         orderRepository.delete(findById(id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Order> findAll(LocalDate fromDeliveryDate, LocalDate toDeliveryDate) {
+        return orderRepository.findAllByDeliveryDateBetween(fromDeliveryDate, toDeliveryDate);
     }
 
 }
