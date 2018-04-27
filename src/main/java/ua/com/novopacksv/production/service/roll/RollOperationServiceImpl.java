@@ -107,7 +107,6 @@ public class RollOperationServiceImpl implements RollOperationService {
         return rollOperationRepository.findAllByOperationTypeAndRollManufactured(OperationType.USE, rollManufactured);
     }
 
-    @Override
     public Boolean isItManufactureOperation(RollOperation rollOperation) {
         return rollOperation.getOperationType().equals(OperationType.MANUFACTURE);
     }

@@ -18,6 +18,4 @@ public interface RollOperationService extends BaseEntityService<RollOperation> {
 
     List<RollOperation> findAllByRollTypeAndManufacturedDateBetween(RollType rollType, LocalDate fromDate, LocalDate toDate);
 
-    Boolean isItManufactureOperation(RollOperation rollOperation);
-
 }
