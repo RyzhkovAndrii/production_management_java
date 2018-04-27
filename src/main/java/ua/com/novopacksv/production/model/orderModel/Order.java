@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import ua.com.novopacksv.production.model.BaseEntity;
 
 import javax.persistence.*;
@@ -29,6 +30,7 @@ public class Order extends BaseEntity {
     @Column(name = "is_important", nullable = false)
     private Boolean isImportant;
 
+    @CreationTimestamp
     @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
 
