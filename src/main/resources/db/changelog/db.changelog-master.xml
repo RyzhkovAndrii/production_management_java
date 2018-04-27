@@ -9,4 +9,6 @@
     <include file="db/changelog/0.0.1/roll_tables_init.xml"/>
     <include file="db/changelog/0.0.1/roll_tables_f_keys.xml"/>
     <include file="db/changelog/0.0.1/test_roll_db.xml"/>
+    <include file="db/changelog/0.0.2/product_tables_init.xml"/>
+    <include file="db/changelog/0.0.3/order_tables_init.xml"/>
 </databaseChangeLog>
