@@ -1,13 +1,10 @@
 package ua.com.novopacksv.production.service.roll;
 
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
-import ua.com.novopacksv.production.model.rollModel.OperationType;
 import ua.com.novopacksv.production.model.rollModel.RollLeftOver;
 import ua.com.novopacksv.production.model.rollModel.RollOperation;
 import ua.com.novopacksv.production.model.rollModel.RollType;
@@ -30,7 +27,7 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
     @Transactional(readOnly = true)
     public List<RollLeftOver> findAllByDate(LocalDate date) {
         return findAll().stream()
-                .map((rollLeftOver) -> checkLeftOverOnDate(rollLeftOver, date))
+                .map((rollLeftOver) -> getLeftOverOnDate(rollLeftOver, date))
                 .collect(Collectors.toList());
     }
 
@@ -43,7 +40,7 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
                     String.format("RollLeftOver with typeId = %d on date = %s is not found", rollTypeId, formatDate);
             return new ResourceNotFoundException(message);
         });
-        return checkLeftOverOnDate(rollLeftOver, date);
+        return getLeftOverOnDate(rollLeftOver, date);
     }
 
 
@@ -95,25 +92,20 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
         });
     }
 
-    private RollLeftOver checkLeftOverOnDate(RollLeftOver rollLeftOver, LocalDate date) {
+    private RollLeftOver getLeftOverOnDate(RollLeftOver rollLeftOver, LocalDate date) {
         Integer lastAmount = rollLeftOver.getAmount();
+        List<RollOperation> rollOperations = rollOperationService.findAllByRollTypeAndManufacturedDateBetween(
+                rollLeftOver.getRollType(), date.plusDays(1), rollLeftOver.getDate());
+        for (RollOperation rollOperation : rollOperations) {
+            lastAmount += rollOperationService.isItManufactureOperation(rollOperation)
+                    ? -rollOperation.getRollAmount()
+                    : rollOperation.getRollAmount();
+        }
         RollLeftOver rollLeftOverTemp = new RollLeftOver();
         rollLeftOverTemp.setDate(date);
         rollLeftOverTemp.setRollType(rollLeftOver.getRollType());
-        List<RollOperation> rollOperations =
-                rollOperationService.findAllByRollTypeAndDateBetween(rollLeftOver.getRollType(),
-                        date, rollLeftOver.getDate());
-        for (RollOperation rollOperation : rollOperations) {
-            lastAmount = isItUseOperation(rollOperation)
-                    ? lastAmount + rollOperation.getRollAmount()
-                    : lastAmount - rollOperation.getRollAmount();
-        }
         rollLeftOverTemp.setAmount(lastAmount);
         return rollLeftOverTemp;
-    }
-
-    private Boolean isItUseOperation(RollOperation rollOperation) {
-        return rollOperation.getOperationType().equals(OperationType.USE);
     }
 
     public void changeRollLeftOverAmount(RollLeftOver rollLeftOver, Integer positiveOrNegativeChanges) {
