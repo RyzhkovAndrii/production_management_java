@@ -2,11 +2,13 @@ package ua.com.novopacksv.production.validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.stereotype.Component;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.time.LocalDate;
 
+@Component
 public class PastOrPresentValidatorForStringDate implements ConstraintValidator<PastOrPresent, String> {
 
     @Autowired
