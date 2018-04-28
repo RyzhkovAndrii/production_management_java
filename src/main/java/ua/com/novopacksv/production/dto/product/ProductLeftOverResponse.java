@@ -9,7 +9,7 @@ import ua.com.novopacksv.production.dto.BaseEntityResponse;
 public class ProductLeftOverResponse extends BaseEntityResponse {
 
     private String date;
-    
+
     private Long productTypeId;
 
     private Integer amount;

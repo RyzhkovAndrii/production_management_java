@@ -41,7 +41,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     }
 
     @Override
-    public ProductType update(ProductType productType) throws ResourceNotFoundException{
+    public ProductType update(ProductType productType) throws ResourceNotFoundException {
         findById(productType.getId());
         return productTypeRepository.save(productType);
     }

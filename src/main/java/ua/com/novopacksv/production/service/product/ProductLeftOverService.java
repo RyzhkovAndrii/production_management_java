@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface ProductLeftOverService extends BaseEntityService<ProductLeftOver> {
 
+    List<ProductLeftOver> findOnDate(LocalDate date);
 
-    List<ProductLeftOver> findByProductTypeOnDate(ProductType productType, LocalDate date);
+    List<ProductLeftOver> findByProductType_IdOnDate(Long productTypeId, LocalDate date);
 }
