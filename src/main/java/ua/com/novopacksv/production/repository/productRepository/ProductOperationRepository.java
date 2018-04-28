@@ -10,5 +10,5 @@ import java.util.List;
 @Repository
 public interface ProductOperationRepository extends JpaRepository<ProductOperation, Long> {
 
-    List<ProductOperation> findAllByDateBetween(LocalDate fromDate, LocalDate toDate);
+    List<ProductOperation> findAllByProductType_IdAndDateBetween(Long productTypeId, LocalDate fromDate, LocalDate toDate);
 }

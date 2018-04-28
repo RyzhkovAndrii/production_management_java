@@ -8,6 +8,7 @@ import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.productModel.ProductOperation;
 import ua.com.novopacksv.production.repository.productRepository.ProductOperationRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -20,8 +21,7 @@ public class ProductOperationServiceImpl implements ProductOperationService {
     @Override
     @Transactional(readOnly = true)
     public ProductOperation findById(Long id) throws ResourceNotFoundException {
-        return productOperationRepository.findById(id).orElseThrow(() ->
-        {
+        return productOperationRepository.findById(id).orElseThrow(() -> {
             String message = String.format("Product operation with id = %d was not found", id);
             return new ResourceNotFoundException(message);
         });
@@ -33,19 +33,26 @@ public class ProductOperationServiceImpl implements ProductOperationService {
         return productOperationRepository.findAll();
     }
 
-    @Override
+    @Override //TODO add changing to left over
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public ProductOperation save(ProductOperation productOperation) {
         return productOperationRepository.save(productOperation);
     }
 
-    @Override
+    @Override //TODO add changing to left over
     public ProductOperation update(ProductOperation productOperation) {
         return productOperationRepository.save(productOperation);
     }
 
-    @Override
+    @Override //TODO add changing to left over
     public void delete(Long id) throws ResourceNotFoundException {
         productOperationRepository.delete(findById(id));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductOperation> findAllOperationBetweenDatesByTypeId(Long productTypeId, LocalDate fromDate,
+                                                                       LocalDate toDate){
+        return productOperationRepository.findAllByProductType_IdAndDateBetween(productTypeId, fromDate, toDate);
     }
 }
