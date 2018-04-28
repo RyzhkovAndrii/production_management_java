@@ -7,6 +7,8 @@ import lombok.Setter;
 @Setter
 public class ProductLeftOverRequest {
 
+    private  String date;
+
     private String productTypeId;
 
     private Integer amount;
