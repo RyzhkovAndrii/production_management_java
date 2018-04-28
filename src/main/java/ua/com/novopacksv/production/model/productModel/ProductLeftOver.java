@@ -7,9 +7,7 @@ import lombok.NoArgsConstructor;
 import ua.com.novopacksv.production.model.BaseEntity;
 
 import javax.persistence.*;
-import javax.persistence.Table;
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -19,9 +17,8 @@ import java.util.List;
 @Table(name = "product_left_over")
 public class ProductLeftOver extends BaseEntity {
 
-    //LocalDateTime for take all changes up to the midnight (here we point a time for this)
     @Column(name = "left_date", nullable = false)
-    private LocalDateTime leftDate;
+    private LocalDate leftDate;
 
     @OneToOne
     @PrimaryKeyJoinColumn
