@@ -17,13 +17,10 @@ public class ProductBatchToProductBatchResponseConverter implements Converter<Pr
 
     @Override
     public ProductBatchResponse convert(ProductBatch source) {
-//        String creationDate = conversionService.convert(source.getCreationDate(), String.class);
         ProductBatchResponse result = new ProductBatchResponse();
-        result.setId(source.getId());
         result.setProductTypeId(source.getProductType().getId());
-//        result.setCreationDate(creationDate);
-        result.setAmount(source.getAmount());
+        result.setManufacturedAmount(source.getManufacturedAmount());
+        result.setSoldAmount(source.getSoldAmount());
         return result;
     }
-
 }

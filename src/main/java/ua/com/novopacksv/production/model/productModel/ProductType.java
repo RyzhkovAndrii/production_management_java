@@ -18,12 +18,12 @@ import javax.persistence.Table;
 @Table(name = "product_type")
 public class ProductType extends BaseEntity {
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "weight")
+    @Column(name = "weight", nullable = false)
     private Double weight;
 
-    @Column(name = "color_code")
+    @Column(name = "color_code", nullable = false)
     private String colorCode;
 }

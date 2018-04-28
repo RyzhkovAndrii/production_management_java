@@ -7,26 +7,27 @@ import lombok.NoArgsConstructor;
 import ua.com.novopacksv.production.model.BaseEntity;
 
 import javax.persistence.*;
-import javax.persistence.Table;
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "product_left_over")
-public class ProductLeftOver extends BaseEntity {
+@Table(name = "product_operation")
+public class ProductOperation extends BaseEntity {
 
-    //LocalDateTime for take all changes up to the midnight (here we point a time for this)
-    @Column(name = "left_date", nullable = false)
-    private LocalDateTime leftDate;
+    @Column(name = "date", nullable = false)
+    private LocalDate date;
 
-    @OneToOne
+    @ManyToOne
     @PrimaryKeyJoinColumn
     @MapsId
     private ProductType productType;
+
+    @Column(columnDefinition = "product_operation_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ProductOperationType productOperationType;
 
     @Column(name = "amount", nullable = false)
     private Integer amount;

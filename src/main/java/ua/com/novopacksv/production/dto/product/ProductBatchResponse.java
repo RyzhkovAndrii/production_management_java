@@ -10,8 +10,8 @@ public class ProductBatchResponse extends BaseEntityResponse {
 
     private Long productTypeId;
 
-    private String creationDate;
+    private Integer manufacturedAmount;
 
-    private Integer amount;
+    private Integer soldAmount;
 
 }
