@@ -1,7 +1,6 @@
 package ua.com.novopacksv.production.service.product;
 
 import ua.com.novopacksv.production.model.productModel.ProductLeftOver;
-import ua.com.novopacksv.production.model.productModel.ProductType;
 import ua.com.novopacksv.production.service.BaseEntityService;
 
 import java.time.LocalDate;
@@ -11,5 +10,5 @@ public interface ProductLeftOverService extends BaseEntityService<ProductLeftOve
 
     List<ProductLeftOver> findOnDate(LocalDate date);
 
-    List<ProductLeftOver> findByProductType_IdOnDate(Long productTypeId, LocalDate date);
+    ProductLeftOver findByProductType_IdOnDate(Long productTypeId, LocalDate date);
 }

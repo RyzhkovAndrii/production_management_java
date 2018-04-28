@@ -3,6 +3,7 @@ package ua.com.novopacksv.production.service.product;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.productModel.ProductLeftOver;
 import ua.com.novopacksv.production.model.productModel.ProductOperation;
 import ua.com.novopacksv.production.model.productModel.ProductOperationType;
@@ -21,7 +22,6 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
 
     private final ProductOperationService productOperationService;
 
-    //TODO ask if the date need to be +1 date for minus operations
     @Override
     public List<ProductLeftOver> findOnDate(LocalDate date) {
         List<ProductLeftOver> productLeftOvers = productLeftOverRepository.findAll();
@@ -30,8 +30,14 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
     }
 
     @Override
-    public List<ProductLeftOver> findByProductType_IdOnDate(Long productTypeId, LocalDate date) {
-        return null;
+    public ProductLeftOver findByProductType_IdOnDate(Long productTypeId, LocalDate date)
+            throws ResourceNotFoundException {
+        ProductLeftOver productLeftOver =
+                productLeftOverRepository.findByProductType_Id(productTypeId).orElseThrow(() -> {
+                    String message = String.format("Produt type with Id = %d was not found", productTypeId);
+                    return new ResourceNotFoundException(message);
+                });
+        return getLeftOverOnDate(date, productLeftOver);
     }
 
     @Override
