@@ -7,6 +7,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import ua.com.novopacksv.production.dto.roll.RollBatchResponse;
 import ua.com.novopacksv.production.model.rollModel.RollBatch;
+import ua.com.novopacksv.production.model.rollModel.RollManufactured;
 
 @Component
 public class RollBatchToRollBatchResponseConverter implements Converter<RollBatch, RollBatchResponse> {
@@ -17,14 +18,16 @@ public class RollBatchToRollBatchResponseConverter implements Converter<RollBatc
 
     @Override
     public RollBatchResponse convert(RollBatch source) {
+        RollManufactured sourceRollManufactured = source.getRollManufactured();
         String dateManufactured = conversionService
-                .convert(source.getRollManufactured().getManufacturedDate(), String.class);
+                .convert(sourceRollManufactured.getManufacturedDate(), String.class);
         RollBatchResponse result = new RollBatchResponse();
         result.setDateManufactured(dateManufactured);
-        result.setRollTypeId(source.getRollManufactured().getRollType().getId());
+        result.setRollTypeId(sourceRollManufactured.getRollType().getId());
         result.setManufacturedAmount(source.getManufacturedAmount());
         result.setUsedAmount(source.getUsedAmount());
         result.setLeftOverAmount(source.getLeftOverAmount());
+        result.setReadyToUse(sourceRollManufactured.getReadyToUse());
         return result;
     }
 

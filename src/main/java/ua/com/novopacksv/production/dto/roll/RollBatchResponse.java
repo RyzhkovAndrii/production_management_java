@@ -17,4 +17,6 @@ public class RollBatchResponse {
 
     private Integer leftOverAmount;
 
+    private Boolean readyToUse;
+
 }
