@@ -97,4 +97,16 @@
             <column name="amount" value="1100"/>
         </insert>
     </changeSet>
+    <changeSet id="13" author="ryzhkov.andrii@gmail.com">
+        <insert tableName="roll_check">
+            <column name="roll_type_id" value="1"/>
+            <column name="roll_left_over_check_status" value="CONFIRMED"/>
+        </insert>
+    </changeSet>
+    <changeSet id="14" author="ryzhkov.andrii@gmail.com">
+        <insert tableName="roll_check">
+            <column name="roll_type_id" value="2"/>
+            <column name="roll_left_over_check_status" value="NOT_CONFIRMED"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>
