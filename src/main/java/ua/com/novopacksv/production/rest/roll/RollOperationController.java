@@ -75,20 +75,4 @@ public class RollOperationController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<RollOperationResponse> update(@PathVariable Long id,
-                                                        @Valid @RequestBody RollOperationRequest request) {
-        RollOperation rollOperation = conversionService.convert(request, RollOperation.class);
-        rollOperation.setId(id);
-        rollOperation = rollOperationService.update(rollOperation);
-        RollOperationResponse response = conversionService.convert(rollOperation, RollOperationResponse.class);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        rollOperationService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
 }
