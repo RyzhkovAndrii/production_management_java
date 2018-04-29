@@ -1,6 +1,8 @@
 package ua.com.novopacksv.production.service.roll;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +21,9 @@ public class RollCheckServiceImpl implements RollCheckService {
 
     private final RollCheckRepository rollCheckRepository;
 
-    private final RollTypeService rollTypeService;
+    @Autowired
+    @Lazy
+    private RollTypeService rollTypeService;
 
     @Override
     @Transactional(readOnly = true)
@@ -41,6 +45,14 @@ public class RollCheckServiceImpl implements RollCheckService {
         RollType rollType = rollTypeService.findById(rollCheck.getId());
         rollCheck.setRollType(rollType);
         return rollCheckRepository.save(rollCheck);
+    }
+
+    @Override
+    public void createNewRollCheckAndSave(RollType rollType) {
+        RollCheck rollCheck = new RollCheck();
+        rollCheck.setRollType(rollType);
+        rollCheck.setRollLeftOverCheckStatus(CheckStatus.NOT_CHECKED);
+        rollCheckRepository.save(rollCheck);
     }
 
     @Scheduled(cron = "0 0 1 * * *")

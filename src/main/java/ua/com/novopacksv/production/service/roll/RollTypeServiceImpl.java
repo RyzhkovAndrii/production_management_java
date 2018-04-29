@@ -33,6 +33,11 @@ public class RollTypeServiceImpl implements RollTypeService {
     private final RollLeftOverService rollLeftOverService;
 
     /**
+     * Содержит методы для работы с сущностью {@code RollCheck}
+     */
+    private final RollCheckService rollCheckService;
+
+    /**
      * Ищет в базе и возвращает тип произоводимого на предприятии рулона по указанному id.
      * <p>
      * Не изменяет содержимого базы данных.
@@ -80,6 +85,7 @@ public class RollTypeServiceImpl implements RollTypeService {
         checkWeightRange(rollType);
         RollType entityRollType = rollTypeRepository.save(rollType);
         rollLeftOverService.createNewLeftOverAndSave(entityRollType);
+        rollCheckService.createNewRollCheckAndSave(entityRollType);
         return entityRollType;
     }
 
