@@ -12,7 +12,9 @@ public class RollTypeResponse extends BaseEntityResponse {
 
     private Double thickness;
 
-    private Double weight;
+    private Double minWeight;
+
+    private Double maxWeight;
 
     private String colorCode;
 

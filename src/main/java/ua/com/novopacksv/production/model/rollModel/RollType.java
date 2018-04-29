@@ -26,8 +26,11 @@ public class RollType extends BaseEntity {
     @Column(name = "thickness", nullable = false)
     private Double thickness;
 
-    @Column(name = "weight", nullable = false)
-    private Double weight;
+    @Column(name = "min_weight", nullable = false)
+    private Double minWeight;
+
+    @Column(name = "max_weight", nullable = false)
+    private Double maxWeight;
 
     @Column(name = "color_code", nullable = false)
     private String colorCode;

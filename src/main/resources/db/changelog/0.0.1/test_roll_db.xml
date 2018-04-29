@@ -10,7 +10,8 @@
         <insert tableName="roll_type">
             <column name="name" value="лист 2,7 білий"/>
             <column name="thickness" value="2.7"/>
-            <column name="weight" value="54.0"/>
+            <column name="min_weight" value="48.0"/>
+            <column name="max_weight" value="60.0"/>
             <column name="color_code" value="#FFFFFF"/>
         </insert>
     </changeSet>
@@ -18,7 +19,8 @@
         <insert tableName="roll_type">
             <column name="name" value="лист 2,8 жовтий"/>
             <column name="thickness" value="2.8"/>
-            <column name="weight" value="56.0"/>
+            <column name="min_weight" value="50.0"/>
+            <column name="max_weight" value="62.0"/>
             <column name="color_code" value="#FFFF00"/>
         </insert>
     </changeSet>

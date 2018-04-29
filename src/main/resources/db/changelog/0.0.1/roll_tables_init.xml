@@ -17,7 +17,10 @@
             <column name="thickness" type="double">
                 <constraints nullable="false"/>
             </column>
-            <column name="weight" type="double">
+            <column name="min_weight" type="double">
+                <constraints nullable="false"/>
+            </column>
+            <column name="max_weight" type="double">
                 <constraints nullable="false"/>
             </column>
             <column name="color_code" type="varchar(7)">
