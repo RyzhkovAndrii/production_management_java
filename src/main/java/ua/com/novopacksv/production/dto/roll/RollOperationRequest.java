@@ -23,7 +23,7 @@ public class RollOperationRequest {
     private String operationDate;
 
     @NotBlank(message = "roll operation type is a required field!")
-    @EnumValue(value = OperationType.class)
+    @EnumValue(value = OperationType.class, message = "roll operation type is not found!")
     private String operationType;
 
     @NotBlank(message = "roll manufacture date is a required field!")
