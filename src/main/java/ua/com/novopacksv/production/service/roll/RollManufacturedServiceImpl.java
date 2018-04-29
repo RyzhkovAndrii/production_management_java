@@ -208,7 +208,7 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
      * <p>
      * Выполняется каждый день в 00.00
      */
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "0 0 1 * * *")
     public void rollsBecomeReadyToUseForNow() {
         findAllShouldBeReadyToUseNow().forEach(rollManufactured -> {
             rollManufactured.setReadyToUse(true);
