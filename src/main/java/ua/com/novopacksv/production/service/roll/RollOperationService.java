@@ -12,6 +12,12 @@ import java.util.List;
 @Service
 public interface RollOperationService extends BaseEntityService<RollOperation> {
 
+    List<RollOperation> findAllByRollTypeIdAndManufacturedPeriod(Long id, LocalDate from, LocalDate to);
+
+    List<RollOperation> findAllByRollTypeIdAndOperationPeriod(Long id, LocalDate from, LocalDate to);
+
+    List<RollOperation> findAllByRollTypeId(Long id);
+
     List<RollOperation> getAllManufacturedOperationsByRollManufactured(RollManufactured rollManufactured);
 
     List<RollOperation> getAllUsedOperationsByRollManufactured(RollManufactured rollManufactured);

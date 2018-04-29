@@ -42,6 +42,26 @@ public class RollOperationServiceImpl implements RollOperationService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<RollOperation> findAllByRollTypeIdAndManufacturedPeriod(Long id, LocalDate from, LocalDate to) {
+        List<RollManufactured> rollManufacturedList = rollManufacturedService.findAll(from, to, id);
+        return rollOperationRepository.findAllByRollManufacturedIsIn(rollManufacturedList);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<RollOperation> findAllByRollTypeIdAndOperationPeriod(Long id, LocalDate from, LocalDate to) {
+        return rollOperationRepository.findAllByRollManufactured_RollType_IdAndOperationDateBetween(id, from, to);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<RollOperation> findAllByRollTypeId(Long id) {
+        List<RollManufactured> rollManufacturedList = rollManufacturedService.findAll(id);
+        return rollOperationRepository.findAllByRollManufacturedIsIn(rollManufacturedList);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public RollOperation findById(Long id) {
         return rollOperationRepository.findById(id).orElseThrow(() -> {
             String message = String.format("Roll operation with id = %d is not found", id);
