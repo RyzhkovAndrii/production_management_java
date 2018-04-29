@@ -1,9 +1,11 @@
 package ua.com.novopacksv.production.service.roll;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
+import ua.com.novopacksv.production.model.rollModel.CheckStatus;
 import ua.com.novopacksv.production.model.rollModel.RollCheck;
 import ua.com.novopacksv.production.model.rollModel.RollType;
 import ua.com.novopacksv.production.repository.rollRepository.RollCheckRepository;
@@ -39,6 +41,16 @@ public class RollCheckServiceImpl implements RollCheckService {
         RollType rollType = rollTypeService.findById(rollCheck.getId());
         rollCheck.setRollType(rollType);
         return rollCheckRepository.save(rollCheck);
+    }
+
+    @Scheduled(cron = "0 0 1 * * *")
+    public void setNotCheckedStatusForAll() {
+        findAll().forEach(this::setNotCheckedStatus);
+    }
+
+    private void setNotCheckedStatus(RollCheck rollCheck) {
+        rollCheck.setRollLeftOverCheckStatus(CheckStatus.NOT_CHECKED);
+        rollCheckRepository.save(rollCheck);
     }
 
 }
