@@ -52,25 +52,6 @@ public class RollTypeServiceImpl implements RollTypeService {
     }
 
     /**
-     * Ищет в базе и возвращает тип произоводимого на предприятии рулона по указанному имени.
-     * <p>
-     * Не изменяет содержимого базы данных.
-     *
-     * @param name имя типа рулона в базе данных, должен быть не null
-     * @return тип рулона с указанным именем
-     * @throws ResourceNotFoundException если тип рулона с указанным именем не найден
-     * @throws IllegalArgumentException  если name - null
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public RollType findOne(String name) throws ResourceNotFoundException {
-        return rollTypeRepository.findByName(name).orElseThrow(() -> {
-            String message = String.format("Roll type whit name = %s is not found!", name);
-            return new ResourceNotFoundException(message);
-        });
-    }
-
-    /**
      * Ищет в базе и возвращает все типы производимых на предприятии рулонов.
      * <p>
      * Не изменяет содержимого базы данных.
