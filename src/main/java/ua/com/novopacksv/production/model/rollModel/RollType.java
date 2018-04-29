@@ -20,8 +20,8 @@ public class RollType extends BaseEntity {
 
     public final static Integer READY_TO_USE_PERIOD = 14;
 
-    @Column(name = "name", nullable = false, unique = true)
-    private String name;
+    @Column(name = "note")
+    private String note;
 
     @Column(name = "thickness", nullable = false)
     private Double thickness;

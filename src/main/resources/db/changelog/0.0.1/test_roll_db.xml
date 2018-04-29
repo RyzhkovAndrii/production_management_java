@@ -8,7 +8,6 @@
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     <changeSet id="1" author="pryadilnikova@gmail.com">
         <insert tableName="roll_type">
-            <column name="name" value="лист 2,7 білий"/>
             <column name="thickness" value="2.7"/>
             <column name="min_weight" value="48.0"/>
             <column name="max_weight" value="60.0"/>
@@ -17,7 +16,7 @@
     </changeSet>
     <changeSet id="2" author="pryadilnikova@gmail.com">
         <insert tableName="roll_type">
-            <column name="name" value="лист 2,8 жовтий"/>
+            <column name="note" value="експерементальний"/>
             <column name="thickness" value="2.8"/>
             <column name="min_weight" value="50.0"/>
             <column name="max_weight" value="62.0"/>

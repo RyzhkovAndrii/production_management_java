@@ -9,9 +9,8 @@ import javax.validation.constraints.*;
 @Setter
 public class RollTypeRequest {
 
-    @NotBlank(message = "roll type name is a required field!")
-    @Size(max = 50, message = "roll type name must be less then 50 symbols long!")
-    private String name;
+    @Size(max = 20, message = "roll type note must be less then 20 symbols long!")
+    private String note;
 
     @NotNull(message = "roll thickness is a required field!")
     @Positive(message = "roll thickness must be greater then 0!")

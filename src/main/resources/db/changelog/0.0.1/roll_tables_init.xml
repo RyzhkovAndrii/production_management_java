@@ -11,9 +11,7 @@
             <column name="id" type="bigint" autoIncrement="true" startWith="1" incrementBy="1">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="name" type="varchar(50)">
-                <constraints nullable="false" unique="true"/>
-            </column>
+            <column name="note" type="varchar(20)"/>
             <column name="thickness" type="double">
                 <constraints nullable="false"/>
             </column>
