@@ -41,27 +41,31 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
     }
 
     @Override
-    public ProductLeftOver findById(Long id) {
-        return null;
+    public ProductLeftOver findById(Long id) throws ResourceNotFoundException{
+        return productLeftOverRepository.findById(id).orElseThrow(() -> {
+            String message = String.format("Product leftover with id = %d was not found", id);
+            return new ResourceNotFoundException(message);
+        });
     }
 
     @Override
     public List<ProductLeftOver> findAll() {
-        return null;
+        return productLeftOverRepository.findAll();
     }
 
     @Override
     public ProductLeftOver save(ProductLeftOver productLeftOver) {
-        return null;
+        return productLeftOverRepository.save(productLeftOver);
     }
 
     @Override
     public ProductLeftOver update(ProductLeftOver productLeftOver) {
-        return null;
+        return productLeftOverRepository.save(productLeftOver);
     }
 
     @Override
     public void delete(Long id) {
+        productLeftOverRepository.deleteById(id);
     }
 
     private ProductLeftOver getLeftOverOnDate(LocalDate date, ProductLeftOver productLeftOver) {
