@@ -128,7 +128,7 @@ public class RollTypeServiceImpl implements RollTypeService {
      * @throws RangeException если максимальный вес рулона равен или меньше минимального
      */
     private void checkWeightRange(RollType rollType) {
-        if (rollType.getMinWeight() >= rollType.getMaxWeight()) {
+        if (rollType.getMinWeight() > rollType.getMaxWeight()) {
             throw new RangeException("max weight must be equals or greater than min weight");
         }
     }
