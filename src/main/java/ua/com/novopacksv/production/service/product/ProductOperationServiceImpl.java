@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
+import ua.com.novopacksv.production.model.productModel.ProductLeftOver;
 import ua.com.novopacksv.production.model.productModel.ProductOperation;
 import ua.com.novopacksv.production.repository.productRepository.ProductOperationRepository;
 
@@ -17,6 +18,7 @@ import java.util.List;
 public class ProductOperationServiceImpl implements ProductOperationService {
 
     private final ProductOperationRepository productOperationRepository;
+    private final ProductLeftOverService productLeftOverService;
 
     @Override
     @Transactional(readOnly = true)
@@ -33,26 +35,45 @@ public class ProductOperationServiceImpl implements ProductOperationService {
         return productOperationRepository.findAll();
     }
 
-    @Override //TODO add changing to left over
+    @Override
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    public ProductOperation save(ProductOperation productOperation) {
+    public ProductOperation save(ProductOperation productOperation) throws ResourceNotFoundException {
+        changingLeftOver(productOperation, getChangingAmount(productOperation));
         return productOperationRepository.save(productOperation);
     }
 
-    @Override //TODO add changing to left over
-    public ProductOperation update(ProductOperation productOperation) {
+    @Override
+    public ProductOperation update(ProductOperation productOperation) throws ResourceNotFoundException {
+        ProductOperation productOperationOld = findById(productOperation.getId());
+        changingLeftOver(productOperation, productOperation.getAmount() - productOperationOld.getAmount());
         return productOperationRepository.save(productOperation);
     }
 
-    @Override //TODO add changing to left over
+    @Override
     public void delete(Long id) throws ResourceNotFoundException {
-        productOperationRepository.delete(findById(id));
+        ProductOperation productOperation = findById(id);
+        changingLeftOver(productOperation, -getChangingAmount(productOperation));
+        productOperationRepository.delete(productOperation);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ProductOperation> findAllOperationBetweenDatesByTypeId(Long productTypeId, LocalDate fromDate,
-                                                                       LocalDate toDate){
+                                                                       LocalDate toDate) {
         return productOperationRepository.findAllByProductType_IdAndDateBetween(productTypeId, fromDate, toDate);
+    }
+
+    private Integer getChangingAmount(ProductOperation productOperation) {
+        return productLeftOverService.isSoldOperation(productOperation) ?
+                -productOperation.getAmount() : +productOperation.getAmount();
+    }
+
+    private void changingLeftOver(ProductOperation productOperation, Integer changingAmount)
+            throws ResourceNotFoundException {
+        ProductLeftOver productLeftOver =
+                productLeftOverService.findByProductTypeId(productOperation.getProductType().getId());
+        Integer leftOverAmount = productLeftOver.getAmount();
+        productLeftOver.setAmount(leftOverAmount + changingAmount);
+        productLeftOverService.update(productLeftOver);
     }
 }

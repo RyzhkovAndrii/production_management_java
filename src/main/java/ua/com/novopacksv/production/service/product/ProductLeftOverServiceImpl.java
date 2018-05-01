@@ -49,6 +49,14 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
     }
 
     @Override
+    public ProductLeftOver findByProductTypeId(Long productTypeId) throws ResourceNotFoundException{
+        return productLeftOverRepository.findByProductType_Id(productTypeId).orElseThrow(() ->{
+            String message = String.format("Product type with id = %d was not found", productTypeId);
+            return new ResourceNotFoundException(message);
+        });
+    }
+
+    @Override
     public List<ProductLeftOver> findAll() {
         return productLeftOverRepository.findAll();
     }
@@ -76,7 +84,7 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
         return productLeftOverTemp;
     }
 
-    private Boolean isSoldOperation(ProductOperation productOperation) {
+    public Boolean isSoldOperation(ProductOperation productOperation) {
         return productOperation.getProductOperationType().equals(ProductOperationType.SOLD);
     }
 
