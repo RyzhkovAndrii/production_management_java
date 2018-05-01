@@ -1,6 +1,8 @@
 package ua.com.novopacksv.production.service.product;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
@@ -20,7 +22,9 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
 
     private final ProductLeftOverRepository productLeftOverRepository;
 
-    private final ProductOperationService productOperationService;
+    @Autowired
+    @Lazy
+    private ProductOperationService productOperationService;
 
     @Override
     public List<ProductLeftOver> findOnDate(LocalDate date) {
