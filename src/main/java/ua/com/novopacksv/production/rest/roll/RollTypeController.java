@@ -11,6 +11,7 @@ import ua.com.novopacksv.production.dto.roll.RollTypeResponse;
 import ua.com.novopacksv.production.model.rollModel.RollType;
 import ua.com.novopacksv.production.service.roll.RollTypeService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -37,7 +38,7 @@ public class RollTypeController {
     }
 
     @PostMapping
-    public ResponseEntity<RollTypeResponse> save(@RequestBody RollTypeRequest request) {
+    public ResponseEntity<RollTypeResponse> save(@RequestBody @Valid RollTypeRequest request) {
         RollType rollType = conversionService.convert(request, RollType.class);
         rollType = rollTypeService.save(rollType);
         RollTypeResponse response = conversionService.convert(rollType, RollTypeResponse.class);
@@ -45,7 +46,7 @@ public class RollTypeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RollTypeResponse> update(@PathVariable Long id, @RequestBody RollTypeRequest request) {
+    public ResponseEntity<RollTypeResponse> update(@PathVariable Long id, @RequestBody @Valid RollTypeRequest request) {
         RollType rollType = conversionService.convert(request, RollType.class);
         rollType.setId(id);
         rollType = rollTypeService.update(rollType);

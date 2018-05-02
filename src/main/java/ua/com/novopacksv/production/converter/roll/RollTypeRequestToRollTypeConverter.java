@@ -11,9 +11,10 @@ public class RollTypeRequestToRollTypeConverter implements Converter<RollTypeReq
     @Override
     public RollType convert(RollTypeRequest source) {
         RollType result = new RollType();
-        result.setName(source.getName());
+        result.setNote(source.getNote());
         result.setThickness(source.getThickness());
-        result.setWeight(source.getWeight());
+        result.setMinWeight(source.getMinWeight());
+        result.setMaxWeight(source.getMaxWeight());
         result.setColorCode(source.getColorCode());
         return result;
     }

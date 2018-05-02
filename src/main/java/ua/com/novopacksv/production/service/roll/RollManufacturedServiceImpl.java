@@ -95,6 +95,22 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
     }
 
     /**
+     * Ищет в базе и возвращает все произведнные рулоны с указанным id типа рулона.
+     * <p>
+     * Не изменяет содержимого базы данных
+     *
+     * @param rollTypeId ID типа рулона
+     * @return {@code List} всех произведенных рулонов с указаным id типа рулона
+     * или empty {@code List}, если в базе отсутствуют рулоны с указаным id типа рулона
+     * @throws IllegalArgumentException если rollTypeId - null
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<RollManufactured> findAll(Long rollTypeId) {
+        return rollManufacturedRepository.findAllByRollType_Id(rollTypeId);
+    }
+
+    /**
      * Ищет в базе и возвращает все произведнные рулоны с указнной датой производства.
      * <p>
      * Не изменяет содержимого базы данных
@@ -192,7 +208,7 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
      * <p>
      * Выполняется каждый день в 00.00
      */
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "0 0 1 * * *")
     public void rollsBecomeReadyToUseForNow() {
         findAllShouldBeReadyToUseNow().forEach(rollManufactured -> {
             rollManufactured.setReadyToUse(true);

@@ -11,13 +11,14 @@
             <column name="id" type="bigint" autoIncrement="true" startWith="1" incrementBy="1">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="name" type="varchar(50)">
-                <constraints nullable="false" unique="true"/>
-            </column>
+            <column name="note" type="varchar(20)"/>
             <column name="thickness" type="double">
                 <constraints nullable="false"/>
             </column>
-            <column name="weight" type="double">
+            <column name="min_weight" type="double">
+                <constraints nullable="false"/>
+            </column>
+            <column name="max_weight" type="double">
                 <constraints nullable="false"/>
             </column>
             <column name="color_code" type="varchar(7)">
@@ -76,4 +77,18 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="5" author="andrii.ryzhkov@gmail.com">
+        <createTable tableName="roll_check">
+            <column name="id" type="bigint" autoIncrement="true" startWith="1" incrementBy="1">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="roll_type_id" type="bigint">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="roll_left_over_check_status" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>

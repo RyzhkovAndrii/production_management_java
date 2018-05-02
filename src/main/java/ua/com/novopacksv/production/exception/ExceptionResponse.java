@@ -7,6 +7,10 @@ import lombok.Setter;
 @Setter
 public class ExceptionResponse {
 
+    private Integer status;
+
+    private String error;
+
     private String message;
 
 }

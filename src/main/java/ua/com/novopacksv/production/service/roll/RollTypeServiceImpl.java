@@ -3,6 +3,7 @@ package ua.com.novopacksv.production.service.roll;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.novopacksv.production.exception.RangeException;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.rollModel.RollType;
 import ua.com.novopacksv.production.repository.rollRepository.RollTypeRepository;
@@ -30,6 +31,11 @@ public class RollTypeServiceImpl implements RollTypeService {
      * Содержит методы для работы с сущностью {@code RollLeftOver}
      */
     private final RollLeftOverService rollLeftOverService;
+
+    /**
+     * Содержит методы для работы с сущностью {@code RollCheck}
+     */
+    private final RollCheckService rollCheckService;
 
     /**
      * Ищет в базе и возвращает тип произоводимого на предприятии рулона по указанному id.
@@ -76,8 +82,10 @@ public class RollTypeServiceImpl implements RollTypeService {
      */
     @Override
     public RollType save(RollType rollType) {
+        checkWeightRange(rollType);
         RollType entityRollType = rollTypeRepository.save(rollType);
         rollLeftOverService.createNewLeftOverAndSave(entityRollType);
+        rollCheckService.createNewRollCheckAndSave(entityRollType);
         return entityRollType;
     }
 
@@ -94,7 +102,8 @@ public class RollTypeServiceImpl implements RollTypeService {
     @Override
     public RollType update(RollType rollType) throws ResourceNotFoundException {
         findById(rollType.getId());
-        return save(rollType);
+        checkWeightRange(rollType);
+        return rollTypeRepository.save(rollType);
     }
 
     /**
@@ -109,6 +118,19 @@ public class RollTypeServiceImpl implements RollTypeService {
     @Override
     public void delete(Long id) throws ResourceNotFoundException {
         rollTypeRepository.delete(findById(id));
+    }
+
+    /**
+     * Проверяет корректность диапазона веса рулона.
+     * Максимальный вес должен быть равен или больше минимального
+     *
+     * @param rollType тип рулона с проверяемым диапазоном веса рулона
+     * @throws RangeException если максимальный вес рулона равен или меньше минимального
+     */
+    private void checkWeightRange(RollType rollType) {
+        if (rollType.getMinWeight() > rollType.getMaxWeight()) {
+            throw new RangeException("max weight must be equals or greater than min weight");
+        }
     }
 
 }

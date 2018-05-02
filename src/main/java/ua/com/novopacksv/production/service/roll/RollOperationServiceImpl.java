@@ -31,22 +31,33 @@ public class RollOperationServiceImpl implements RollOperationService {
     private RollManufacturedServiceImpl rollManufacturedService; // todo circular dependencies remove
 
     /*
-    Research all operations by RollType for count RollLeftOver
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public List<RollOperation> findAllByRollType(RollType rollType) {
-        return rollOperationRepository.findAllByRollManufactured_RollType(rollType);
-    }
-
-    /*
     Find all operations by RollType for period - for tables of rollType`s information
      */
     @Override
     @Transactional(readOnly = true)
-    public List<RollOperation> findAllByRollTypeAndDateBetween(RollType rollType, LocalDate fromDate, LocalDate toDate) {
+    public List<RollOperation> findAllByRollTypeAndManufacturedDateBetween(RollType rollType, LocalDate fromDate, LocalDate toDate) {
         return rollOperationRepository
-                .findAllByRollManufactured_RollTypeAndOperationDateBetween(rollType, fromDate, toDate);
+                .findAllByRollManufactured_RollTypeAndRollManufactured_ManufacturedDateBetween(rollType, fromDate, toDate);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<RollOperation> findAllByRollTypeIdAndManufacturedPeriod(Long id, LocalDate from, LocalDate to) {
+        List<RollManufactured> rollManufacturedList = rollManufacturedService.findAll(from, to, id);
+        return rollOperationRepository.findAllByRollManufacturedIsIn(rollManufacturedList);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<RollOperation> findAllByRollTypeIdAndOperationPeriod(Long id, LocalDate from, LocalDate to) {
+        return rollOperationRepository.findAllByRollManufactured_RollType_IdAndOperationDateBetween(id, from, to);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<RollOperation> findAllByRollTypeId(Long id) {
+        List<RollManufactured> rollManufacturedList = rollManufacturedService.findAll(id);
+        return rollOperationRepository.findAllByRollManufacturedIsIn(rollManufacturedList);
     }
 
     @Override
@@ -116,25 +127,26 @@ public class RollOperationServiceImpl implements RollOperationService {
         return rollOperationRepository.findAllByOperationTypeAndRollManufactured(OperationType.USE, rollManufactured);
     }
 
+    public Boolean isItManufactureOperation(RollOperation rollOperation) {
+        return rollOperation.getOperationType().equals(OperationType.MANUFACTURE);
+    }
+
     private Integer getOperationAmountWithSign(RollOperation rollOperation) {
         return isItManufactureOperation(rollOperation) ? rollOperation.getRollAmount() : -rollOperation.getRollAmount();
     }
 
-    private void checkOperationSaveAllowed(RollOperation rollOperation)
-            throws NegativeRollAmountException {
+    private void checkOperationSaveAllowed(RollOperation rollOperation) throws NegativeRollAmountException {
         RollManufactured rollManufactured = rollOperation.getRollManufactured();
-        Integer rollManufacturedAmount = 0;
-        Integer rollUsedAmount = 0;
-        Integer resultOfAmount;
         if (!isItManufactureOperation(rollOperation)) {
-            rollManufacturedAmount
-                    = isRollNew(rollManufactured) ? 0 : rollManufacturedService.getManufacturedRollAmount(rollManufactured);
-            rollUsedAmount
-                    = isRollNew(rollManufactured) ? 0 : rollManufacturedService.getUsedRollAmount(rollManufactured);
-        }
-        resultOfAmount = rollManufacturedAmount - rollUsedAmount - rollOperation.getRollAmount();
-        if (resultOfAmount < 0) {
-            throw new NegativeRollAmountException("Roll's left is negative!");
+            if (isRollNew(rollManufactured)) {
+                throw new NegativeRollAmountException("Roll's left is negative!");
+            }
+            Integer rollManufacturedAmount = rollManufacturedService.getManufacturedRollAmount(rollManufactured);
+            Integer rollUsedAmount = rollManufacturedService.getUsedRollAmount(rollManufactured);
+            Integer resultOfAmount = rollManufacturedAmount - rollUsedAmount - rollOperation.getRollAmount();
+            if (resultOfAmount < 0) {
+                throw new NegativeRollAmountException("Roll's left is negative!");
+            }
         }
     }
 
@@ -148,10 +160,6 @@ public class RollOperationServiceImpl implements RollOperationService {
                 throw new NegativeRollAmountException("Roll's left is negative!");
             }
         }
-    }
-
-    private Boolean isItManufactureOperation(RollOperation rollOperation) {
-        return rollOperation.getOperationType().equals(OperationType.MANUFACTURE);
     }
 
     private Boolean isRollNew(RollManufactured rollManufactured) {

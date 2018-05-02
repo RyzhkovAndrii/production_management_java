@@ -16,14 +16,13 @@ public interface RollManufacturedRepository extends JpaRepository<RollManufactur
 
     Optional<RollManufactured> findByManufacturedDateAndRollType_Id(LocalDate manufacturedDate, Long rollTypeId);
 
+    List<RollManufactured> findAllByRollType_Id(Long rollTypeId);
+
     List<RollManufactured> findAllByManufacturedDateBetween(LocalDate fromDate, LocalDate toDate);
 
     List<RollManufactured> findAllByManufacturedDateBetweenAndReadyToUseIsFalse(LocalDate fromDate, LocalDate toDate);
 
     List<RollManufactured> findAllByManufacturedDate(LocalDate manufacturedDate);
-
-    List<RollManufactured> findAllByManufacturedDateBetweenAndRollType(
-            LocalDate fromDate, LocalDate toDate, RollType rollType);
 
     List<RollManufactured> findAllByManufacturedDateBetweenAndRollType_Id(
             LocalDate fromManufacturedDate, LocalDate toManufacturedDate, Long rollTypeId);

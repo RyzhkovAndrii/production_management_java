@@ -13,13 +13,13 @@ import java.util.List;
 @Repository
 public interface RollOperationRepository extends JpaRepository <RollOperation, Long> {
 
-    List<RollOperation> findAllByOperationTypeAndOperationDateBetween
-            (OperationType operationType, LocalDate fromDate, LocalDate toDate);
-
-    List<RollOperation> findAllByRollManufactured_RollTypeAndOperationDateBetween
+    List<RollOperation> findAllByRollManufactured_RollTypeAndRollManufactured_ManufacturedDateBetween
             (RollType rollType, LocalDate fromDate, LocalDate toDate);
 
-    List<RollOperation> findAllByRollManufactured_RollType(RollType rollType);
-
     List<RollOperation> findAllByOperationTypeAndRollManufactured(OperationType operationType, RollManufactured rollManufactured);
+
+    List<RollOperation> findAllByRollManufacturedIsIn(List<RollManufactured> rollManufacturedList);
+
+    List<RollOperation> findAllByRollManufactured_RollType_IdAndOperationDateBetween(Long id, LocalDate from, LocalDate to);
+
 }

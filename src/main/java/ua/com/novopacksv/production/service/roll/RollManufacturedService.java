@@ -15,6 +15,8 @@ public interface RollManufacturedService {
 
     RollManufactured findOneOrCreate(LocalDate manufacturedDate, RollType rollType);
 
+    List<RollManufactured> findAll(Long rollTypeId);
+
     List<RollManufactured> findAll(LocalDate manufacturedDate);
 
     List<RollManufactured> findAll(LocalDate fromManufacturedDate, LocalDate toManufacturedDate);

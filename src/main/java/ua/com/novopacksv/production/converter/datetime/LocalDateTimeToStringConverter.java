@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 @Component
 public class LocalDateTimeToStringConverter implements Converter<LocalDateTime, String> {
 
-    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
 
     @Nullable
     @Override

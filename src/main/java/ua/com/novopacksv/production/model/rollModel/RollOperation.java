@@ -21,9 +21,8 @@ public class RollOperation extends BaseEntity {
     @Column(name = "operation_date", nullable = false)
     private LocalDate operationDate;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
-    @MapsId
     private RollManufactured rollManufactured;
 
     @Column(name = "operation_type", nullable = false)
