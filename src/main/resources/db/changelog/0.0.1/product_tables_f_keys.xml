@@ -1,0 +1,25 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+   http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="1" author="pryadilnikova@gmail.com">
+        <addForeignKeyConstraint baseTableName="product_operation"
+                                 baseColumnNames="product_type_id"
+                                 constraintName="fk_product_operation_product_type"
+                                 onUpdate="CASCADE"
+                                 onDelete="CASCADE"
+                                 referencedTableName="product_type"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="2" author="pryadilnikova@gmail.com">
+        <addForeignKeyConstraint baseTableName="product_left_over"
+                                 baseColumnNames="product_type_id"
+                                 constraintName="fk_product_left_over_product_type"
+                                 referencedTableName="product_type"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+</databaseChangeLog>
