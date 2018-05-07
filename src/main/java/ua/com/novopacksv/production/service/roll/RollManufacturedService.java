@@ -27,4 +27,6 @@ public interface RollManufacturedService {
 
     Integer getUsedRollAmount(RollManufactured rollManufactured);
 
+    void setReadyToUseTrue(LocalDate from, LocalDate to);
+
 }

@@ -3,7 +3,6 @@ package ua.com.novopacksv.production.service.roll;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
@@ -55,7 +54,7 @@ public class RollCheckServiceImpl implements RollCheckService {
         rollCheckRepository.save(rollCheck);
     }
 
-    @Scheduled(cron = "0 0 1 * * *")
+    @Override
     public void setNotCheckedStatusForAll() {
         findAll().forEach(this::setNotCheckedStatus);
     }
