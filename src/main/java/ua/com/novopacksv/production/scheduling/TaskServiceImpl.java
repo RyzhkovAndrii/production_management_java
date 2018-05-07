@@ -57,8 +57,8 @@ public class TaskServiceImpl {
 
     private List<TaskDetails> initialTaskDetails() {
         List<TaskDetails> taskDetailsList = new ArrayList<>();
-        taskDetailsList.add(getInitialTaskDetailsForTask(RollReadyToUseTask.class, "0 0 3 * * *"));
-        taskDetailsList.add(getInitialTaskDetailsForTask(ResetRollChecksTask.class, "0 0 3 * * *"));
+        taskDetailsList.add(getInitialTaskDetailsForTask(RollReadyToUseTask.class, "0 1 0 * * *"));
+        taskDetailsList.add(getInitialTaskDetailsForTask(ResetRollChecksTask.class, "0 1 0 * * *"));
         return taskDetailsList;
     }
 
