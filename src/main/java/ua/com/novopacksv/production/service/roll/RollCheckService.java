@@ -15,4 +15,6 @@ public interface RollCheckService {
 
     void createNewRollCheckAndSave(RollType rollType);
 
+    void setNotCheckedStatusForAll();
+
 }
