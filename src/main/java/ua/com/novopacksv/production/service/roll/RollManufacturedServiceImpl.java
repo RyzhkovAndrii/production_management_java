@@ -2,7 +2,6 @@ package ua.com.novopacksv.production.service.roll;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
@@ -24,17 +23,6 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class RollManufacturedServiceImpl implements RollManufacturedService {
-
-    /**
-     * Дополнительный период времени, за который необходмо проверять, установлено ли поле готовности в зачение
-     * {@code true} для готовых к использованию рулонов.
-     * <p>
-     * Необходим для учета случаев, когда метод {@link #rollsBecomeReadyToUseForNow()} не выполнялся из-за не зависящих
-     * от программы причин (например, выход из строя аппаратного обеспечения т.п.)
-     * <p>
-     * Период указан в днях.
-     */
-    private final static Integer PERIOD_FOR_CHECK_READY_TO_USE = 7;
 
     /**
      * Содержит методы для работы с базой данных (DAO уровень) для сущности {@code RollManufactured}
@@ -203,38 +191,33 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
     }
 
     /**
-     * Ищет в базе готовые к использованию рулоны, но у которых не установлено соответствующее поле
-     * в значение {@code true}, и устанавливает данное поле в значение {@code true}
-     * <p>
-     * Выполняется каждый день в 00.00
+     * Ищет в базе рулоны за указанный период производсвта и у которых не установлено поле готовности к использованию
+     * в значение {@code true}, а затем устанавливает данное поле в значение {@code true}
+     *
+     * @param fromManufacturedDate начало периода производства рулонов
+     * @param toManufacturedDate   окончание периода производства рулонов
+     * @throws IllegalArgumentException если fromManufacturedDate - null и/или toManufacturedDate - null
      */
-    @Scheduled(cron = "0 0 1 * * *")
-    public void rollsBecomeReadyToUseForNow() {
-        findAllShouldBeReadyToUseNow().forEach(rollManufactured -> {
+    @Override
+    public void setReadyToUseTrue(LocalDate fromManufacturedDate, LocalDate toManufacturedDate) {
+        findAllReadyToUseIsFalse(fromManufacturedDate, toManufacturedDate).forEach(rollManufactured -> {
             rollManufactured.setReadyToUse(true);
             rollManufacturedRepository.save(rollManufactured);
         });
     }
 
     /**
-     * Ищет в базе и возвращет все рулоны, которые уже готовы к использованию, но у которых не установлено
-     * соответствующее поле в значение {@code true}.
-     * <p>
-     * Вычисляет дату производства рулона, который становится готовым сегодня. Затем ищет в базе все рулоны,
-     * значение готовности которых - {@code false} и которые произведенны в вычисленную дату и в период
-     * за {@value #PERIOD_FOR_CHECK_READY_TO_USE} дней ранее.
-     * <p>
-     * Рулон становится готовым после прошествия {@value RollType#READY_TO_USE_PERIOD} дней от даты его производства.
+     * Ищет в базе рулоны за указанный период производсвта и у которых не установлено поле готовности
+     * к использованию в значение {@code true}
      *
-     * @return {@code List} всех рулонов, которые уже готовы к использованию, но у которых не установлено
-     * соответствующее поле в значение {@code true} или empty {@code List}, если рулоны, готовые к использованию,
-     * отсутствуют
+     * @param fromManufacturedDate начало периода производства рулонов
+     * @param toManufacturedDate   окончание периода производства рулонов
+     * @throws IllegalArgumentException если fromManufacturedDate - null и/или toManufacturedDate - null
      */
-    private List<RollManufactured> findAllShouldBeReadyToUseNow() {
-        LocalDate manufacturedDate = LocalDate.now().minusDays(RollType.READY_TO_USE_PERIOD);
+    private List<RollManufactured> findAllReadyToUseIsFalse(LocalDate fromManufacturedDate,
+                                                            LocalDate toManufacturedDate) {
         return rollManufacturedRepository.findAllByManufacturedDateBetweenAndReadyToUseIsFalse(
-                manufacturedDate.minusDays(PERIOD_FOR_CHECK_READY_TO_USE),
-                manufacturedDate);
+                fromManufacturedDate, toManufacturedDate);
     }
 
     /**
