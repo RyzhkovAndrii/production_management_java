@@ -1,6 +1,7 @@
 package ua.com.novopacksv.production.service.roll;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.RangeException;
@@ -20,6 +21,7 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class RollTypeServiceImpl implements RollTypeService {
 
     /**
@@ -50,8 +52,10 @@ public class RollTypeServiceImpl implements RollTypeService {
     @Override
     @Transactional(readOnly = true)
     public RollType findById(Long id) throws ResourceNotFoundException {
+        log.debug("Method findById(*): Roll type with id {} is finding", id);
         return rollTypeRepository.findById(id).orElseThrow(() -> {
             String message = String.format("Roll type whit id = %d is not found!", id);
+            log.error("Method findById(*): Roll type with id {} is not found", id);
             return new ResourceNotFoundException(message);
         });
     }
@@ -66,6 +70,7 @@ public class RollTypeServiceImpl implements RollTypeService {
     @Override
     @Transactional(readOnly = true)
     public List<RollType> findAll() {
+        log.debug("Method findAll(): All roll types are finding");
         return rollTypeRepository.findAll();
     }
 
@@ -86,6 +91,7 @@ public class RollTypeServiceImpl implements RollTypeService {
         RollType entityRollType = rollTypeRepository.save(rollType);
         rollLeftOverService.createNewLeftOverAndSave(entityRollType);
         rollCheckService.createNewRollCheckAndSave(entityRollType);
+        log.debug("Method save(*): Roll type {} was saved", rollType);
         return entityRollType;
     }
 
@@ -103,6 +109,7 @@ public class RollTypeServiceImpl implements RollTypeService {
     public RollType update(RollType rollType) throws ResourceNotFoundException {
         findById(rollType.getId());
         checkWeightRange(rollType);
+        log.debug("Method update(*): Method save(*) is calling");
         return rollTypeRepository.save(rollType);
     }
 
@@ -118,6 +125,7 @@ public class RollTypeServiceImpl implements RollTypeService {
     @Override
     public void delete(Long id) throws ResourceNotFoundException {
         rollTypeRepository.delete(findById(id));
+        log.debug("Method delete(*): Roll type with id {} was deleted", id);
     }
 
     /**
@@ -129,6 +137,7 @@ public class RollTypeServiceImpl implements RollTypeService {
      */
     private void checkWeightRange(RollType rollType) {
         if (rollType.getMinWeight() > rollType.getMaxWeight()) {
+            log.error("Method checkWeightRange(*): Roll type {} has incorrect range of weight", rollType);
             throw new RangeException("max weight must be equals or greater than min weight");
         }
     }

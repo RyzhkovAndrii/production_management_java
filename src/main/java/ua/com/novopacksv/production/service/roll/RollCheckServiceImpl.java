@@ -28,7 +28,7 @@ public class RollCheckServiceImpl implements RollCheckService {
     @Transactional(readOnly = true)
     public RollCheck findOneByRollTypeId(Long rollTypeId) {
         return rollCheckRepository.findByRollType_Id(rollTypeId).orElseThrow(() -> {
-            String message = String.format("Roll check whit roll type id = %d is not found!", rollTypeId);
+            String message = String.format("Roll check with roll type id = %d is not found!", rollTypeId);
             return new ResourceNotFoundException(message);
         });
     }
