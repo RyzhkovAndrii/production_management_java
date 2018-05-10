@@ -1,6 +1,7 @@
 package ua.com.novopacksv.production.service.roll;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,27 +15,59 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The class implements {@link RollLeftOverService}, contains the logic for working with roll's leftover - objects of
+ * {@link RollLeftOver}
+ */
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class RollLeftOverServiceImpl implements RollLeftOverService {
 
+    /**
+     * An object of repository layer for have access to methods of working with DB
+     */
     private final RollLeftOverRepository rollLeftOverRepository;
+    /**
+     * An object of service layer for have access to methods of working with roll operations
+     */
     private final RollOperationServiceImpl rollOperationService;
+    /**
+     * An object that give methods for convert from one format to another (here it is date)
+     */
     private final ConversionService conversionService;
 
+    /**
+     * The method returns roll's leftovers on pointed date
+     *
+     * @param date - pointed date for searching
+     * @return list of roll's leftovers - objects of {@link RollLeftOver}
+     */
     @Override
     @Transactional(readOnly = true)
     public List<RollLeftOver> findAllByDate(LocalDate date) {
+        log.debug("Method findAllByDate(*): List of RollLeftOvers are finding by date {}", date);
         return findAll().stream()
                 .map((rollLeftOver) -> getLeftOverOnDate(rollLeftOver, date))
                 .collect(Collectors.toList());
     }
 
+    /**
+     * The method returns one roll's leftover on pointed date and rollTypeId
+     *
+     * @param rollTypeId - rollTypeId for searching
+     * @param date       - pointed date for searching
+     * @return roll's leftover - object of {@link RollLeftOver}
+     * @throws ResourceNotFoundException - if there is not rollType with pointed Id
+     */
     @Override
     @Transactional(readOnly = true)
     public RollLeftOver findByRollTypeIdAndDate(Long rollTypeId, LocalDate date) throws ResourceNotFoundException {
+        log.debug("Method findByRollTypeIdAndDate(*): RollLeftOver is finding with rollTypeId {} and on date {}",
+                rollTypeId, date);
         RollLeftOver rollLeftOver = rollLeftOverRepository.findByRollType_Id(rollTypeId).orElseThrow(() -> {
+            log.error("Method findByRollTypeIdAndDate(*): RollLeftOver was not found with rollTypeId {}", rollTypeId);
             String formatDate = conversionService.convert(date, String.class);
             String message =
                     String.format("RollLeftOver with typeId = %d on date = %s is not found", rollTypeId, formatDate);
@@ -43,7 +76,11 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
         return getLeftOverOnDate(rollLeftOver, date);
     }
 
-
+    /**
+     * The method creates new leftover for (new*) roll type
+     *
+     * @param rollType - (new*) roll type
+     */
     @Override
     public void createNewLeftOverAndSave(RollType rollType) {
         RollLeftOver leftOver = new RollLeftOver();
@@ -51,47 +88,97 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
         leftOver.setRollType(rollType);
         leftOver.setAmount(0);
         rollLeftOverRepository.save(leftOver);
+        log.debug("Method createNewLeftOverAndSave(*): New lefvover for rollType {} was created", rollType);
     }
 
+    /**
+     * The method finds roll's leftover by id on current date
+     *
+     * @param id - roll's leftover's id for searching
+     * @return roll's leftover
+     */
     @Override
     @Transactional(readOnly = true)
     public RollLeftOver findById(Long id) {
+        log.debug("Method findById(*): rollLeftOver is finding by id {}", id);
         return rollLeftOverRepository.findById(id).orElseThrow(() -> {
+            log.error("Method findById(*): rollLeftOver was not found by id {}", id);
             String message = String.format("Roll left over with id = %d is not found", id);
             return new ResourceNotFoundException(message);
         });
     }
 
+    /**
+     * Method finds all roll's leftovers on current date
+     *
+     * @return list of exist roll's leftovers
+     */
     @Override
     @Transactional(readOnly = true)
     public List<RollLeftOver> findAll() {
+        log.debug("Method findAll(): List of RollLeftOver is finding");
         return rollLeftOverRepository.findAll();
     }
 
+    /**
+     * Method saves rollLeftOver
+     *
+     * @param rollLeftOver - roll's leftover for save
+     * @return saved roll's leftover
+     */
     @Override
     public RollLeftOver save(RollLeftOver rollLeftOver) {
+        log.debug("Method save(*): RollLeftOver {} is saving", rollLeftOver);
         return rollLeftOverRepository.save(rollLeftOver);
     }
 
+    /**
+     * Method saves changed roll's leftover
+     *
+     * @param rollLeftOver - changed roll's leftover
+     * @return changed roll's leftover
+     */
     @Override
     public RollLeftOver update(RollLeftOver rollLeftOver) {
+        log.debug("Method update(*): RollLeftover {} is updating", rollLeftOver);
         return rollLeftOverRepository.save(rollLeftOver);
     }
 
+    /**
+     * Method removes roll's leftover by it's id
+     *
+     * @param id - roll's leftover's id for remove
+     */
     @Override
     public void delete(Long id) {
         rollLeftOverRepository.deleteById(id);
+        log.debug("Method delete(*): RollLeftOver with id {} was deleted", id);
     }
 
+    /**
+     * Method finds roll's leftover by roll's type on current date
+     *
+     * @param rollType - roll's type for search
+     * @return roll's leftover - object of {@link RollLeftOver}
+     */
     @Override
     @Transactional(readOnly = true)
     public RollLeftOver findLastRollLeftOverByRollType(RollType rollType) {
+        log.debug("Method findLastRollLeftOverByRollType(*): RollLeftOver is searching by roll's type {}", rollType);
         return rollLeftOverRepository.findByRollType_Id(rollType.getId()).orElseThrow(() -> {
+            log.error("Method findLastRollLeftOverByRollType(*): RollLeftOver was not found by roll's type {}", rollType);
             String message = String.format("RollLeftOver with typeId = %d is not found", rollType.getId());
             return new ResourceNotFoundException(message);
         });
     }
 
+    /**
+     * Method counts roll's leftover on pointed date
+     *
+     * @param rollLeftOver - roll's leftover on current date
+     * @param date         - date for search
+     * @return roll's leftover on pointed date
+     */
     private RollLeftOver getLeftOverOnDate(RollLeftOver rollLeftOver, LocalDate date) {
         Integer lastAmount = rollLeftOver.getAmount();
         List<RollOperation> rollOperations = rollOperationService.findAllByRollTypeAndManufacturedDateBetween(
@@ -105,12 +192,21 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
         rollLeftOverTemp.setDate(date);
         rollLeftOverTemp.setRollType(rollLeftOver.getRollType());
         rollLeftOverTemp.setAmount(lastAmount);
+        log.debug("Method getLeftOverOnDate(*): RollLeftOver on date {} was found: {}", date, rollLeftOverTemp);
         return rollLeftOverTemp;
     }
 
+    /**
+     * Method changes roll's leftover's amount
+     *
+     * @param rollLeftOver              - roll's leftover for change
+     * @param positiveOrNegativeChanges - integer value of changing roll's leftover's amount
+     */
     public void changeRollLeftOverAmount(RollLeftOver rollLeftOver, Integer positiveOrNegativeChanges) {
         Integer oldAmount = rollLeftOver.getAmount();
         rollLeftOver.setAmount(oldAmount + positiveOrNegativeChanges);
         update(rollLeftOver);
+        log.debug("Method changeRollLeftOverAmount(*): RollLeftOver {} was changed by value {}",
+                rollLeftOver, positiveOrNegativeChanges);
     }
 }

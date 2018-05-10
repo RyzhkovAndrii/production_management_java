@@ -1,6 +1,7 @@
 package ua.com.novopacksv.production.service.roll;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class RollBatchServiceImpl implements RollBatchService {
 
     /**
@@ -45,6 +47,8 @@ public class RollBatchServiceImpl implements RollBatchService {
     @Override
     public RollBatch getOne(Long rollTypeId, LocalDate manufacturedDate) throws ResourceNotFoundException {
         RollManufactured rollManufactured = rollManufacturedService.findOne(manufacturedDate, rollTypeId);
+        log.debug("Method getOne(*): RollBatch is finding by rollType's id {} and manufactured date {}",
+                rollTypeId, manufacturedDate);
         return getOne(rollManufactured);
     }
 
@@ -60,6 +64,7 @@ public class RollBatchServiceImpl implements RollBatchService {
     @Override
     public List<RollBatch> getAll(LocalDate manufacturedDate) {
         List<RollManufactured> rollManufacturedList = rollManufacturedService.findAll(manufacturedDate);
+        log.debug("Method getAll(*): List<RollBatch> is finding by manufactured date {}", manufacturedDate);
         return getAll(rollManufacturedList);
     }
 
@@ -77,6 +82,8 @@ public class RollBatchServiceImpl implements RollBatchService {
     public List<RollBatch> getAll(LocalDate fromManufacturedDate, LocalDate toManufacturedDate) {
         List<RollManufactured> rollManufacturedList =
                 rollManufacturedService.findAll(fromManufacturedDate, toManufacturedDate);
+        log.debug("Method getAll(*): List<RollBatch> is finding by period from {} to {}",
+                fromManufacturedDate, toManufacturedDate);
         return getAll(rollManufacturedList);
     }
 
@@ -96,6 +103,8 @@ public class RollBatchServiceImpl implements RollBatchService {
     public List<RollBatch> getAll(Long rollTypeId, LocalDate fromManufacturedDate, LocalDate toManufacturedDate) {
         List<RollManufactured> rollManufacturedList =
                 rollManufacturedService.findAll(fromManufacturedDate, toManufacturedDate, rollTypeId);
+        log.debug("Method getAll(*): List<RollBatch> is finding by rollType's id{} and for period from {} to {}",
+                rollTypeId, fromManufacturedDate, toManufacturedDate);
         return getAll(rollManufacturedList);
     }
 
@@ -114,6 +123,7 @@ public class RollBatchServiceImpl implements RollBatchService {
         rollBatch.setRollManufactured(rollManufactured);
         rollBatch.setManufacturedAmount(manufacturedAmount);
         rollBatch.setUsedAmount(usedAmount);
+        log.debug("Method getOne(*): RollBatch {} is created for rollManufactured {}", rollBatch, rollManufactured);
         return rollBatch;
     }
 
@@ -126,6 +136,7 @@ public class RollBatchServiceImpl implements RollBatchService {
      * @throws NullPointerException если rollManufacturedList - null
      */
     private List<RollBatch> getAll(List<RollManufactured> rollManufacturedList) {
+        log.debug("Method getAll(*): List<RollBatch> is finding for List<RollManufactured>");
         return rollManufacturedList.stream()
                 .map(this::getOne)
                 .collect(Collectors.toList());

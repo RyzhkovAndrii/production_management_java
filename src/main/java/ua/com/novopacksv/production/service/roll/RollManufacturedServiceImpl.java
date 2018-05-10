@@ -1,6 +1,7 @@
 package ua.com.novopacksv.production.service.roll;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class RollManufacturedServiceImpl implements RollManufacturedService {
 
     /**
@@ -50,8 +52,10 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
     @Override
     @Transactional(readOnly = true)
     public RollManufactured findOne(LocalDate manufacturedDate, Long rollTypeId) throws ResourceNotFoundException {
+        log.debug("Method findOne(*): RollManufactured is finding by rollTypeId {}", rollTypeId);
         return rollManufacturedRepository.findByManufacturedDateAndRollType_Id(manufacturedDate, rollTypeId)
                 .orElseThrow(() -> {
+                    log.error("Method findOne(*): RollManufactured was not found by rollTypeId {}", rollTypeId);
                     String formatDate = conversionService.convert(manufacturedDate, String.class);
                     String message = String.format("Roll manufactured whit roll type id = %d" +
                             " and manufactured date = %s is not found!", rollTypeId, formatDate);
@@ -72,12 +76,14 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
      */
     @Override
     public RollManufactured findOneOrCreate(LocalDate manufacturedDate, RollType rollType) {
+        log.debug("Method findOneOrCreate(*): RollManufactured is finding by rollType {}", rollType);
         return rollManufacturedRepository.findByManufacturedDateAndRollType(manufacturedDate, rollType)
                 .orElseGet(() -> {
                     RollManufactured rollManufactured = new RollManufactured();
                     rollManufactured.setManufacturedDate(manufacturedDate);
                     rollManufactured.setRollType(rollType);
                     rollManufactured.setReadyToUse(isReadyToUse(manufacturedDate));
+                    log.debug("Method findOneOrCreate(*): RollManufactured is created by rollType {}", rollType);
                     return rollManufactured;
                 });
     }
@@ -95,6 +101,7 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
     @Override
     @Transactional(readOnly = true)
     public List<RollManufactured> findAll(Long rollTypeId) {
+        log.debug("Method findAll(*): List of RollManufactured is finding by rollTypeId {}", rollTypeId);
         return rollManufacturedRepository.findAllByRollType_Id(rollTypeId);
     }
 
@@ -111,6 +118,7 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
     @Override
     @Transactional(readOnly = true)
     public List<RollManufactured> findAll(LocalDate manufacturedDate) {
+        log.debug("Method findAll(*): List of RollManufactured is finding by manufactured date {}", manufacturedDate);
         return rollManufacturedRepository.findAllByManufacturedDate(manufacturedDate);
     }
 
@@ -128,6 +136,8 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
     @Override
     @Transactional(readOnly = true)
     public List<RollManufactured> findAll(LocalDate fromManufacturedDate, LocalDate toManufacturedDate) {
+        log.debug("Method findAll(*): List of RollManufactured is finding by period from {} to {}",
+                fromManufacturedDate, toManufacturedDate);
         return rollManufacturedRepository.findAllByManufacturedDateBetween(fromManufacturedDate, toManufacturedDate);
     }
 
@@ -147,6 +157,8 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
      */
     @Override
     public List<RollManufactured> findAll(LocalDate fromManufacturedDate, LocalDate toManufacturedDate, Long rollTypeId) {
+        log.debug("Method findAll(*): List of RollManufactured is finding by rollTypeId {} for period " +
+                "from {} to {}", rollTypeId, fromManufacturedDate, toManufacturedDate);
         return rollManufacturedRepository
                 .findAllByManufacturedDateBetweenAndRollType_Id(fromManufacturedDate, toManufacturedDate, rollTypeId);
     }
@@ -165,6 +177,8 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
     @Override
     @Transactional(readOnly = true)
     public Integer getManufacturedRollAmount(RollManufactured rollManufactured) {
+        log.debug("Method getManufacturedRollAmount(*): Amount of roll manufactured operations is finding " +
+                "by rollManufactured {}", rollManufactured);
         return rollOperationService.getAllManufacturedOperationsByRollManufactured(rollManufactured)
                 .stream()
                 .mapToInt(RollOperation::getRollAmount)
@@ -184,6 +198,8 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
     @Override
     @Transactional(readOnly = true)
     public Integer getUsedRollAmount(RollManufactured rollManufactured) {
+        log.debug("Method getUsedRollAmount(*): Amount of roll used operations is finding by rollManufactured {}",
+                rollManufactured);
         return rollOperationService.getAllUsedOperationsByRollManufactured(rollManufactured)
                 .stream()
                 .mapToInt(RollOperation::getRollAmount)
@@ -202,6 +218,8 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
     public void setReadyToUseTrue(LocalDate fromManufacturedDate, LocalDate toManufacturedDate) {
         findAllReadyToUseIsFalse(fromManufacturedDate, toManufacturedDate).forEach(rollManufactured -> {
             rollManufactured.setReadyToUse(true);
+            log.debug("Method setReadyToUseTrue(*): All rolls from date {} to date {} are set ReadyToUse",
+                    fromManufacturedDate, toManufacturedDate);
             rollManufacturedRepository.save(rollManufactured);
         });
     }
@@ -216,6 +234,7 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
      */
     private List<RollManufactured> findAllReadyToUseIsFalse(LocalDate fromManufacturedDate,
                                                             LocalDate toManufacturedDate) {
+        log.debug("Method findAllReadyToUseIsFalse(*): List of unready to use rollManufactured are finding for period");
         return rollManufacturedRepository.findAllByManufacturedDateBetweenAndReadyToUseIsFalse(
                 fromManufacturedDate, toManufacturedDate);
     }
@@ -230,6 +249,7 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
      * @throws NullPointerException если manufacturedDate - null
      */
     private boolean isReadyToUse(LocalDate manufacturedDate) {
+        log.debug("Method isReadyToUse(*): A period of ready to use is determining");
         return manufacturedDate.until(LocalDate.now(), ChronoUnit.DAYS) > RollType.READY_TO_USE_PERIOD;
     }
 
