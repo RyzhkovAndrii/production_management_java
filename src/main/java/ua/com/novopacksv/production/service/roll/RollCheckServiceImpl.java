@@ -46,11 +46,13 @@ public class RollCheckServiceImpl implements RollCheckService {
     @Transactional(readOnly = true)
     public RollCheck findOneByRollTypeId(Long rollTypeId) {
         RollCheck rollCheck = rollCheckRepository.findByRollType_Id(rollTypeId).orElseThrow(() -> {
-            log.error("Method findOneByRollTypeId(Long rollTypeId): RollCheck by rollType's id {} was not found", rollTypeId);
+            log.error("Method findOneByRollTypeId(Long rollTypeId): RollCheck by rollType's id {} was not found",
+                    rollTypeId);
             String message = String.format("Roll check with roll type id = %d is not found!", rollTypeId);
             return new ResourceNotFoundException(message);
         });
-        log.debug("Method findOneByRollTypeId(*): RollCheck {} by rollType's id {} was found", rollCheck, rollTypeId);
+        log.debug("Method findOneByRollTypeId(Long rollTypeId): RollCheck {} by rollType's id {} was found",
+                rollCheck, rollTypeId);
         return rollCheck;
     }
 
