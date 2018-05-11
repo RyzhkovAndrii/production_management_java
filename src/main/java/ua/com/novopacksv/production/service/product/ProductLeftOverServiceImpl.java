@@ -38,7 +38,7 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
             throws ResourceNotFoundException {
         ProductLeftOver productLeftOver =
                 productLeftOverRepository.findByProductType_Id(productTypeId).orElseThrow(() -> {
-                    String message = String.format("Produt type with Id = %d was not found", productTypeId);
+                    String message = String.format("Product type with Id = %d was not found", productTypeId);
                     return new ResourceNotFoundException(message);
                 });
         return getLeftOverOnDate(date, productLeftOver);
@@ -95,11 +95,11 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
     private Integer amountOfLeftOverOnDate(LocalDate date, ProductLeftOver productLeftOver) {
         List<ProductOperation> operationsBetweenDates =
                 productOperationService.findAllOperationBetweenDatesByTypeId(productLeftOver.getProductType().getId(),
-                        date, date);
+                        date, productLeftOver.getLeftDate());
         Integer amount = productLeftOver.getAmount();
         for (ProductOperation productOperation : operationsBetweenDates) {
             amount = isSoldOperation(productOperation) ?
-                    amount - productOperation.getAmount() : amount + productOperation.getAmount();
+                    amount + productOperation.getAmount() : amount - productOperation.getAmount();
         }
         return amount;
     }
