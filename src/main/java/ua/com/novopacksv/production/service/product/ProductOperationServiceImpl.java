@@ -65,7 +65,7 @@ public class ProductOperationServiceImpl implements ProductOperationService {
 
     private Integer getChangingAmount(ProductOperation productOperation) {
         return productLeftOverService.isSoldOperation(productOperation) ?
-                -productOperation.getAmount() : +productOperation.getAmount();
+                -productOperation.getAmount() : productOperation.getAmount();
     }
 
     private void changingLeftOver(ProductOperation productOperation, Integer changingAmount)
