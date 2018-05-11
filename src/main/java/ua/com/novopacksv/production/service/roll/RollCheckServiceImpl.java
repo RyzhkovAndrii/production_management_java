@@ -45,12 +45,13 @@ public class RollCheckServiceImpl implements RollCheckService {
     @Override
     @Transactional(readOnly = true)
     public RollCheck findOneByRollTypeId(Long rollTypeId) {
-        log.debug("Method findOneByRollTypeId(*): RollCheck by rollType's id {} is finding", rollTypeId);
-        return rollCheckRepository.findByRollType_Id(rollTypeId).orElseThrow(() -> {
-            log.error("Method findOneByRollTypeId(*): RollCheck by rollType's id {} was not found", rollTypeId);
+        RollCheck rollCheck = rollCheckRepository.findByRollType_Id(rollTypeId).orElseThrow(() -> {
+            log.error("Method findOneByRollTypeId(Long rollTypeId): RollCheck by rollType's id {} was not found", rollTypeId);
             String message = String.format("Roll check with roll type id = %d is not found!", rollTypeId);
             return new ResourceNotFoundException(message);
         });
+        log.debug("Method findOneByRollTypeId(*): RollCheck {} by rollType's id {} was found", rollCheck, rollTypeId);
+        return rollCheck;
     }
 
     /**
@@ -61,8 +62,9 @@ public class RollCheckServiceImpl implements RollCheckService {
     @Override
     @Transactional(readOnly = true)
     public List<RollCheck> findAll() {
-        log.debug("Method findAll(): List of RollChecks is finding");
-        return rollCheckRepository.findAll();
+        List<RollCheck> rollChecks = rollCheckRepository.findAll();
+        log.debug("Method findAll(): List of RollChecks was found: {}", rollChecks);
+        return rollChecks;
     }
 
     /**
@@ -75,7 +77,7 @@ public class RollCheckServiceImpl implements RollCheckService {
     public RollCheck update(RollCheck rollCheck) {
         RollType rollType = rollTypeService.findById(rollCheck.getId());
         rollCheck.setRollType(rollType);
-        log.debug("Method update(*): RollCheck {} is saving", rollCheck);
+        log.debug("Method update(RollCheck rollCheck): RollCheck {} was saved", rollCheck);
         return rollCheckRepository.save(rollCheck);
     }
 
@@ -90,8 +92,8 @@ public class RollCheckServiceImpl implements RollCheckService {
         rollCheck.setRollType(rollType);
         rollCheck.setRollLeftOverCheckStatus(CheckStatus.NOT_CHECKED);
         rollCheckRepository.save(rollCheck);
-        log.debug("Method createNewRollCheckAndSave(*): New rollCheck {} for rollType {} " +
-                "was created and save", rollCheck, rollType);
+        log.debug("Method createNewRollCheckAndSave(RollType rollType): New rollCheck {} for rollType {} " +
+                "was created and saved", rollCheck, rollType);
     }
 
     /**
@@ -100,7 +102,8 @@ public class RollCheckServiceImpl implements RollCheckService {
     @Override
     public void setNotCheckedStatusForAll() {
         findAll().forEach(this::setNotCheckedStatus);
-        log.debug("Method setNotCheckedStatusForAll(): For all rollChecks was set status NOT_CHECKED");
+        List<RollCheck> rollChecks = findAll();
+        log.debug("Method setNotCheckedStatusForAll(): For all rollChecks was set status NOT_CHECKED: {}", rollChecks);
     }
 
     /**
@@ -111,7 +114,8 @@ public class RollCheckServiceImpl implements RollCheckService {
     private void setNotCheckedStatus(RollCheck rollCheck) {
         rollCheck.setRollLeftOverCheckStatus(CheckStatus.NOT_CHECKED);
         rollCheckRepository.save(rollCheck);
-        log.debug("Method setNotCheckedStatus(*): For rollCheck {} was set status NOT_CHECKED", rollCheck);
+        log.debug("Method setNotCheckedStatus(RollCheck rollCheck): For rollCheck {} was set status NOT_CHECKED",
+                rollCheck);
     }
 
 }

@@ -47,10 +47,12 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
     @Override
     @Transactional(readOnly = true)
     public List<RollLeftOver> findAllByDate(LocalDate date) {
-        log.debug("Method findAllByDate(*): List of RollLeftOvers are finding by date {}", date);
-        return findAll().stream()
+        List<RollLeftOver> rollLeftOvers = findAll().stream()
                 .map((rollLeftOver) -> getLeftOverOnDate(rollLeftOver, date))
                 .collect(Collectors.toList());
+        log.debug("Method findAllByDate(LocalDate date): List of RollLeftOvers {} are finding by date {}",
+                rollLeftOvers, date);
+        return rollLeftOvers;
     }
 
     /**
@@ -64,16 +66,19 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
     @Override
     @Transactional(readOnly = true)
     public RollLeftOver findByRollTypeIdAndDate(Long rollTypeId, LocalDate date) throws ResourceNotFoundException {
-        log.debug("Method findByRollTypeIdAndDate(*): RollLeftOver is finding with rollTypeId {} and on date {}",
-                rollTypeId, date);
         RollLeftOver rollLeftOver = rollLeftOverRepository.findByRollType_Id(rollTypeId).orElseThrow(() -> {
-            log.error("Method findByRollTypeIdAndDate(*): RollLeftOver was not found with rollTypeId {}", rollTypeId);
+            log.error("Method findByRollTypeIdAndDate(Long rollTypeId, LocalDate date): " +
+                    "RollLeftOver was not found with rollTypeId {}", rollTypeId);
             String formatDate = conversionService.convert(date, String.class);
             String message =
                     String.format("RollLeftOver with typeId = %d on date = %s is not found", rollTypeId, formatDate);
             return new ResourceNotFoundException(message);
         });
-        return getLeftOverOnDate(rollLeftOver, date);
+        RollLeftOver leftOverOnDate = getLeftOverOnDate(rollLeftOver, date);
+        log.debug("Method findByRollTypeIdAndDate(Long rollTypeId, LocalDate date): RollLeftOver {} was found " +
+                        "with rollTypeId {} and on date {}",
+                leftOverOnDate, rollTypeId, date);
+        return leftOverOnDate;
     }
 
     /**
@@ -88,7 +93,8 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
         leftOver.setRollType(rollType);
         leftOver.setAmount(0);
         rollLeftOverRepository.save(leftOver);
-        log.debug("Method createNewLeftOverAndSave(*): New lefvover for rollType {} was created", rollType);
+        log.debug("Method createNewLeftOverAndSave(RollType rollType): New leftover {} for rollType {} was created",
+                leftOver, rollType);
     }
 
     /**
@@ -100,12 +106,13 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
     @Override
     @Transactional(readOnly = true)
     public RollLeftOver findById(Long id) {
-        log.debug("Method findById(*): rollLeftOver is finding by id {}", id);
-        return rollLeftOverRepository.findById(id).orElseThrow(() -> {
+        RollLeftOver rollLeftOver = rollLeftOverRepository.findById(id).orElseThrow(() -> {
             log.error("Method findById(*): rollLeftOver was not found by id {}", id);
             String message = String.format("Roll left over with id = %d is not found", id);
             return new ResourceNotFoundException(message);
         });
+        log.debug("Method findById(Long id): rollLeftOver {} is finding by id {}", rollLeftOver, id);
+        return rollLeftOver;
     }
 
     /**
@@ -116,8 +123,9 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
     @Override
     @Transactional(readOnly = true)
     public List<RollLeftOver> findAll() {
-        log.debug("Method findAll(): List of RollLeftOver is finding");
-        return rollLeftOverRepository.findAll();
+        List<RollLeftOver> rollLeftOvers = rollLeftOverRepository.findAll();
+        log.debug("Method findAll(): List of RollLeftOver was found: {}", rollLeftOvers);
+        return rollLeftOvers;
     }
 
     /**
@@ -128,7 +136,7 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
      */
     @Override
     public RollLeftOver save(RollLeftOver rollLeftOver) {
-        log.debug("Method save(*): RollLeftOver {} is saving", rollLeftOver);
+        log.debug("Method save(RollLeftOver rollLeftOver): RollLeftOver {} is saving", rollLeftOver);
         return rollLeftOverRepository.save(rollLeftOver);
     }
 
@@ -140,7 +148,7 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
      */
     @Override
     public RollLeftOver update(RollLeftOver rollLeftOver) {
-        log.debug("Method update(*): RollLeftover {} is updating", rollLeftOver);
+        log.debug("Method update(RollLeftOver rollLeftOver): RollLeftover {} was updated", rollLeftOver);
         return rollLeftOverRepository.save(rollLeftOver);
     }
 
@@ -151,8 +159,9 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
      */
     @Override
     public void delete(Long id) {
+        RollLeftOver rollLeftOver = findById(id);
         rollLeftOverRepository.deleteById(id);
-        log.debug("Method delete(*): RollLeftOver with id {} was deleted", id);
+        log.debug("Method delete(Long id): RollLeftOver {} with id {} was deleted", rollLeftOver, id);
     }
 
     /**
@@ -164,12 +173,15 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
     @Override
     @Transactional(readOnly = true)
     public RollLeftOver findLastRollLeftOverByRollType(RollType rollType) {
-        log.debug("Method findLastRollLeftOverByRollType(*): RollLeftOver is searching by roll's type {}", rollType);
-        return rollLeftOverRepository.findByRollType_Id(rollType.getId()).orElseThrow(() -> {
-            log.error("Method findLastRollLeftOverByRollType(*): RollLeftOver was not found by roll's type {}", rollType);
+        RollLeftOver rollLeftOver = rollLeftOverRepository.findByRollType_Id(rollType.getId()).orElseThrow(() -> {
+            log.error("Method findLastRollLeftOverByRollType(RollType rollType): RollLeftOver was not found " +
+                    "by roll's type {}", rollType);
             String message = String.format("RollLeftOver with typeId = %d is not found", rollType.getId());
             return new ResourceNotFoundException(message);
         });
+        log.debug("Method findLastRollLeftOverByRollType(RollType rollType): RollLeftOver {} " +
+                "was found by roll's type {}", rollLeftOver, rollType);
+        return rollLeftOver;
     }
 
     /**
@@ -192,7 +204,8 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
         rollLeftOverTemp.setDate(date);
         rollLeftOverTemp.setRollType(rollLeftOver.getRollType());
         rollLeftOverTemp.setAmount(lastAmount);
-        log.debug("Method getLeftOverOnDate(*): RollLeftOver on date {} was found: {}", date, rollLeftOverTemp);
+        log.debug("Method getLeftOverOnDate(RollLeftOver rollLeftOver, LocalDate date): RollLeftOver on date {} " +
+                "was found: {}", date, rollLeftOverTemp);
         return rollLeftOverTemp;
     }
 
@@ -206,7 +219,8 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
         Integer oldAmount = rollLeftOver.getAmount();
         rollLeftOver.setAmount(oldAmount + positiveOrNegativeChanges);
         update(rollLeftOver);
-        log.debug("Method changeRollLeftOverAmount(*): RollLeftOver {} was changed by value {}",
+        log.debug("Method changeRollLeftOverAmount(RollLeftOver rollLeftOver, Integer positiveOrNegativeChanges): " +
+                        "RollLeftOver {} was changed by value {}",
                 rollLeftOver, positiveOrNegativeChanges);
     }
 }

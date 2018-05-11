@@ -47,9 +47,11 @@ public class RollBatchServiceImpl implements RollBatchService {
     @Override
     public RollBatch getOne(Long rollTypeId, LocalDate manufacturedDate) throws ResourceNotFoundException {
         RollManufactured rollManufactured = rollManufacturedService.findOne(manufacturedDate, rollTypeId);
-        log.debug("Method getOne(*): RollBatch is finding by rollType's id {} and manufactured date {}",
+        RollBatch rollBatch = getOne(rollManufactured);
+        log.debug("Method getOne(Long rollTypeId, LocalDate manufacturedDate): RollBatch {} is finding " +
+                        "by rollType's id {} and manufactured date {}", rollBatch,
                 rollTypeId, manufacturedDate);
-        return getOne(rollManufactured);
+        return rollBatch;
     }
 
     /**
@@ -64,8 +66,10 @@ public class RollBatchServiceImpl implements RollBatchService {
     @Override
     public List<RollBatch> getAll(LocalDate manufacturedDate) {
         List<RollManufactured> rollManufacturedList = rollManufacturedService.findAll(manufacturedDate);
-        log.debug("Method getAll(*): List<RollBatch> is finding by manufactured date {}", manufacturedDate);
-        return getAll(rollManufacturedList);
+        List<RollBatch> rollBatches = getAll(rollManufacturedList);
+        log.debug("Method getAll(LocalDate manufacturedDate): List<RollBatch>: {} is finding by manufactured date {}",
+                rollBatches, manufacturedDate);
+        return rollBatches;
     }
 
     /**
@@ -82,9 +86,11 @@ public class RollBatchServiceImpl implements RollBatchService {
     public List<RollBatch> getAll(LocalDate fromManufacturedDate, LocalDate toManufacturedDate) {
         List<RollManufactured> rollManufacturedList =
                 rollManufacturedService.findAll(fromManufacturedDate, toManufacturedDate);
-        log.debug("Method getAll(*): List<RollBatch> is finding by period from {} to {}",
+        List<RollBatch> rollBatches = getAll(rollManufacturedList);
+        log.debug("Method getAll(LocalDate fromManufacturedDate, LocalDate toManufacturedDate): List<RollBatch>: " +
+                        "{} is finding by period from {} to {}", rollBatches,
                 fromManufacturedDate, toManufacturedDate);
-        return getAll(rollManufacturedList);
+        return rollBatches;
     }
 
     /**
@@ -103,9 +109,11 @@ public class RollBatchServiceImpl implements RollBatchService {
     public List<RollBatch> getAll(Long rollTypeId, LocalDate fromManufacturedDate, LocalDate toManufacturedDate) {
         List<RollManufactured> rollManufacturedList =
                 rollManufacturedService.findAll(fromManufacturedDate, toManufacturedDate, rollTypeId);
-        log.debug("Method getAll(*): List<RollBatch> is finding by rollType's id{} and for period from {} to {}",
-                rollTypeId, fromManufacturedDate, toManufacturedDate);
-        return getAll(rollManufacturedList);
+        List<RollBatch> rollBatches = getAll(rollManufacturedList);
+        log.debug("Method getAll(Long rollTypeId, LocalDate fromManufacturedDate): List<RollBatch>: {} " +
+                        "is finding by rollType's id{} and for period from {} to {}",
+                rollBatches, rollTypeId, fromManufacturedDate, toManufacturedDate);
+        return rollBatches;
     }
 
     /**
@@ -123,7 +131,8 @@ public class RollBatchServiceImpl implements RollBatchService {
         rollBatch.setRollManufactured(rollManufactured);
         rollBatch.setManufacturedAmount(manufacturedAmount);
         rollBatch.setUsedAmount(usedAmount);
-        log.debug("Method getOne(*): RollBatch {} is created for rollManufactured {}", rollBatch, rollManufactured);
+        log.debug("Method getOne(RollManufactured rollManufactured): RollBatch {} is created for rollManufactured {}",
+                rollBatch, rollManufactured);
         return rollBatch;
     }
 
@@ -136,10 +145,12 @@ public class RollBatchServiceImpl implements RollBatchService {
      * @throws NullPointerException если rollManufacturedList - null
      */
     private List<RollBatch> getAll(List<RollManufactured> rollManufacturedList) {
-        log.debug("Method getAll(*): List<RollBatch> is finding for List<RollManufactured>");
-        return rollManufacturedList.stream()
+        List<RollBatch> rollBatches = rollManufacturedList.stream()
                 .map(this::getOne)
                 .collect(Collectors.toList());
+        log.debug("Method getAll(List<RollManufactured> rollManufacturedList): List<RollBatch>: {} " +
+                "is finding for List<RollManufactured> {}", rollBatches, rollManufacturedList);
+        return rollBatches;
     }
 
 }
