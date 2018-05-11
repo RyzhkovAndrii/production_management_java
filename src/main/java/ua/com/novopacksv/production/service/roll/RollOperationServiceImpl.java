@@ -56,8 +56,8 @@ public class RollOperationServiceImpl implements RollOperationService {
     @Transactional(readOnly = true)
     public List<RollOperation> findAllByRollTypeAndManufacturedDateBetween(RollType rollType, LocalDate fromDate,
                                                                            LocalDate toDate) {
-        log.debug("Method findAllByRollTypeAndManufacturedDateBetween(*): Roll operations of roll type {} " +
-                "for period are finding", rollType);
+        log.debug("Method findAllByRollTypeAndManufacturedDateBetween(RollType rollType, LocalDate fromDate, " +
+                "LocalDate toDate): Roll operations of roll type {} for period are finding", rollType);
         return rollOperationRepository
                 .findAllByRollManufactured_RollTypeAndRollManufactured_ManufacturedDateBetween(rollType, fromDate,
                         toDate);
@@ -75,7 +75,9 @@ public class RollOperationServiceImpl implements RollOperationService {
     @Transactional(readOnly = true)
     public List<RollOperation> findAllByRollTypeIdAndManufacturedPeriod(Long rollTypeId, LocalDate from, LocalDate to) {
         List<RollManufactured> rollManufacturedList = rollManufacturedService.findAll(from, to, rollTypeId);
-        log.debug("Method findAllByRollTypeIDAndManufacturedPeriod(*): Operations with roll's type id = {} for manufactured period are finding", rollTypeId);
+        log.debug("Method findAllByRollTypeIDAndManufacturedPeriod(Long rollTypeId, LocalDate from, LocalDate to): " +
+                "Operations with roll's type id = {} for manufactured period from {} to {} are finding",
+                rollTypeId, from, to);
         return rollOperationRepository.findAllByRollManufacturedIsIn(rollManufacturedList);
     }
 
@@ -90,7 +92,8 @@ public class RollOperationServiceImpl implements RollOperationService {
     @Override
     @Transactional(readOnly = true)
     public List<RollOperation> findAllByRollTypeIdAndOperationPeriod(Long id, LocalDate from, LocalDate to) {
-        log.debug("Method findAllByRollTypeIdAndOperationPeriod(*): Operations with roll type id = {} for period are finding", id);
+        log.debug("Method findAllByRollTypeIdAndOperationPeriod(Long id, LocalDate from, LocalDate to): " +
+                "Operations with roll type id = {} for period are finding", id);
         return rollOperationRepository.findAllByRollManufactured_RollType_IdAndOperationDateBetween(id, from, to);
     }
 
@@ -104,7 +107,7 @@ public class RollOperationServiceImpl implements RollOperationService {
     @Transactional(readOnly = true)
     public List<RollOperation> findAllByRollTypeId(Long id) {
         List<RollManufactured> rollManufacturedList = rollManufacturedService.findAll(id);
-        log.debug("Method findAllByRollTypeID(*): Roll operations with roll type id = {} are finding", id);
+        log.debug("Method findAllByRollTypeID(Long id): Roll operations with roll type id = {} are finding", id);
         return rollOperationRepository.findAllByRollManufacturedIsIn(rollManufacturedList);
     }
 
@@ -118,12 +121,13 @@ public class RollOperationServiceImpl implements RollOperationService {
     @Override
     @Transactional(readOnly = true)
     public RollOperation findById(Long id) throws ResourceNotFoundException {
-        log.debug("Method findById(*): Roll operation with id {} is finding", id);
-        return rollOperationRepository.findById(id).orElseThrow(() -> {
+        RollOperation rollOperation = rollOperationRepository.findById(id).orElseThrow(() -> {
             String message = String.format("Roll operation with id = %d is not found", id);
-            log.error("Method findById(*): Roll operation with id {} was not found", id);
+            log.error("Method findById(Long id): Roll operation with id {} was not found", id);
             return new ResourceNotFoundException(message);
         });
+        log.debug("Method findById(Long id): Roll operation {} with id {} is finding",rollOperation, id);
+        return rollOperation;
     }
 
     /**
@@ -155,7 +159,7 @@ public class RollOperationServiceImpl implements RollOperationService {
         RollLeftOver rollLeftOver = rollLeftOverService
                 .findLastRollLeftOverByRollType(rollManufactured.getRollType());
         rollLeftOverService.changeRollLeftOverAmount(rollLeftOver, changingAmount);
-        log.debug("Method save(*): Roll operation {} is saving", rollOperation);
+        log.debug("Method save(RollOperation rollOperation): Roll operation {} is saving", rollOperation);
         return rollOperationRepository.save(rollOperation);
     }
 
@@ -176,7 +180,7 @@ public class RollOperationServiceImpl implements RollOperationService {
                 .findLastRollLeftOverByRollType(rollManufactured.getRollType());
         rollLeftOverService.changeRollLeftOverAmount(rollLeftOver,
                 rollOperation.getRollAmount() - rollOperationOld.getRollAmount());
-        log.debug("Method update(*): Roll operation {} is updating", rollOperation);
+        log.debug("Method update(RollOperation rollOperation): Roll operation {} is updating", rollOperation);
         return rollOperationRepository.save(rollOperation);
     }
 
@@ -195,7 +199,7 @@ public class RollOperationServiceImpl implements RollOperationService {
                 .findLastRollLeftOverByRollType(findById(id).getRollManufactured().getRollType());
         rollLeftOverService.changeRollLeftOverAmount(rollLeftOver, -getOperationAmountWithSign(rollOperation));
         rollOperationRepository.deleteById(id);
-        log.debug("Method delete(*): Operation with id {} was deleted", id);
+        log.debug("Method delete(Long id): Operation {} with id {} was deleted",rollOperation, id);
     }
 
     /**
@@ -207,8 +211,8 @@ public class RollOperationServiceImpl implements RollOperationService {
     @Override
     @Transactional(readOnly = true)
     public List<RollOperation> getAllManufacturedOperationsByRollManufactured(RollManufactured rollManufactured) {
-        log.debug("Method getAllManufacturedOperationsByRollManufactured(*): Roll operations with roll manufactured" +
-                " {} are finding", rollManufactured);
+        log.debug("Method getAllManufacturedOperationsByRollManufactured(RollManufactured rollManufactured): " +
+                "Roll operations with roll manufactured {} are finding", rollManufactured);
         return rollOperationRepository.findAllByOperationTypeAndRollManufactured(OperationType.MANUFACTURE,
                 rollManufactured);
     }
@@ -222,8 +226,8 @@ public class RollOperationServiceImpl implements RollOperationService {
     @Override
     @Transactional(readOnly = true)
     public List<RollOperation> getAllUsedOperationsByRollManufactured(RollManufactured rollManufactured) {
-        log.debug("Method getAllUsedOperationsByRollManufactured(*): Roll operations with roll manufactured" +
-                " {} are finding", rollManufactured);
+        log.debug("Method getAllUsedOperationsByRollManufactured(RollManufactured rollManufactured): " +
+                "Roll operations with roll manufactured {} are finding", rollManufactured);
         return rollOperationRepository.findAllByOperationTypeAndRollManufactured(OperationType.USE, rollManufactured);
     }
 
@@ -234,8 +238,10 @@ public class RollOperationServiceImpl implements RollOperationService {
      * @return true if operation's type is MANUFACTURE or false if this one is USE
      */
     Boolean isItManufactureOperation(RollOperation rollOperation) {
-        log.debug("Method isItManufactureOperation(*): Operation's type is determining");
-        return rollOperation.getOperationType().equals(OperationType.MANUFACTURE);
+        Boolean isManufacture = rollOperation.getOperationType().equals(OperationType.MANUFACTURE);
+        log.debug("Method isItManufactureOperation(RollOperation rollOperation): Operation's type was determined as {}",
+                isManufacture);
+        return isManufacture;
     }
 
     /**
@@ -245,7 +251,8 @@ public class RollOperationServiceImpl implements RollOperationService {
      * @return positive amount of operation if operation type is MANUFACTURE and negative if this one is USE
      */
     private Integer getOperationAmountWithSign(RollOperation rollOperation) {
-        log.debug("Method getOperationAmountWithSign(*): Sign of amount of roll operation {} is finding", rollOperation);
+        log.debug("Method getOperationAmountWithSign(RollOperation rollOperation): Sign of amount of " +
+                "roll operation {} is finding", rollOperation);
         return isItManufactureOperation(rollOperation) ? rollOperation.getRollAmount() : -rollOperation.getRollAmount();
     }
 
@@ -259,19 +266,19 @@ public class RollOperationServiceImpl implements RollOperationService {
         RollManufactured rollManufactured = rollOperation.getRollManufactured();
         if (!isItManufactureOperation(rollOperation)) {
             if (isRollNew(rollManufactured)) {
-                log.error("Method checkOperationSaveAllowed(*): Roll operation {} could not been saved " +
-                        "if rolls were not manufactured", rollOperation);
+                log.error("Method checkOperationSaveAllowed(RollOperation rollOperation): Roll operation {} " +
+                        "could not been saved if rolls were not manufactured", rollOperation);
                 throw new NegativeRollAmountException("Roll's left is negative!");
             }
             Integer rollManufacturedAmount = rollManufacturedService.getManufacturedRollAmount(rollManufactured);
             Integer rollUsedAmount = rollManufacturedService.getUsedRollAmount(rollManufactured);
             Integer resultOfAmount = rollManufacturedAmount - rollUsedAmount - rollOperation.getRollAmount();
             if (resultOfAmount < 0) {
-                log.error("Method checkOperationSaveAllowed(*): Roll operation {} could not been saved " +
-                        "if rollManufacturedAmount is negative", rollOperation);
+                log.error("Method checkOperationSaveAllowed(RollOperation rollOperation): Roll operation {} could " +
+                        "not been saved if rollManufacturedAmount is negative", rollOperation);
                 throw new NegativeRollAmountException("Roll's left is negative!");
             }
-            log.debug("Method checkOperationSaveAllowed(*): Roll operation {} is allowed", rollOperation);
+            log.debug("Method checkOperationSaveAllowed(RollOperation rollOperation): Roll operation {} is allowed", rollOperation);
         }
     }
 
@@ -288,11 +295,11 @@ public class RollOperationServiceImpl implements RollOperationService {
             Integer rollUsedAmount = rollManufacturedService.getUsedRollAmount(rollManufactured);
             Integer resultOfAmount = rollManufacturedAmount - rollUsedAmount - rollOperation.getRollAmount();
             if (resultOfAmount < 0) {
-                log.error("Method checkOperationDeleteAllowed(*): Operation {} changes manufactureAmount " +
+                log.error("Method checkOperationDeleteAllowed(RollOperation rollOperation): Operation {} changes manufactureAmount " +
                         "to negative value", rollOperation);
                 throw new NegativeRollAmountException("Roll's left is negative!");
             }
-            log.debug("Method checkOperationDeleteAllowed(*): Operation {} is allowed", rollOperation);
+            log.debug("Method checkOperationDeleteAllowed(RollOperation rollOperation): Operation {} is allowed", rollOperation);
         }
     }
 
@@ -303,7 +310,8 @@ public class RollOperationServiceImpl implements RollOperationService {
      * @return true if its are new and false if this manufactured rolls exist in DB
      */
     private Boolean isRollNew(RollManufactured rollManufactured) {
-        log.debug("Method isRollNew(*): Roll manufactured {} is checking if it's new", rollManufactured);
+        log.debug("Method isRollNew(RollManufactured rollManufactured): Roll manufactured {} is checking if it's new",
+                rollManufactured);
         return Objects.isNull(rollManufactured.getId());
     }
 
