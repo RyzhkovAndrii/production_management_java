@@ -22,4 +22,11 @@
                                  referencedTableName="product_type"
                                  referencedColumnNames="id"/>
     </changeSet>
+    <changeSet id="3" author="pryadilnikova@gmail.com">
+        <addForeignKeyConstraint baseTableName="product_check"
+                                 baseColumnNames="product_type_id"
+                                 constraintName="fk_product_check_product_type"
+                                 referencedTableName="product_type"
+                                 referencedColumnNames="id"/>
+    </changeSet>
 </databaseChangeLog>
