@@ -19,6 +19,8 @@
         <addForeignKeyConstraint baseTableName="product_left_over"
                                  baseColumnNames="product_type_id"
                                  constraintName="fk_product_left_over_product_type"
+                                 onUpdate="CASCADE"
+                                 onDelete="CASCADE"
                                  referencedTableName="product_type"
                                  referencedColumnNames="id"/>
     </changeSet>
@@ -26,6 +28,8 @@
         <addForeignKeyConstraint baseTableName="product_check"
                                  baseColumnNames="product_type_id"
                                  constraintName="fk_product_check_product_type"
+                                 onUpdate="CASCADE"
+                                 onDelete="CASCADE"
                                  referencedTableName="product_type"
                                  referencedColumnNames="id"/>
     </changeSet>
