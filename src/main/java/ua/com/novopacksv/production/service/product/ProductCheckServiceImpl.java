@@ -1,6 +1,8 @@
 package ua.com.novopacksv.production.service.product;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
@@ -18,6 +20,10 @@ public class ProductCheckServiceImpl implements ProductCheckService {
 
     private final ProductCheckRepository productCheckRepository;
 
+    @Autowired
+    @Lazy
+    private ProductTypeService productTypeService;
+
     @Override
     @Transactional(readOnly = true)
     public ProductCheck findOneByProductTypeId(Long productTypeId) {
@@ -34,6 +40,8 @@ public class ProductCheckServiceImpl implements ProductCheckService {
 
     @Override
     public ProductCheck update(ProductCheck productCheck) {
+        ProductType productType = productTypeService.findById(productCheck.getId());
+        productCheck.setProductType(productType);
         return productCheckRepository.save(productCheck);
     }
 
