@@ -57,4 +57,17 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="4" author="pryadilnikova@gmail.com">
+        <createTable tableName="product_check">
+            <column name="id" type="bigint" autoIncrement="true" startWith="1" incrementBy="1">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="product_type_id" type="bigint">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="roll_left_over_check_status" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
