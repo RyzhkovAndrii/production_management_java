@@ -22,7 +22,7 @@ public class ProductCheck extends BaseEntity {
     @MapsId
     private ProductType productType;
 
-    @Column(name = "roll_left_over_check_status", nullable = false)
+    @Column(name = "product_left_over_check_status", nullable = false)
     @Enumerated(EnumType.STRING)
     private CheckStatus productLeftOverCheckStatus;
 }

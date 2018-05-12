@@ -65,7 +65,7 @@
             <column name="product_type_id" type="bigint">
                 <constraints unique="true" nullable="false"/>
             </column>
-            <column name="roll_left_over_check_status" type="varchar(30)">
+            <column name="product_left_over_check_status" type="varchar(30)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
