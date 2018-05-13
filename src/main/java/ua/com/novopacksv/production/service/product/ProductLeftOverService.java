@@ -2,6 +2,7 @@ package ua.com.novopacksv.production.service.product;
 
 import ua.com.novopacksv.production.model.productModel.ProductLeftOver;
 import ua.com.novopacksv.production.model.productModel.ProductOperation;
+import ua.com.novopacksv.production.model.productModel.ProductType;
 import ua.com.novopacksv.production.service.BaseEntityService;
 
 import java.time.LocalDate;
@@ -16,4 +17,6 @@ public interface ProductLeftOverService extends BaseEntityService<ProductLeftOve
     ProductLeftOver findByProductTypeId(Long productTypeId);
 
     Boolean isSoldOperation(ProductOperation productOperation);
+
+    ProductLeftOver saveByProductType (ProductType productType);
 }

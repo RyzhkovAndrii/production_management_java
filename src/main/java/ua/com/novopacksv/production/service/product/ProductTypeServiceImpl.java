@@ -1,6 +1,8 @@
 package ua.com.novopacksv.production.service.product;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +18,14 @@ import java.util.List;
 public class ProductTypeServiceImpl implements ProductTypeService {
 
     private final ProductTypeRepository productTypeRepository;
+
+    @Autowired
+    @Lazy
+    private ProductLeftOverService productLeftOverService;
+
+    @Autowired
+    @Lazy
+    private ProductCheckService productCheckService;
 
     @Override
     @Transactional(readOnly = true)
@@ -37,6 +47,8 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public ProductType save(ProductType productType) {
         Long existedId = checkIfTheSameType(productType);
+        productLeftOverService.saveByProductType(productType);
+        productCheckService.createNewProductCheckAndSave(productType);
         return (existedId != null) ? findById(existedId) : productTypeRepository.save(productType);
     }
 

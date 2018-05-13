@@ -370,4 +370,200 @@
             <column name="product_left_over_check_status" value="NOT_CONFIRMED"/>
         </insert>
     </changeSet>
+    <changeSet id="57" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="1"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="58" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="2"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="59" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="3"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="60" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="4"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="61" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="5"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="62" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="6"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="63" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="7"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="64" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="8"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="65" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="9"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="66" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="10"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="67" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="11"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="68" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="12"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="69" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="13"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="70" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="14"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="71" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="15"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="72" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="16"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="73" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="17"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="74" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="18"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="75" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="19"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="76" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="20"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="77" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="21"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="78" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="22"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="79" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="23"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="80" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="24"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="81" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="25"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="82" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="26"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="83" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="27"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
+    <changeSet id="84" author="pryadilnikova@gmail.com">
+        <insert tableName="product_left_over">
+            <column name="left_date" value="2018-05-13"/>
+            <column name="product_type_id" value="28"/>
+            <column name="amount" value="0"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>

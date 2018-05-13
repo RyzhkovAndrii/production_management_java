@@ -9,6 +9,7 @@ import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.productModel.ProductLeftOver;
 import ua.com.novopacksv.production.model.productModel.ProductOperation;
 import ua.com.novopacksv.production.model.productModel.ProductOperationType;
+import ua.com.novopacksv.production.model.productModel.ProductType;
 import ua.com.novopacksv.production.repository.productRepository.ProductLeftOverRepository;
 
 import java.time.LocalDate;
@@ -45,7 +46,7 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
     }
 
     @Override
-    public ProductLeftOver findById(Long id) throws ResourceNotFoundException{
+    public ProductLeftOver findById(Long id) throws ResourceNotFoundException {
         return productLeftOverRepository.findById(id).orElseThrow(() -> {
             String message = String.format("Product leftover with id = %d was not found", id);
             return new ResourceNotFoundException(message);
@@ -53,8 +54,8 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
     }
 
     @Override
-    public ProductLeftOver findByProductTypeId(Long productTypeId) throws ResourceNotFoundException{
-        return productLeftOverRepository.findByProductType_Id(productTypeId).orElseThrow(() ->{
+    public ProductLeftOver findByProductTypeId(Long productTypeId) throws ResourceNotFoundException {
+        return productLeftOverRepository.findByProductType_Id(productTypeId).orElseThrow(() -> {
             String message = String.format("Product type with id = %d was not found", productTypeId);
             return new ResourceNotFoundException(message);
         });
@@ -88,6 +89,16 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
         return productLeftOverTemp;
     }
 
+    @Override
+    public ProductLeftOver saveByProductType(ProductType productType) {
+        ProductLeftOver productLeftOver = ifLeftOverExist(productType);
+        if (productLeftOver != null) {
+            return save(productLeftOver);
+        } else {
+            return createNewLeftOver(productType);
+        }
+    }
+
     public Boolean isSoldOperation(ProductOperation productOperation) {
         return productOperation.getProductOperationType().equals(ProductOperationType.SOLD);
     }
@@ -102,5 +113,23 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
                     amount + productOperation.getAmount() : amount - productOperation.getAmount();
         }
         return amount;
+    }
+
+    private ProductLeftOver ifLeftOverExist(ProductType productType) {
+        List<ProductLeftOver> productLeftOvers = findAll();
+        for (ProductLeftOver leftOver : productLeftOvers) {
+            if (leftOver.getProductType().equals(productType)) {
+                return leftOver;
+            }
+        }
+        return null;
+    }
+
+    private ProductLeftOver createNewLeftOver(ProductType productType) {
+        ProductLeftOver productLeftOver = new ProductLeftOver();
+        productLeftOver.setProductType(productType);
+        productLeftOver.setAmount(0);
+        productLeftOver.setLeftDate(LocalDate.now());
+        return productLeftOver;
     }
 }
