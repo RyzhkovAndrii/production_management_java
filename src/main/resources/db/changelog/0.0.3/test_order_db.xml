@@ -25,6 +25,7 @@
             <column name="is_important" value="true"/>
             <column name="creation_date" value="2018-04-27 18:45:06"/>
             <column name="delivery_date" value="2018-05-15"/>
+            <column name="is_delivered" value="false"/>
         </insert>
     </changeSet>
 
@@ -34,6 +35,7 @@
             <column name="is_important" value="false"/>
             <column name="creation_date" value="2018-04-26 12:09:45"/>
             <column name="delivery_date" value="2018-04-30"/>
+            <column name="is_delivered" value="false"/>
         </insert>
     </changeSet>
 
@@ -43,6 +45,7 @@
             <column name="is_important" value="false"/>
             <column name="creation_date" value="2018-04-27 09:10:52"/>
             <column name="delivery_date" value="2018-05-01"/>
+            <column name="is_delivered" value="false"/>
         </insert>
     </changeSet>
 

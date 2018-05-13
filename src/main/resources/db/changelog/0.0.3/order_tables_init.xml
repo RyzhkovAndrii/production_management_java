@@ -35,6 +35,9 @@
             <column name="delivery_date" type="date">
                 <constraints nullable="false"/>
             </column>
+            <column name="is_delivered" value="boolean">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
         <addForeignKeyConstraint baseTableName="orders"
                                  baseColumnNames="client_id"

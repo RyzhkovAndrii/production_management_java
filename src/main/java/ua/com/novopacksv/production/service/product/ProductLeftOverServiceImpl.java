@@ -130,7 +130,7 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
     }
 
     private Integer countAmountOfLeftOverForFuture(LocalDate date, ProductLeftOver productLeftOver) {
-        List<OrderItem> orderItems = orderItemService.findAll();//TODO 
+        List<OrderItem> orderItems = orderItemService.findAll();//TODO
         return null;
     }
 

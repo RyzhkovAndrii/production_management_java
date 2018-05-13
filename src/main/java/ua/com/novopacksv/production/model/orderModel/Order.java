@@ -37,4 +37,7 @@ public class Order extends BaseEntity {
     @Column(name = "delivery_date", nullable = false)
     private LocalDate deliveryDate;
 
+    @Column(name = "is_delivered", nullable = false)
+    private Boolean isDelivered;
+
 }
