@@ -6,11 +6,13 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
+import ua.com.novopacksv.production.model.orderModel.OrderItem;
 import ua.com.novopacksv.production.model.productModel.ProductLeftOver;
 import ua.com.novopacksv.production.model.productModel.ProductOperation;
 import ua.com.novopacksv.production.model.productModel.ProductOperationType;
 import ua.com.novopacksv.production.model.productModel.ProductType;
 import ua.com.novopacksv.production.repository.productRepository.ProductLeftOverRepository;
+import ua.com.novopacksv.production.service.order.OrderItemService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,6 +28,10 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
     @Autowired
     @Lazy
     private ProductOperationService productOperationService;
+
+    @Autowired
+    @Lazy
+    private OrderItemService orderItemService;
 
     @Override
     public List<ProductLeftOver> findOnDate(LocalDate date) {
@@ -104,6 +110,14 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
     }
 
     private Integer amountOfLeftOverOnDate(LocalDate date, ProductLeftOver productLeftOver) {
+        if (date.isBefore(LocalDate.now()) || date.isEqual(LocalDate.now())) {
+            return countAmountOfLeftOverForPast(date, productLeftOver);
+        } else {
+            return countAmountOfLeftOverForFuture(date, productLeftOver);
+        }
+    }
+
+    private Integer countAmountOfLeftOverForPast(LocalDate date, ProductLeftOver productLeftOver) {
         List<ProductOperation> operationsBetweenDates =
                 productOperationService.findAllOperationBetweenDatesByTypeId(productLeftOver.getProductType().getId(),
                         date, productLeftOver.getLeftDate());
@@ -113,6 +127,11 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
                     amount + productOperation.getAmount() : amount - productOperation.getAmount();
         }
         return amount;
+    }
+
+    private Integer countAmountOfLeftOverForFuture(LocalDate date, ProductLeftOver productLeftOver) {
+        List<OrderItem> orderItems = orderItemService.findAll();//TODO 
+        return null;
     }
 
     private ProductLeftOver ifLeftOverExist(ProductType productType) {
