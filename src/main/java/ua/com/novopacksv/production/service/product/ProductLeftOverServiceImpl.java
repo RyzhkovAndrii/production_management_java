@@ -130,8 +130,20 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
     }
 
     private Integer countAmountOfLeftOverForFuture(LocalDate date, ProductLeftOver productLeftOver) {
-        List<OrderItem> orderItems = orderItemService.findAll();//TODO
-        return null;
+        ProductType productType = productLeftOver.getProductType();
+        List<OrderItem> orderItems = findOrderNotDelivered(productType, LocalDate.now(), date);
+        Integer amount = productLeftOver.getAmount();
+        for(OrderItem orderItem : orderItems){
+            amount -= orderItem.getAmount();
+        }
+        return amount;
+    }
+
+    //TODO review
+    private List<OrderItem> findOrderNotDelivered(ProductType productType, LocalDate fromDate, LocalDate toDate) {
+        List<OrderItem> orderItems = orderItemService.findAll(productType, fromDate, toDate);
+        return orderItems.stream()
+                .filter((orderItem) -> orderItem.getOrder().getIsDelivered().equals(false)).collect(Collectors.toList());
     }
 
     private ProductLeftOver ifLeftOverExist(ProductType productType) {

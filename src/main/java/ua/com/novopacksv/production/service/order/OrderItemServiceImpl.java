@@ -6,8 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.orderModel.Order;
 import ua.com.novopacksv.production.model.orderModel.OrderItem;
+import ua.com.novopacksv.production.model.productModel.ProductType;
 import ua.com.novopacksv.production.repository.orderRepository.OrderItemRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -56,4 +58,9 @@ public class OrderItemServiceImpl implements OrderItemService {
         return orderItemRepository.findAllByOrder(order);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<OrderItem> findAll(ProductType productType, LocalDate fromDate, LocalDate toDate) {
+        return orderItemRepository.findAllByProductTypeAndOrder_DeliveryDateBetween(productType, fromDate, toDate);
+    }
 }
