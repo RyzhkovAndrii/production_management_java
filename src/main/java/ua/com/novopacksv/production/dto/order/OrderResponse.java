@@ -12,8 +12,8 @@ public class OrderResponse extends BaseEntityResponse {
 
     private Boolean isImportant;
 
-    private String deliveryDate;
+    private String creationDate;
 
-    // todo add create date
+    private String deliveryDate;
 
 }

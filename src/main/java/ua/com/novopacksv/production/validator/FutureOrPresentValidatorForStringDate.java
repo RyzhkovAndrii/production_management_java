@@ -9,27 +9,27 @@ import javax.validation.ConstraintValidatorContext;
 import java.time.LocalDate;
 
 @Component
-public class PastOrPresentValidatorForStringDate implements ConstraintValidator<PastOrPresent, String> {
+public class FutureOrPresentValidatorForStringDate implements ConstraintValidator<FutureOrPresent, String> {
 
     @Autowired
     private ConversionService conversionService;
 
-    public void initialize(PastOrPresent pastOrPresent) {
+    public void initialize(FutureOrPresent constraint) {
     }
 
     public boolean isValid(String stringDate, ConstraintValidatorContext context) {
         try {
             assert null != stringDate;
             LocalDate date = conversionService.convert(stringDate, LocalDate.class);
-            return isPastOrPresent(date);
+            return isFutureOrPresent(date);
         } catch (Exception ex) {
             return true;
         }
     }
 
-    private boolean isPastOrPresent(LocalDate date) {
+    private boolean isFutureOrPresent(LocalDate date) {
         LocalDate today = LocalDate.now();
-        return date.isBefore(today) || date.isEqual(today);
+        return date.isAfter(today) || date.isEqual(today);
     }
 
 }

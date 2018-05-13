@@ -1,9 +1,12 @@
 package ua.com.novopacksv.production.validator;
 
+import org.springframework.stereotype.Component;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.Arrays;
 
+@Component
 public class EnumValueValidator implements ConstraintValidator<EnumValue, String> {
 
     private Class<? extends Enum<?>> enumClass;

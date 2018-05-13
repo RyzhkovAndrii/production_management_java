@@ -11,6 +11,7 @@ import ua.com.novopacksv.production.dto.order.OrderResponse;
 import ua.com.novopacksv.production.model.orderModel.Order;
 import ua.com.novopacksv.production.service.order.OrderService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -23,21 +24,21 @@ public class OrderController {
     private final ModelConversionService conversionService;
 
     @GetMapping
-    public ResponseEntity<List<OrderResponse>> getList() {
+    public ResponseEntity<List<OrderResponse>> getAll() {
         List<Order> clients = orderService.findAll();
         List<OrderResponse> response = conversionService.convert(clients, OrderResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderResponse> getById(@PathVariable Long id) {
+    public ResponseEntity<OrderResponse> getOne(@PathVariable Long id) {
         Order order = orderService.findById(id);
         OrderResponse response = conversionService.convert(order, OrderResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<OrderResponse> save(@RequestBody OrderRequest request) {
+    public ResponseEntity<OrderResponse> save(@Valid @RequestBody OrderRequest request) {
         Order order = conversionService.convert(request, Order.class);
         order = orderService.save(order);
         OrderResponse response = conversionService.convert(order, OrderResponse.class);
@@ -45,7 +46,7 @@ public class OrderController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OrderResponse> update(@PathVariable Long id, @RequestBody OrderRequest request) {
+    public ResponseEntity<OrderResponse> update(@PathVariable Long id, @Valid @RequestBody OrderRequest request) {
         Order order = conversionService.convert(request, Order.class);
         order.setId(id);
         order = orderService.update(order);

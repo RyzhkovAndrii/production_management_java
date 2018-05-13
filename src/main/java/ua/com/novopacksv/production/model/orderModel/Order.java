@@ -1,11 +1,13 @@
 package ua.com.novopacksv.production.model.orderModel;
 
-import lombok.*;
-import org.hibernate.annotations.Type;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import ua.com.novopacksv.production.model.BaseEntity;
 
 import javax.persistence.*;
-import javax.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,24 +17,24 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "order")
+@Table(name = "orders")
 public class Order extends BaseEntity {
 
     @ManyToOne
     @PrimaryKeyJoinColumn
     private Client client;
 
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", orphanRemoval = true)
     private List<OrderItem> orderItems;
 
-    @Type(type = "true_false")
-    @Column(name = "is_important")
-    @NonNull
+    @Column(name = "is_important", nullable = false)
     private Boolean isImportant;
 
-    @Column(name = "creation_date")
+    @CreationTimestamp
+    @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
 
-    @Column(name = "delivery_date")
+    @Column(name = "delivery_date", nullable = false)
     private LocalDate deliveryDate;
+
 }

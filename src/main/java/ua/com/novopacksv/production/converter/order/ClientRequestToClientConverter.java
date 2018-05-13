@@ -9,10 +9,10 @@ import ua.com.novopacksv.production.model.orderModel.Client;
 public class ClientRequestToClientConverter implements Converter<ClientRequest, Client> {
 
     @Override
-    public Client convert(ClientRequest source) { // todo null check
+    public Client convert(ClientRequest source) {
         Client result = new Client();
         result.setName(source.getName());
         return result;
     }
-    //todo badRequest exception
+
 }

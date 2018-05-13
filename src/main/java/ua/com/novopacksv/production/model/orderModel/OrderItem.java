@@ -15,17 +15,18 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "order_item")
+@Table(name = "order_items")
 public class OrderItem extends BaseEntity {
 
-    @OneToOne
+    @ManyToOne
     @PrimaryKeyJoinColumn
-    private ProductType product;
+    private ProductType productType;
 
-    @Column(name = "amount")
+    @Column(name = "amount", nullable = false)
     private Integer amount;
 
     @ManyToOne
     @PrimaryKeyJoinColumn
     private Order order;
+
 }
