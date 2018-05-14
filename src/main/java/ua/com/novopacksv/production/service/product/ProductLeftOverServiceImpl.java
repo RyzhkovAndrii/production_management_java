@@ -120,7 +120,7 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
     private Integer countAmountOfLeftOverForPast(LocalDate date, ProductLeftOver productLeftOver) {
         List<ProductOperation> operationsBetweenDates =
                 productOperationService.findAllOperationBetweenDatesByTypeId(productLeftOver.getProductType().getId(),
-                        date, productLeftOver.getLeftDate());
+                        date, LocalDate.now());
         Integer amount = productLeftOver.getAmount();
         for (ProductOperation productOperation : operationsBetweenDates) {
             amount = isSoldOperation(productOperation) ?
