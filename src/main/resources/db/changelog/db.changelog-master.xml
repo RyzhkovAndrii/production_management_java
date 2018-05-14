@@ -12,4 +12,5 @@
     <include file="db/changelog/0.0.1/product_tables_f_keys.xml"/>
     <include file="db/changelog/0.1.0/task_details_table_init.xml"/>
     <include file="db/changelog/0.0.3/order_tables_init.xml"/>
+    <include file="db/changelog/0.0.3/order_tables_f_keys.xml"/>
 </databaseChangeLog>

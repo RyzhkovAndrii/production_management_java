@@ -35,17 +35,10 @@
             <column name="delivery_date" type="date">
                 <constraints nullable="false"/>
             </column>
-            <column name="is_delivered" value="boolean">
+            <column name="is_delivered" type="boolean">
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseTableName="orders"
-                                 baseColumnNames="client_id"
-                                 constraintName="fk_order_client"
-                                 onDelete="CASCADE"
-                                 onUpdate="CASCADE"
-                                 referencedTableName="clients"
-                                 referencedColumnNames="id"/>
     </changeSet>
 
     <changeSet id="3" author="ryzhkov.andrii@gmail.com">
@@ -63,20 +56,6 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addForeignKeyConstraint baseTableName="order_items"
-                                 baseColumnNames="product_type_id"
-                                 constraintName="fk_order_item_product_type"
-                                 onDelete="CASCADE"
-                                 onUpdate="CASCADE"
-                                 referencedTableName="product_type"
-                                 referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableName="order_items"
-                                 baseColumnNames="order_id"
-                                 constraintName="fk_order_item_order"
-                                 onDelete="CASCADE"
-                                 onUpdate="CASCADE"
-                                 referencedTableName="orders"
-                                 referencedColumnNames="id"/>
     </changeSet>
 
 </databaseChangeLog>
