@@ -7,8 +7,10 @@ import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.productModel.ProductBatch;
 import ua.com.novopacksv.production.model.productModel.ProductOperation;
 import ua.com.novopacksv.production.model.productModel.ProductOperationType;
+import ua.com.novopacksv.production.model.productModel.ProductType;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -43,6 +45,24 @@ public class ProductBatchServiceImpl implements ProductBatchService {
         productBatch.setManufacturedAmount(manufacturedAmount);
         productBatch.setSoldAmount(soldAmount);
         return productBatch;
+    }
+
+    @Override
+    public List<ProductBatch> getAll(LocalDate date) {
+        return getAll(date, date);
+    }
+
+    @Override
+    public List<ProductBatch> getAll(LocalDate fromDate, LocalDate toDate) {
+        List<ProductType> productTypes = productTypeService.findAll();
+        List<ProductBatch> productBatches = new ArrayList<>();
+        for (ProductType productType : productTypes) {
+            ProductBatch productBatch = getOne(productType.getId(), fromDate, toDate);
+            if (productBatch != null) {
+                productBatches.add(productBatch);
+            }
+        }
+        return productBatches;
     }
 
     private Boolean isManufacturedOperation(ProductOperation productOperation) {

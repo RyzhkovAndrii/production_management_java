@@ -14,6 +14,7 @@ import ua.com.novopacksv.production.model.productModel.ProductBatch;
 import ua.com.novopacksv.production.service.product.ProductBatchService;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/product-batches", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -40,4 +41,20 @@ public class ProductBatchController {
         ProductBatchResponse response = conversionService.convert(productBatch, ProductBatchResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @GetMapping(params = {"from", "to"})
+    public ResponseEntity<List<ProductBatchResponse>> getAll(@RequestParam("from") LocalDate fromDate,
+                                                             @RequestParam("to") LocalDate toDate) {
+        List<ProductBatch> productBatches = productBatchService.getAll(fromDate, toDate);
+        List<ProductBatchResponse> responses = conversionService.convert(productBatches, ProductBatchResponse.class);
+        return new ResponseEntity<>(responses, HttpStatus.OK);
+    }
+
+    @GetMapping(params = {"date"})
+    public ResponseEntity<List<ProductBatchResponse>> getAll(@RequestParam("date") LocalDate date) {
+        List<ProductBatch> productBatches = productBatchService.getAll(date);
+        List<ProductBatchResponse> responses = conversionService.convert(productBatches, ProductBatchResponse.class);
+        return new ResponseEntity<>(responses, HttpStatus.OK);
+    }
+
 }
