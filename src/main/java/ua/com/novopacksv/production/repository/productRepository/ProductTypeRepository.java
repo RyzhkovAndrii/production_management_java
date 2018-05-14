@@ -6,4 +6,6 @@ import ua.com.novopacksv.production.model.productModel.ProductType;
 
 @Repository
 public interface ProductTypeRepository extends JpaRepository<ProductType, Long> {
+
+    ProductType findByNameAndWeightAndColorCode(String name, Double weight, String colorCode);
 }

@@ -47,9 +47,14 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public ProductType save(ProductType productType) {
         Long existedId = checkIfTheSameType(productType);
-        productLeftOverService.saveByProductType(productType);
-        productCheckService.createNewProductCheckAndSave(productType);
-        return (existedId != null) ? findById(existedId) : productTypeRepository.save(productType);
+        if (existedId != null) {
+            return findById(existedId);
+        } else {
+            productTypeRepository.save(productType);
+            productLeftOverService.saveByProductType(productType);
+            productCheckService.createNewProductCheckAndSave(productType);
+            return productType;
+        }
     }
 
     @Override
@@ -64,14 +69,8 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     }
 
     private Long checkIfTheSameType(ProductType productType) {
-        Long existedId = null;
-        List<ProductType> productTypes = findAll();
-        for (ProductType type : productTypes) {
-            if (productType.getName().equals(type.getName()) & productType.getColorCode().equals(type.getColorCode())
-                    & productType.getWeight().equals(type.getWeight())) {
-                existedId = type.getId();
-            }
-        }
-        return existedId;
+        ProductType productType1 = productTypeRepository.findByNameAndWeightAndColorCode(productType.getName(),
+                productType.getWeight(), productType.getColorCode());
+        return productType1.getId();
     }
 }

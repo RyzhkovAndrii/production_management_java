@@ -49,6 +49,7 @@ public class ProductCheckServiceImpl implements ProductCheckService {
     public void createNewProductCheckAndSave(ProductType productType) {
         ProductCheck productCheck = new ProductCheck();
         productCheck.setProductType(productType);
+        productCheck.setProductLeftOverCheckStatus(CheckStatus.NOT_CHECKED);
         productCheckRepository.save(productCheck);
     }
 
