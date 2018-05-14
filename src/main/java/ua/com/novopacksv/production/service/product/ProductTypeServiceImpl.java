@@ -47,14 +47,10 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public ProductType save(ProductType productType) {
-        if (!checkIfTheSameType(productType)){
             productTypeRepository.save(productType);
             productLeftOverService.saveByProductType(productType);
             productCheckService.createNewProductCheckAndSave(productType);
             return productType;
-        }else {
-            throw new NotUniqueFieldException("This product type exists");
-        }
     }
 
     @Override

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.novopacksv.production.exception.NotUniqueFieldException;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.orderModel.OrderItem;
 import ua.com.novopacksv.production.model.productModel.ProductLeftOver;
@@ -97,12 +98,7 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
 
     @Override
     public ProductLeftOver saveByProductType(ProductType productType) {
-        ProductLeftOver productLeftOver = ifLeftOverExist(productType);
-        if (productLeftOver != null) {
-            return save(productLeftOver);
-        } else {
             return createNewLeftOver(productType);
-        }
     }
 
     public Boolean isSoldOperation(ProductOperation productOperation) {
@@ -120,11 +116,11 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
     private Integer countAmountOfLeftOverForPast(LocalDate date, ProductLeftOver productLeftOver) {
         List<ProductOperation> operationsBetweenDates =
                 productOperationService.findAllOperationBetweenDatesByTypeId(productLeftOver.getProductType().getId(),
-                        date, LocalDate.now());
+                        date.plusDays(1), LocalDate.now());
         Integer amount = productLeftOver.getAmount();
         for (ProductOperation productOperation : operationsBetweenDates) {
-            amount = isSoldOperation(productOperation) ?
-                    amount + productOperation.getAmount() : amount - productOperation.getAmount();
+            amount += isSoldOperation(productOperation) ?
+                    productOperation.getAmount() : - productOperation.getAmount();
         }
         return amount;
     }
@@ -133,7 +129,7 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
         ProductType productType = productLeftOver.getProductType();
         List<OrderItem> orderItems = findOrderNotDelivered(productType, LocalDate.now(), date);
         Integer amount = productLeftOver.getAmount();
-        for(OrderItem orderItem : orderItems){
+        for (OrderItem orderItem : orderItems) {
             amount -= orderItem.getAmount();
         }
         return amount;
@@ -146,14 +142,8 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
                 .filter((orderItem) -> orderItem.getOrder().getIsDelivered().equals(false)).collect(Collectors.toList());
     }
 
-    private ProductLeftOver ifLeftOverExist(ProductType productType) {
-        List<ProductLeftOver> productLeftOvers = findAll();
-        for (ProductLeftOver leftOver : productLeftOvers) {
-            if (leftOver.getProductType().equals(productType)) {
-                return leftOver;
-            }
-        }
-        return null;
+    private Boolean ifLeftOverExist(ProductType productType) {
+        return productLeftOverRepository.findByProductType_Id(productType.getId()) != null;
     }
 
     private ProductLeftOver createNewLeftOver(ProductType productType) {
@@ -161,6 +151,6 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
         productLeftOver.setProductType(productType);
         productLeftOver.setAmount(0);
         productLeftOver.setLeftDate(LocalDate.now());
-        return productLeftOver;
+        return productLeftOverRepository.save(productLeftOver);
     }
 }

@@ -1,12 +1,16 @@
 package ua.com.novopacksv.production.service.product;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.productModel.ProductLeftOver;
 import ua.com.novopacksv.production.model.productModel.ProductOperation;
+import ua.com.novopacksv.production.model.productModel.ProductOperationType;
+import ua.com.novopacksv.production.model.productModel.ProductType;
 import ua.com.novopacksv.production.repository.productRepository.ProductOperationRepository;
 
 import java.time.LocalDate;
@@ -19,6 +23,10 @@ public class ProductOperationServiceImpl implements ProductOperationService {
 
     private final ProductOperationRepository productOperationRepository;
     private final ProductLeftOverService productLeftOverService;
+
+    @Autowired
+    @Lazy
+    private ProductTypeService productTypeService;
 
     @Override
     @Transactional(readOnly = true)
@@ -60,12 +68,18 @@ public class ProductOperationServiceImpl implements ProductOperationService {
     @Transactional(readOnly = true)
     public List<ProductOperation> findAllOperationBetweenDatesByTypeId(Long productTypeId, LocalDate fromDate,
                                                                        LocalDate toDate) {
-        return productOperationRepository.findAllByProductType_IdAndDateBetween(productTypeId, fromDate, toDate);
+        ProductType productType = productTypeService.findById(productTypeId);
+        return productOperationRepository.findAllByProductTypeAndDateBetween(productType, fromDate, toDate);
     }
 
     private Integer getChangingAmount(ProductOperation productOperation) {
-        return productLeftOverService.isSoldOperation(productOperation) ?
-                -productOperation.getAmount() : productOperation.getAmount();
+        Integer amount = 0;
+        if (productOperation.getProductOperationType().equals(ProductOperationType.SOLD)) {
+            amount -= productOperation.getAmount();
+        } else {
+            amount += productOperation.getAmount();
+        }
+        return amount;
     }
 
     private void changingLeftOver(ProductOperation productOperation, Integer changingAmount)

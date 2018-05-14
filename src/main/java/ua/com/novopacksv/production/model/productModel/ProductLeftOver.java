@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.UpdateTimestamp;
 import ua.com.novopacksv.production.model.BaseEntity;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ import java.time.LocalDate;
 public class ProductLeftOver extends BaseEntity {
 
     @Column(name = "left_date", nullable = false)
+    @UpdateTimestamp
     private LocalDate leftDate;
 
     @OneToOne
