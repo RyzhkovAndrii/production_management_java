@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.novopacksv.production.exception.NotUniqueFieldException;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.productModel.ProductType;
 import ua.com.novopacksv.production.repository.productRepository.ProductTypeRepository;
@@ -46,14 +47,13 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public ProductType save(ProductType productType) {
-        Long existedId = checkIfTheSameType(productType);
-        if (existedId != null) {
-            return findById(existedId);
-        } else {
+        if (!checkIfTheSameType(productType)){
             productTypeRepository.save(productType);
             productLeftOverService.saveByProductType(productType);
             productCheckService.createNewProductCheckAndSave(productType);
             return productType;
+        }else {
+            throw new NotUniqueFieldException("This product type exists");
         }
     }
 
@@ -68,9 +68,9 @@ public class ProductTypeServiceImpl implements ProductTypeService {
         productTypeRepository.delete(findById(id));
     }
 
-    private Long checkIfTheSameType(ProductType productType) {
+    private Boolean checkIfTheSameType(ProductType productType) {
         ProductType productType1 = productTypeRepository.findByNameAndWeightAndColorCode(productType.getName(),
                 productType.getWeight(), productType.getColorCode());
-        return productType1.getId();
+        return productType1 != null;
     }
 }
