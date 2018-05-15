@@ -11,6 +11,7 @@
             <column name="thickness" value="2.7"/>
             <column name="min_weight" value="48.0"/>
             <column name="max_weight" value="60.0"/>
+            <column name="length" value="250.0"/>
             <column name="color_code" value="#FFFFFF"/>
         </insert>
     </changeSet>
@@ -20,6 +21,7 @@
             <column name="thickness" value="2.8"/>
             <column name="min_weight" value="50.0"/>
             <column name="max_weight" value="62.0"/>
+            <column name="length" value="365.0"/>
             <column name="color_code" value="#FFFF00"/>
         </insert>
     </changeSet>
