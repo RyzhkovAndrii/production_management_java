@@ -22,7 +22,6 @@ public class ProductOperation extends BaseEntity {
 
     @ManyToOne
     @PrimaryKeyJoinColumn
-    @MapsId
     private ProductType productType;
 
     @Column(columnDefinition = "product_operation_type", nullable = false)
