@@ -95,13 +95,12 @@ public class RollOperationServiceImpl implements RollOperationService {
      */
     @Override
     public RollOperation update(RollOperation rollOperation) throws NegativeRollAmountException {
-        checkOperationSaveAllowed(rollOperation);
-        RollOperation rollOperationOld = rollOperationRepository.getOne(rollOperation.getId());//update only for amount
-        RollManufactured rollManufactured = rollOperation.getRollManufactured();// what kind of operation
+        RollOperation oldRollOperation = rollOperationRepository.getOne(rollOperation.getId());
+        checkOperationUpdateAllowed(rollOperation, oldRollOperation);
         RollLeftOver rollLeftOver = rollLeftOverService
-                .findLastRollLeftOverByRollType(rollManufactured.getRollType());
-        rollLeftOverService.changeRollLeftOverAmount(rollLeftOver,
-                rollOperation.getRollAmount() - rollOperationOld.getRollAmount());
+                .findLastRollLeftOverByRollType(rollOperation.getRollManufactured().getRollType());
+        Integer differenceAmount = rollOperation.getRollAmount() - oldRollOperation.getRollAmount();
+        rollLeftOverService.changeRollLeftOverAmount(rollLeftOver, differenceAmount);
         return rollOperationRepository.save(rollOperation);
     }
 
@@ -110,7 +109,7 @@ public class RollOperationServiceImpl implements RollOperationService {
         RollOperation rollOperation = findById(id);
         checkOperationDeleteAllowed(rollOperation);
         RollLeftOver rollLeftOver = rollLeftOverService
-                .findLastRollLeftOverByRollType(findById(id).getRollManufactured().getRollType());
+                .findLastRollLeftOverByRollType(rollOperation.getRollManufactured().getRollType());
         rollLeftOverService.changeRollLeftOverAmount(rollLeftOver, -getOperationAmountWithSign(rollOperation));
         rollOperationRepository.deleteById(id);
     }
@@ -159,6 +158,19 @@ public class RollOperationServiceImpl implements RollOperationService {
             if (resultOfAmount < 0) {
                 throw new NegativeRollAmountException("Roll's left is negative!");
             }
+        }
+    }
+
+    private void checkOperationUpdateAllowed(RollOperation rollOperation, RollOperation oldRollOperation) {
+        Integer differenceAmount = rollOperation.getRollAmount() - oldRollOperation.getRollAmount();
+        RollManufactured rollManufactured = rollOperation.getRollManufactured();
+        Integer rollManufacturedAmount = rollManufacturedService.getManufacturedRollAmount(rollManufactured);
+        Integer rollUsedAmount = rollManufacturedService.getUsedRollAmount(rollManufactured);
+        Integer resultOfAmount = isItManufactureOperation(rollOperation)
+                ? rollManufacturedAmount - rollUsedAmount + differenceAmount
+                : rollManufacturedAmount - rollUsedAmount - differenceAmount;
+        if (resultOfAmount < 0) {
+            throw new NegativeRollAmountException("Roll's left is negative!");
         }
     }
 
