@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ua.com.novopacksv.production.converter.ModelConversionService;
 import ua.com.novopacksv.production.dto.roll.RollLeftOverResponse;
-import ua.com.novopacksv.production.dto.roll.RollSumLeftOverResponse;
+import ua.com.novopacksv.production.dto.roll.RollTotalLeftOverResponse;
 import ua.com.novopacksv.production.model.rollModel.RollLeftOver;
 import ua.com.novopacksv.production.service.roll.RollLeftOverService;
 
@@ -35,9 +35,9 @@ public class RollLeftOverController {
     }
 
     @GetMapping(params = {"date", "total"})
-    public ResponseEntity<RollSumLeftOverResponse> getSum(@RequestParam("date") LocalDate date) {
+    public ResponseEntity<RollTotalLeftOverResponse> getSum(@RequestParam("date") LocalDate date) {
         RollLeftOver rollLeftOver = rollLeftOverService.getTotalLeftOver(date);
-        RollSumLeftOverResponse response = conversionService.convert(rollLeftOver, RollSumLeftOverResponse.class);
+        RollTotalLeftOverResponse response = conversionService.convert(rollLeftOver, RollTotalLeftOverResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
