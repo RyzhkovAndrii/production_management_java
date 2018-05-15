@@ -140,9 +140,8 @@ public class RollOperationServiceImpl implements RollOperationService {
             if (isRollNew(rollManufactured)) {
                 throw new NegativeRollAmountException("Roll's left is negative!");
             }
-            Integer rollManufacturedAmount = rollManufacturedService.getManufacturedRollAmount(rollManufactured);
-            Integer rollUsedAmount = rollManufacturedService.getUsedRollAmount(rollManufactured);
-            Integer resultOfAmount = rollManufacturedAmount - rollUsedAmount - rollOperation.getRollAmount();
+            Integer resultOfAmount =
+                    rollManufacturedService.getLeftOverAmount(rollManufactured) - rollOperation.getRollAmount();
             if (resultOfAmount < 0) {
                 throw new NegativeRollAmountException("Roll's left is negative!");
             }
@@ -152,9 +151,8 @@ public class RollOperationServiceImpl implements RollOperationService {
     private void checkOperationDeleteAllowed(RollOperation rollOperation) throws NegativeRollAmountException {
         if (isItManufactureOperation(rollOperation)) {
             RollManufactured rollManufactured = rollOperation.getRollManufactured();
-            Integer rollManufacturedAmount = rollManufacturedService.getManufacturedRollAmount(rollManufactured);
-            Integer rollUsedAmount = rollManufacturedService.getUsedRollAmount(rollManufactured);
-            Integer resultOfAmount = rollManufacturedAmount - rollUsedAmount - rollOperation.getRollAmount();
+            Integer resultOfAmount =
+                    rollManufacturedService.getLeftOverAmount(rollManufactured) - rollOperation.getRollAmount();
             if (resultOfAmount < 0) {
                 throw new NegativeRollAmountException("Roll's left is negative!");
             }
@@ -164,11 +162,9 @@ public class RollOperationServiceImpl implements RollOperationService {
     private void checkOperationUpdateAllowed(RollOperation rollOperation, RollOperation oldRollOperation) {
         Integer differenceAmount = rollOperation.getRollAmount() - oldRollOperation.getRollAmount();
         RollManufactured rollManufactured = rollOperation.getRollManufactured();
-        Integer rollManufacturedAmount = rollManufacturedService.getManufacturedRollAmount(rollManufactured);
-        Integer rollUsedAmount = rollManufacturedService.getUsedRollAmount(rollManufactured);
         Integer resultOfAmount = isItManufactureOperation(rollOperation)
-                ? rollManufacturedAmount - rollUsedAmount + differenceAmount
-                : rollManufacturedAmount - rollUsedAmount - differenceAmount;
+                ? rollManufacturedService.getLeftOverAmount(rollManufactured) + differenceAmount
+                : rollManufacturedService.getLeftOverAmount(rollManufactured) - differenceAmount;
         if (resultOfAmount < 0) {
             throw new NegativeRollAmountException("Roll's left is negative!");
         }
