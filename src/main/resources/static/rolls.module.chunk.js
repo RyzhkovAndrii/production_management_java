@@ -85,6 +85,23 @@ function compareDates(d1, d2, format) {
 
 /***/ }),
 
+/***/ "./src/app/app-utils/app-validators.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = integerValidator;
+function integerValidator(control) {
+    if (control.value % 1 != 0) {
+        return {
+            'notIntegerError': true
+        };
+    }
+    return null;
+}
+
+
+/***/ }),
+
 /***/ "./src/app/modules/app-rolls/components/roll-check/roll-check.component.css":
 /***/ (function(module, exports) {
 

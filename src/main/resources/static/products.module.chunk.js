@@ -10,7 +10,7 @@ module.exports = ""
 /***/ "./src/app/modules/app-products/components/product-operation-modal/product-operation-modal.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<form [formGroup]=\"form\">\n  <div class=\"form-group\">\n    <label for=\"operation-type\">Тип операции:</label>\n    <select class=\"form-control\" id=\"operation-type\" formControlName=\"operationType\">\n      <option value=\"MANUFACTURED\">Производство</option>\n      <option value=\"SOLD\">Реализация</option>\n    </select>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"product-amount\">Количество продуктов:</label>\n    <input type=\"number\" min=\"0\" step=\"1\" class=\"form-control\" id=\"product-amount\" formControlName=\"amount\" [ngClass]=\"{\n        'is-invalid': form.get('amount').invalid && isTouched('amount'),\n        'is-valid': form.get('amount').valid && isTouched('amount')\n      }\">\n    <div class=\"invalid-feedback\" *ngIf=\"form.get('amount').invalid && isTouched('amount')\">\n      <span *ngIf=\"form.get('amount').errors['required']\">\n        Обязательное поле!\n      </span>\n      <span *ngIf=\"form.get('amount').errors['min']\">\n        Минимальное количество продукции для операции: {{ MIN_PRODUCT_AMOUNT }}\n      </span>\n      <span *ngIf=\"form.get('amount').errors['notIntegerError']\">\n        Количество продукции должно быть целым числом!\n      </span>\n    </div>\n  </div>\n</form>\n"
+module.exports = "<form [formGroup]=\"form\">\n  <div class=\"form-group\">\n    <label for=\"operation-type\">Тип операции:</label>\n    <select class=\"form-control\" id=\"operation-type\" formControlName=\"operationType\">\n      <option value=\"MANUFACTURED\">Производство</option>\n      <option value=\"SOLD\">Реализация</option>\n    </select>\n  </div>\n  <div class=\"form-group\">\n    <label for=\"product-amount\">Количество продуктов:</label>\n    <input type=\"number\" min=\"0\" step=\"1\" class=\"form-control\" id=\"product-amount\" formControlName=\"amount\" [ngClass]=\"{\n        'is-invalid': form.get('amount').invalid && isTouched('amount'),\n        'is-valid': form.get('amount').valid && isTouched('amount')\n      }\">\n    <div class=\"invalid-feedback\" *ngIf=\"form.get('amount').invalid && isTouched('amount')\">\n      <span *ngIf=\"form.get('amount').errors['required']\">\n        Обязательное поле!\n      </span>\n      <span *ngIf=\"form.get('amount').errors['min']\">\n        Минимальное количество продукции для операции: {{ MIN_PRODUCT_AMOUNT }}\n      </span>\n      <span *ngIf=\"form.get('amount').errors['decimalPlacesError']\">\n        Максимальное количество знаков после запятой: {{ DECIMAL_PLACES }}\n      </span>\n    </div>\n  </div>\n</form>\n"
 
 /***/ }),
 
@@ -21,8 +21,8 @@ module.exports = "<form [formGroup]=\"form\">\n  <div class=\"form-group\">\n   
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ProductOperationModalComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__("./node_modules/@angular/forms/esm5/forms.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__enums_product_operation_type_enum__ = __webpack_require__("./src/app/modules/app-products/enums/product-operation-type.enum.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_utils_app_validators__ = __webpack_require__("./src/app/app-utils/app-validators.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_decimal_js__ = __webpack_require__("./node_modules/decimal.js/decimal.mjs");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__enums_product_operation_type_enum__ = __webpack_require__("./src/app/modules/app-products/enums/product-operation-type.enum.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -38,7 +38,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 var ProductOperationModalComponent = /** @class */ (function () {
     function ProductOperationModalComponent() {
-        this.MIN_PRODUCT_AMOUNT = 1;
+        this.MIN_PRODUCT_AMOUNT = 0.001;
+        this.DECIMAL_PLACES = 3;
         this.btnClass = 'btn btn-outline-dark';
         this.submitPressed = false;
         this.actionButtons = [{
@@ -58,13 +59,13 @@ var ProductOperationModalComponent = /** @class */ (function () {
     ProductOperationModalComponent.prototype.dialogInit = function (reference, options) {
         this.options = options;
         this.productOperation = options.data.productOperationRequest;
-        this.operationType = __WEBPACK_IMPORTED_MODULE_2__enums_product_operation_type_enum__["a" /* ProductOperationType */][this.productOperation.operationType];
+        this.operationType = __WEBPACK_IMPORTED_MODULE_3__enums_product_operation_type_enum__["a" /* ProductOperationType */][this.productOperation.operationType];
         this.form = new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormGroup */]({
             operationType: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["a" /* FormControl */]({
                 value: this.operationType,
                 disabled: true
             }),
-            amount: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["a" /* FormControl */](undefined, [__WEBPACK_IMPORTED_MODULE_1__angular_forms__["g" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_1__angular_forms__["g" /* Validators */].min(this.MIN_PRODUCT_AMOUNT), __WEBPACK_IMPORTED_MODULE_3__app_utils_app_validators__["a" /* integerValidator */]])
+            amount: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["a" /* FormControl */](undefined, [__WEBPACK_IMPORTED_MODULE_1__angular_forms__["g" /* Validators */].required, __WEBPACK_IMPORTED_MODULE_1__angular_forms__["g" /* Validators */].min(this.MIN_PRODUCT_AMOUNT), this.validateDecimalPlaces.bind(this)])
         });
     };
     ProductOperationModalComponent.prototype.onSubmit = function () {
@@ -78,7 +79,7 @@ var ProductOperationModalComponent = /** @class */ (function () {
             operationDate: this.productOperation.operationDate,
             productTypeId: this.productOperation.productTypeId,
             operationType: this.operationType,
-            amount: this.form.value.amount
+            amount: new __WEBPACK_IMPORTED_MODULE_2_decimal_js__["a" /* Decimal */](this.form.value.amount).times(Math.pow(10, this.DECIMAL_PLACES)).toNumber()
         };
         var resolve = Promise.resolve(productOperation);
         this.options.data.func(resolve);
@@ -86,6 +87,14 @@ var ProductOperationModalComponent = /** @class */ (function () {
     };
     ProductOperationModalComponent.prototype.isTouched = function (controlName) {
         return this.form.get(controlName).touched || this.submitPressed;
+    };
+    ProductOperationModalComponent.prototype.validateDecimalPlaces = function (control) {
+        if (control.value && !new __WEBPACK_IMPORTED_MODULE_2_decimal_js__["a" /* Decimal */](control.value).times(Math.pow(10, this.DECIMAL_PLACES)).isInteger()) {
+            return {
+                'decimalPlacesError': true
+            };
+        }
+        return null;
     };
     ProductOperationModalComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["n" /* Component */])({
@@ -210,7 +219,7 @@ module.exports = "td {\n    width: 12%;\n}\n\n.empty-row, .empty-row:hover {\n  
 /***/ "./src/app/modules/app-products/components/products-page/products-page.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container-fluid mt-2\">\n  <button class=\"btn btn-outline-dark btn-sm\" (click)=\"openAddProductTypeModal()\">\n    <span class=\"material-icons\">add</span>\n  </button>\n  <div class=\"table-responsive mt-2\">\n    <table class=\"table table-bordered table-striped table-sm\">\n      <thead>\n        <tr class=\"table-header\">\n          <th scope=\"col\" rowspan=\"2\" class=\"align-middle\">Наименование</th>\n          <th scope=\"col\" rowspan=\"2\" class=\"align-middle\">Вес</th>\n          <th scope=\"col\" rowspan=\"2\" class=\"align-middle\">Цвет</th>\n          <th scope=\"col\" rowspan=\"2\" class=\"align-middle\">Остаток на начало месяца, тыс.шт.</th>\n          <th scope=\"col\" rowspan=\"1\" colspan=\"2\">Произведено тыс.шт.</th>\n          <th scope=\"col\" rowspan=\"1\" colspan=\"2\">Реализация тыс.шт.</th>\n          <th scope=\"col\" rowspan=\"2\" class=\"align-middle\">Текущий период, тыс.шт.</th>\n        </tr>\n        <tr class=\"table-header\">\n          <th scope=\"col\">за сутки</th>\n          <th scope=\"col\">за месяц</th>\n          <th scope=\"col\">за сутки</th>\n          <th scope=\"col\">за месяц</th>\n        </tr>\n      </thead>\n      <tbody *ngFor=\"let infoArray of productsInfo\">\n        <tr *ngFor=\"let productInfo of sortByNameAndWeight(infoArray)\" [contextMenu]=\"productsMenu\" [contextMenuSubject]=\"productInfo.type\">\n          <th scope=\"row\" class=\"row-name\">\n            {{ productInfo.type.name }}\n          </th>\n          <th scope=\"row\" class=\"row-name\">\n            {{ productInfo.type.weight }}\n          </th>\n          <th scope=\"row\" class=\"row-name\">\n            <span class=\"filled-circle\" [ngStyle]=\"{ 'background-color': productInfo.type.colorCode }\"></span>\n          </th>\n          <td>\n            {{ productInfo.restLeftover.amount || 0 }}\n          </td>\n          <td (click)=\"openAddProductOperation(productInfo.type.id, 'MANUFACTURED')\">\n            {{ productInfo.dayBatch.manufacturedAmount || 0 }}\n          </td>\n          <td>\n            {{ productInfo.monthBatch.manufacturedAmount || 0 }}\n          </td>\n          <td (click)=\"openAddProductOperation(productInfo.type.id, 'SOLD')\">\n            {{ productInfo.dayBatch.soldAmount || 0 }}\n          </td>\n          <td>\n            {{ productInfo.monthBatch.soldAmount || 0 }}\n          </td>\n          <td>\n            {{ productInfo.currentLeftover.amount || 0 }}\n          </td>\n        </tr>\n        <tr>\n          <th scope=\"row\" class=\"row-name\" colspan=\"3\">Итого</th>\n          <td *ngFor=\"let total of getSectionTotals(infoArray)\">\n            {{ total }}\n          </td>\n        </tr>\n        <td class=\"empty-row\"></td>\n      </tbody>\n      <tbody *ngIf=\"productsInfo.length != 0\">\n        <tr>\n          <th scope=\"row\" class=\"row-name\" colspan=\"3\">Всего</th>\n          <td *ngFor=\"let total of getTotals()\">\n            {{ total }}\n          </td>\n        </tr>\n      </tbody>\n    </table>\n  </div>\n</div>\n\n<context-menu #productsMenu>\n  <ng-template contextMenuItem let-item (execute)=\"openEditProductTypeModal($event.item)\">\n    Редактировать продукцию\n  </ng-template>\n  <ng-template contextMenuItem divider=\"true\"></ng-template>\n  <ng-template contextMenuItem let-item (execute)=\"openDeleteProductTypeModal($event.item)\">\n    Удалить продукцию\n  </ng-template>\n</context-menu>\n"
+module.exports = "<div class=\"container-fluid mt-2\">\n  <button class=\"btn btn-outline-dark btn-sm\" (click)=\"openAddProductTypeModal()\">\n    <span class=\"material-icons\">add</span>\n  </button>\n  <div class=\"table-responsive mt-2\">\n    <table class=\"table table-bordered table-striped table-sm\">\n      <thead>\n        <tr class=\"table-header\">\n          <th scope=\"col\" rowspan=\"2\" class=\"align-middle\">Наименование</th>\n          <th scope=\"col\" rowspan=\"2\" class=\"align-middle\">Вес</th>\n          <th scope=\"col\" rowspan=\"2\" class=\"align-middle\">Цвет</th>\n          <th scope=\"col\" rowspan=\"2\" class=\"align-middle\">Остаток на начало месяца, тыс.шт.</th>\n          <th scope=\"col\" rowspan=\"1\" colspan=\"2\">Произведено тыс.шт.</th>\n          <th scope=\"col\" rowspan=\"1\" colspan=\"2\">Реализация тыс.шт.</th>\n          <th scope=\"col\" rowspan=\"2\" class=\"align-middle\">Текущий период, тыс.шт.</th>\n        </tr>\n        <tr class=\"table-header\">\n          <th scope=\"col\">за сутки</th>\n          <th scope=\"col\">за месяц</th>\n          <th scope=\"col\">за сутки</th>\n          <th scope=\"col\">за месяц</th>\n        </tr>\n      </thead>\n      <tbody *ngFor=\"let infoArray of productsInfo\">\n        <tr *ngFor=\"let productInfo of sortByNameAndWeight(infoArray)\" [contextMenu]=\"productsMenu\" [contextMenuSubject]=\"productInfo.type\">\n          <th scope=\"row\" class=\"row-name\">\n            {{ productInfo.type.name }}\n          </th>\n          <th scope=\"row\" class=\"row-name\">\n            {{ productInfo.type.weight }}\n          </th>\n          <th scope=\"row\" class=\"row-name\">\n            <span class=\"filled-circle\" [ngStyle]=\"{ 'background-color': productInfo.type.colorCode }\"></span>\n          </th>\n          <td>\n            {{ (productInfo.restLeftover.amount) | exponent }}\n          </td>\n          <td (click)=\"openAddProductOperation(productInfo.type.id, 'MANUFACTURED')\">\n            {{ productInfo.dayBatch.manufacturedAmount | empty | exponent }}\n          </td>\n          <td>\n            {{ productInfo.monthBatch.manufacturedAmount | empty | exponent }}\n          </td>\n          <td (click)=\"openAddProductOperation(productInfo.type.id, 'SOLD')\">\n            {{ productInfo.dayBatch.soldAmount | empty | exponent }}\n          </td>\n          <td>\n            {{ productInfo.monthBatch.soldAmount | empty | exponent }}\n          </td>\n          <td>\n            {{ productInfo.currentLeftover.amount | exponent }}\n          </td>\n        </tr>\n        <tr>\n          <th scope=\"row\" class=\"row-name\" colspan=\"3\">Итого</th>\n          <td *ngFor=\"let total of getSectionTotals(infoArray)\">\n            {{ total | exponent }}\n          </td>\n        </tr>\n        <td class=\"empty-row\"></td>\n      </tbody>\n      <tbody *ngIf=\"productsInfo.length != 0\">\n        <tr>\n          <th scope=\"row\" class=\"row-name\" colspan=\"3\">Всего</th>\n          <td *ngFor=\"let total of getTotals()\">\n            {{ total | exponent }}\n          </td>\n        </tr>\n      </tbody>\n    </table>\n  </div>\n</div>\n\n<context-menu #productsMenu>\n  <ng-template contextMenuItem let-item (execute)=\"openEditProductTypeModal($event.item)\">\n    Редактировать продукцию\n  </ng-template>\n  <ng-template contextMenuItem divider=\"true\"></ng-template>\n  <ng-template contextMenuItem let-item (execute)=\"openDeleteProductTypeModal($event.item)\">\n    Удалить продукцию\n  </ng-template>\n</context-menu>\n"
 
 /***/ }),
 
