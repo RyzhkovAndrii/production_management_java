@@ -88,7 +88,7 @@ public class ProductOperationServiceImpl implements ProductOperationService {
         ProductLeftOver productLeftOver =
                 productLeftOverService.findByProductTypeId(productOperation.getProductType().getId());
         Integer leftOverAmount = productLeftOver.getAmount();
-        if ((leftOverAmount + changingAmount) > 0) {
+        if ((leftOverAmount + changingAmount) > 0 || (leftOverAmount + changingAmount) == 0) {
             productLeftOver.setAmount(leftOverAmount + changingAmount);
             productLeftOverService.update(productLeftOver);
         } else {
