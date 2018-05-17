@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.novopacksv.production.exception.NegativeRollAmountException;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.productModel.ProductLeftOver;
 import ua.com.novopacksv.production.model.productModel.ProductOperation;
@@ -87,7 +88,11 @@ public class ProductOperationServiceImpl implements ProductOperationService {
         ProductLeftOver productLeftOver =
                 productLeftOverService.findByProductTypeId(productOperation.getProductType().getId());
         Integer leftOverAmount = productLeftOver.getAmount();
-        productLeftOver.setAmount(leftOverAmount + changingAmount);
-        productLeftOverService.update(productLeftOver);
+        if ((leftOverAmount + changingAmount) > 0) {
+            productLeftOver.setAmount(leftOverAmount + changingAmount);
+            productLeftOverService.update(productLeftOver);
+        } else {
+            throw new NegativeRollAmountException("Product's leftover is negative!");
+        }
     }
 }
