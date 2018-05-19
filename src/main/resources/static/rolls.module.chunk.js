@@ -1,90 +1,5 @@
 webpackJsonp(["rolls.module"],{
 
-/***/ "./src/app/app-utils/app-comparators.ts":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (immutable) */ __webpack_exports__["a"] = compareColors;
-/* unused harmony export rgbToHsl */
-/* harmony export (immutable) */ __webpack_exports__["b"] = compareDates;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment__ = __webpack_require__("./node_modules/moment/moment.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moment__);
-
-/**
- * @returns numeric value of the resulting comparation
- * @description compares two hexademical color codes in format #ff11aa
- *
- * @param c1 color code only in hexademical format of the first element
- * @param c2 color code only in hexademical format of the second element
- */
-function compareColors(c1, c2) {
-    var a1 = c1.substr(1, c1.length);
-    var a2 = c2.substr(1, c2.length);
-    var base = 16;
-    var r1 = parseInt(a1.substr(0, 2), base);
-    var g1 = parseInt(a1.substr(2, 2), base);
-    var b1 = parseInt(a1.substr(4, 2), base);
-    var r2 = parseInt(a2.substr(0, 2), base);
-    var g2 = parseInt(a2.substr(2, 2), base);
-    var b2 = parseInt(a2.substr(4, 2), base);
-    var hsl1 = rgbToHsl(r1, g1, b1);
-    var hsl2 = rgbToHsl(r2, g2, b2);
-    var result = hsl1[0] - hsl2[0];
-    if (result != 0) {
-        return result;
-    }
-    else if ((result = hsl1[1] - hsl2[1]) != 0) {
-        return result;
-    }
-    else {
-        result = hsl1[2] - hsl2[2];
-    }
-    return result;
-}
-/**
- * @returns color code in hsl format as array of numbers [hue, saturation, lightness]
- * @description transforms rgb color code to hsl
- *
- * @param r red color value between 0 and 255
- * @param g green color value between 0 and 255
- * @param b blue color value between 0 and 255
- */
-function rgbToHsl(r, g, b) {
-    r /= 255, g /= 255, b /= 255;
-    var max = Math.max(r, g, b), min = Math.min(r, g, b);
-    var h, s, l = (max + min) / 2;
-    if (max == min) {
-        h = s = 0;
-    }
-    else {
-        var d = max - min;
-        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-        switch (max) {
-            case r:
-                h = (g - b) / d + (g < b ? 6 : 0);
-                break;
-            case g:
-                h = (b - r) / d + 2;
-                break;
-            case b:
-                h = (r - g) / d + 4;
-                break;
-        }
-        h /= 6;
-    }
-    return [(h * 100 + 0.5) | 0, ((s * 100 + 0.5) | 0), ((l * 100 + 0.5) | 0)];
-}
-function compareDates(d1, d2, format) {
-    if (format === void 0) { format = 'DD-MM-YYYY'; }
-    var m1 = __WEBPACK_IMPORTED_MODULE_0_moment__(d1, format);
-    var m2 = __WEBPACK_IMPORTED_MODULE_0_moment__(d2, format);
-    var result = m1.diff(m2, 'days');
-    return result;
-}
-
-
-/***/ }),
-
 /***/ "./src/app/app-utils/app-validators.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -267,7 +182,7 @@ var RollOperationModalComponent = /** @class */ (function () {
             return reject;
         }
         var rollOperation = {
-            operationDate: Object(__WEBPACK_IMPORTED_MODULE_4__app_utils_app_date_utils__["b" /* formatDate */])(Object(__WEBPACK_IMPORTED_MODULE_4__app_utils_app_date_utils__["g" /* midnightDate */])()),
+            operationDate: Object(__WEBPACK_IMPORTED_MODULE_4__app_utils_app_date_utils__["b" /* formatDate */])(Object(__WEBPACK_IMPORTED_MODULE_4__app_utils_app_date_utils__["j" /* midnightDate */])()),
             operationType: this.form.get('operationType').value,
             manufacturedDate: Object(__WEBPACK_IMPORTED_MODULE_4__app_utils_app_date_utils__["b" /* formatDate */])(this.manufacturedDate),
             rollTypeId: this.rollTypeId,
@@ -640,7 +555,7 @@ var RollsPageComponent = /** @class */ (function () {
         this.appModalService = appModalService;
         this.rollsInfo = [];
         this.daysInTable = 30;
-        this.toDate = Object(__WEBPACK_IMPORTED_MODULE_5__app_utils_app_date_utils__["g" /* midnightDate */])();
+        this.toDate = Object(__WEBPACK_IMPORTED_MODULE_5__app_utils_app_date_utils__["j" /* midnightDate */])();
         this.rollChecks = new Map();
     }
     RollsPageComponent.prototype.ngOnInit = function () {
@@ -648,8 +563,8 @@ var RollsPageComponent = /** @class */ (function () {
     };
     RollsPageComponent.prototype.initTableHeader = function (dateTo) {
         this.toDate = dateTo;
-        this.restDate = Object(__WEBPACK_IMPORTED_MODULE_5__app_utils_app_date_utils__["h" /* substructDays */])(dateTo, this.daysInTable);
-        this.fromDate = Object(__WEBPACK_IMPORTED_MODULE_5__app_utils_app_date_utils__["h" /* substructDays */])(dateTo, this.daysInTable - 1);
+        this.restDate = Object(__WEBPACK_IMPORTED_MODULE_5__app_utils_app_date_utils__["k" /* substructDays */])(dateTo, this.daysInTable);
+        this.fromDate = Object(__WEBPACK_IMPORTED_MODULE_5__app_utils_app_date_utils__["k" /* substructDays */])(dateTo, this.daysInTable - 1);
         this.daysHeader = [];
         this.monthYearMap = new Map();
         for (var i = 0; i < this.daysInTable; i++) {
@@ -676,7 +591,7 @@ var RollsPageComponent = /** @class */ (function () {
         }
     };
     RollsPageComponent.prototype.showPreviousPeriod = function () {
-        this.initTableHeader(Object(__WEBPACK_IMPORTED_MODULE_5__app_utils_app_date_utils__["h" /* substructDays */])(this.toDate, this.daysInTable));
+        this.initTableHeader(Object(__WEBPACK_IMPORTED_MODULE_5__app_utils_app_date_utils__["k" /* substructDays */])(this.toDate, this.daysInTable));
         this.fetchTableData();
     };
     RollsPageComponent.prototype.showNextPeriod = function () {
@@ -685,14 +600,14 @@ var RollsPageComponent = /** @class */ (function () {
     };
     RollsPageComponent.prototype.isPreviousPeriod = function () {
         var accuracy = 10000;
-        return this.toDate.getTime() + accuracy < Object(__WEBPACK_IMPORTED_MODULE_5__app_utils_app_date_utils__["g" /* midnightDate */])().getTime();
+        return this.toDate.getTime() + accuracy < Object(__WEBPACK_IMPORTED_MODULE_5__app_utils_app_date_utils__["j" /* midnightDate */])().getTime();
     };
     RollsPageComponent.prototype.isBeforePreviousPeriod = function () {
         var accuracy = 10000;
-        return this.toDate.getTime() + accuracy < Object(__WEBPACK_IMPORTED_MODULE_5__app_utils_app_date_utils__["h" /* substructDays */])(Object(__WEBPACK_IMPORTED_MODULE_5__app_utils_app_date_utils__["g" /* midnightDate */])(), this.daysInTable).getTime();
+        return this.toDate.getTime() + accuracy < Object(__WEBPACK_IMPORTED_MODULE_5__app_utils_app_date_utils__["k" /* substructDays */])(Object(__WEBPACK_IMPORTED_MODULE_5__app_utils_app_date_utils__["j" /* midnightDate */])(), this.daysInTable).getTime();
     };
     RollsPageComponent.prototype.showCurrentPeriod = function () {
-        this.initTableHeader(Object(__WEBPACK_IMPORTED_MODULE_5__app_utils_app_date_utils__["g" /* midnightDate */])());
+        this.initTableHeader(Object(__WEBPACK_IMPORTED_MODULE_5__app_utils_app_date_utils__["j" /* midnightDate */])());
         this.fetchTableData();
     };
     RollsPageComponent.prototype.getBatch = function (rollBatch) {
@@ -704,7 +619,7 @@ var RollsPageComponent = /** @class */ (function () {
     RollsPageComponent.prototype.getBatches = function (rollBatches) {
         var _this = this;
         var result = new Array(this.daysInTable);
-        rollBatches.forEach(function (item) { return result[Object(__WEBPACK_IMPORTED_MODULE_5__app_utils_app_date_utils__["f" /* getIndex */])(Object(__WEBPACK_IMPORTED_MODULE_5__app_utils_app_date_utils__["g" /* midnightDate */])(item.dateManufactured), result.length, (24 * 60 * 60 * 1000), _this.toDate)] = item; });
+        rollBatches.forEach(function (item) { return result[Object(__WEBPACK_IMPORTED_MODULE_5__app_utils_app_date_utils__["h" /* getIndex */])(Object(__WEBPACK_IMPORTED_MODULE_5__app_utils_app_date_utils__["j" /* midnightDate */])(item.dateManufactured), result.length, (24 * 60 * 60 * 1000), _this.toDate)] = item; });
         return result;
     };
     RollsPageComponent.prototype.getWeight = function (rollType) {

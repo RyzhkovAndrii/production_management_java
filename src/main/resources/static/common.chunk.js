@@ -45154,20 +45154,107 @@ module.exports = function(module) {
 
 /***/ }),
 
+/***/ "./src/app/app-utils/app-comparators.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = compareColors;
+/* unused harmony export rgbToHsl */
+/* harmony export (immutable) */ __webpack_exports__["b"] = compareDates;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment__ = __webpack_require__("./node_modules/moment/moment.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moment__);
+
+/**
+ * @returns numeric value of the resulting comparation
+ * @description compares two hexademical color codes in format #ff11aa
+ *
+ * @param c1 color code only in hexademical format of the first element
+ * @param c2 color code only in hexademical format of the second element
+ */
+function compareColors(c1, c2) {
+    var a1 = c1.substr(1, c1.length);
+    var a2 = c2.substr(1, c2.length);
+    var base = 16;
+    var r1 = parseInt(a1.substr(0, 2), base);
+    var g1 = parseInt(a1.substr(2, 2), base);
+    var b1 = parseInt(a1.substr(4, 2), base);
+    var r2 = parseInt(a2.substr(0, 2), base);
+    var g2 = parseInt(a2.substr(2, 2), base);
+    var b2 = parseInt(a2.substr(4, 2), base);
+    var hsl1 = rgbToHsl(r1, g1, b1);
+    var hsl2 = rgbToHsl(r2, g2, b2);
+    var result = hsl1[0] - hsl2[0];
+    if (result != 0) {
+        return result;
+    }
+    else if ((result = hsl1[1] - hsl2[1]) != 0) {
+        return result;
+    }
+    else {
+        result = hsl1[2] - hsl2[2];
+    }
+    return result;
+}
+/**
+ * @returns color code in hsl format as array of numbers [hue, saturation, lightness]
+ * @description transforms rgb color code to hsl
+ *
+ * @param r red color value between 0 and 255
+ * @param g green color value between 0 and 255
+ * @param b blue color value between 0 and 255
+ */
+function rgbToHsl(r, g, b) {
+    r /= 255, g /= 255, b /= 255;
+    var max = Math.max(r, g, b), min = Math.min(r, g, b);
+    var h, s, l = (max + min) / 2;
+    if (max == min) {
+        h = s = 0;
+    }
+    else {
+        var d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+            case r:
+                h = (g - b) / d + (g < b ? 6 : 0);
+                break;
+            case g:
+                h = (b - r) / d + 2;
+                break;
+            case b:
+                h = (r - g) / d + 4;
+                break;
+        }
+        h /= 6;
+    }
+    return [(h * 100 + 0.5) | 0, ((s * 100 + 0.5) | 0), ((l * 100 + 0.5) | 0)];
+}
+function compareDates(d1, d2, format) {
+    if (format === void 0) { format = 'DD-MM-YYYY'; }
+    var m1 = __WEBPACK_IMPORTED_MODULE_0_moment__(d1, format);
+    var m2 = __WEBPACK_IMPORTED_MODULE_0_moment__(d2, format);
+    var result = m1.diff(m2, 'days');
+    return result;
+}
+
+
+/***/ }),
+
 /***/ "./src/app/app-utils/app-date-utils.ts":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (immutable) */ __webpack_exports__["h"] = substructDays;
+/* harmony export (immutable) */ __webpack_exports__["k"] = substructDays;
 /* harmony export (immutable) */ __webpack_exports__["a"] = addDays;
-/* harmony export (immutable) */ __webpack_exports__["g"] = midnightDate;
-/* unused harmony export getDate */
+/* harmony export (immutable) */ __webpack_exports__["j"] = midnightDate;
+/* harmony export (immutable) */ __webpack_exports__["e"] = getDate;
 /* harmony export (immutable) */ __webpack_exports__["b"] = formatDate;
 /* harmony export (immutable) */ __webpack_exports__["c"] = formatDateBrowserToServer;
 /* harmony export (immutable) */ __webpack_exports__["d"] = formatDateServerToBrowser;
-/* harmony export (immutable) */ __webpack_exports__["f"] = getIndex;
+/* harmony export (immutable) */ __webpack_exports__["h"] = getIndex;
 /* unused harmony export getDifferenceInDays */
-/* harmony export (immutable) */ __webpack_exports__["e"] = getDateFirstDayOfMonth;
+/* harmony export (immutable) */ __webpack_exports__["f"] = getDateFirstDayOfMonth;
+/* harmony export (immutable) */ __webpack_exports__["g"] = getDateLastDayOfMotth;
+/* harmony export (immutable) */ __webpack_exports__["i"] = isSameMonthYear;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment__ = __webpack_require__("./node_modules/moment/moment.js");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_moment__);
 
@@ -45209,8 +45296,9 @@ function midnightDate(date) {
  * @returns date object
  * @param date date in format DD-MM-YYYY
  */
-function getDate(date) {
-    return __WEBPACK_IMPORTED_MODULE_0_moment__(date, 'DD-MM-YYYY').toDate();
+function getDate(date, format) {
+    if (format === void 0) { format = 'DD-MM-YYYY'; }
+    return __WEBPACK_IMPORTED_MODULE_0_moment__(date, format).toDate();
 }
 /**
  * @description immutable function
@@ -45258,6 +45346,15 @@ function getDifferenceInDays(dateA, dateB) {
 function getDateFirstDayOfMonth(date) {
     return __WEBPACK_IMPORTED_MODULE_0_moment__(date).date(1).toDate();
 }
+function getDateLastDayOfMotth(date) {
+    var temp = __WEBPACK_IMPORTED_MODULE_0_moment__(date);
+    return temp.date(temp.daysInMonth()).toDate();
+}
+function isSameMonthYear(a, b) {
+    var aMoment = __WEBPACK_IMPORTED_MODULE_0_moment__(a);
+    var bMoment = __WEBPACK_IMPORTED_MODULE_0_moment__(b);
+    return aMoment.isSame(bMoment, 'months') && aMoment.isSame(bMoment, 'year');
+}
 
 
 /***/ }),
@@ -45303,7 +45400,7 @@ function httpErrorHandle(error) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony default export */ __webpack_exports__["a"] = (['#ffffff', '#2f2f2f', '#ff9d14', '#008a17', '#f1cd72', '#edf100']);
+/* harmony default export */ __webpack_exports__["a"] = (['#ffffff', '#2f2f2f', '#602e05', '#ff9d14', '#008a17', '#f1cd72', '#edf100']);
 
 
 /***/ }),
@@ -45319,12 +45416,14 @@ function httpErrorHandle(error) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_simple_confirm_modal_simple_confirm_modal_component__ = __webpack_require__("./src/app/modules/app-shared/components/simple-confirm-modal/simple-confirm-modal.component.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pipes_exponent_pipe__ = __webpack_require__("./src/app/modules/app-shared/pipes/exponent.pipe.ts");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pipes_empty_pipe__ = __webpack_require__("./src/app/modules/app-shared/pipes/empty.pipe.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__pipes_moment_pipe__ = __webpack_require__("./src/app/modules/app-shared/pipes/moment.pipe.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -45340,7 +45439,8 @@ var AppSharedModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_2__components_http_error_modal_http_error_modal_component__["a" /* HttpErrorModalComponent */],
                 __WEBPACK_IMPORTED_MODULE_3__components_simple_confirm_modal_simple_confirm_modal_component__["a" /* SimpleConfirmModalComponent */],
                 __WEBPACK_IMPORTED_MODULE_4__pipes_exponent_pipe__["a" /* ExponentPipe */],
-                __WEBPACK_IMPORTED_MODULE_5__pipes_empty_pipe__["a" /* EmptyPipe */]
+                __WEBPACK_IMPORTED_MODULE_5__pipes_empty_pipe__["a" /* EmptyPipe */],
+                __WEBPACK_IMPORTED_MODULE_6__pipes_moment_pipe__["a" /* MomentPipe */]
             ],
             imports: [
                 __WEBPACK_IMPORTED_MODULE_1__angular_common__["b" /* CommonModule */]
@@ -45349,7 +45449,8 @@ var AppSharedModule = /** @class */ (function () {
                 __WEBPACK_IMPORTED_MODULE_2__components_http_error_modal_http_error_modal_component__["a" /* HttpErrorModalComponent */],
                 __WEBPACK_IMPORTED_MODULE_3__components_simple_confirm_modal_simple_confirm_modal_component__["a" /* SimpleConfirmModalComponent */],
                 __WEBPACK_IMPORTED_MODULE_4__pipes_exponent_pipe__["a" /* ExponentPipe */],
-                __WEBPACK_IMPORTED_MODULE_5__pipes_empty_pipe__["a" /* EmptyPipe */]
+                __WEBPACK_IMPORTED_MODULE_5__pipes_empty_pipe__["a" /* EmptyPipe */],
+                __WEBPACK_IMPORTED_MODULE_6__pipes_moment_pipe__["a" /* MomentPipe */]
             ],
             entryComponents: [
                 __WEBPACK_IMPORTED_MODULE_2__components_http_error_modal_http_error_modal_component__["a" /* HttpErrorModalComponent */],
@@ -45485,6 +45586,42 @@ var ExponentPipe = /** @class */ (function () {
         })
     ], ExponentPipe);
     return ExponentPipe;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/modules/app-shared/pipes/moment.pipe.ts":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MomentPipe; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment__ = __webpack_require__("./node_modules/moment/moment.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_moment___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_moment__);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+
+var MomentPipe = /** @class */ (function () {
+    function MomentPipe() {
+    }
+    MomentPipe.prototype.transform = function (value, format, locale) {
+        if (format === void 0) { format = 'DD MMM YYYY'; }
+        if (locale === void 0) { locale = 'ru'; }
+        return __WEBPACK_IMPORTED_MODULE_1_moment__(value).locale(locale).format(format);
+    };
+    MomentPipe = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["U" /* Pipe */])({
+            name: 'moment'
+        })
+    ], MomentPipe);
+    return MomentPipe;
 }());
 
 

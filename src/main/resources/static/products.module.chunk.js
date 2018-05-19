@@ -121,7 +121,7 @@ module.exports = ""
 /***/ "./src/app/modules/app-products/components/product-type-modal/product-type-modal.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<form [formGroup]=\"form\">\n  <div class=\"row\">\n    <div class=\"col-md-6\">\n      <label for=\"roll-name\" class=\"col-form-label\">Наименование:</label>\n      <input type=\"text\" class=\"form-control\" id=\"roll-name\" formControlName=\"name\" [ngClass]=\"{\n            'is-invalid': form.get('name').invalid && isTouched('name'),\n            'is-valid': form.get('name').valid && isTouched('name')\n          }\">\n      <div class=\"invalid-feedback\" *ngIf=\"form.get('name').invalid && isTouched('name')\">\n        <span *ngIf=\"form.get('name').errors['required']\">Обязательное поле!</span>\n      </div>\n    </div>\n    <div class=\"col-md-4\">\n      <label for=\"product-weight\" class=\"col-form-label\">Вес:</label>\n      <input type=\"number\" class=\"form-control\" id=\"product-weight\" [step]=\"MIN_WEIGHT\" formControlName=\"weight\" [min]=\"MIN_WEIGHT\" [ngClass]=\"{\n          'is-invalid': form.get('weight').invalid && isTouched('weight'),\n          'is-valid': form.get('weight').valid && isTouched('weight')\n        }\">\n      <div class=\"invalid-feedback\" *ngIf=\"form.get('weight').invalid && isTouched('weight')\">\n        <span *ngIf=\"form.get('weight').errors['required']\">Обязательное поле!</span>\n        <span *ngIf=\"form.get('weight').errors['min']\">Вес должен быть больше {{ MIN_WEIGHT }}</span>\n      </div>\n    </div>\n    <div class=\"col-md-2\">\n      <label for=\"product-color\" class=\"col-form-label\">Цвет:</label>\n      <input type=\"button\" class=\"form-control\" id=\"product-color\" formControlName=\"colorCode\" [(colorPicker)]=\"colorCode\" [value]=\"colorCode\"\n        [style.background]=\"colorCode\" [style.color]=\"colorCode\" [cpOutputFormat]=\"'hex'\" [cpPosition]=\"'left'\" [cpOKButton]=\"true\"\n        [cpCancelButton]=\"true\" [cpPresetColors]=\"presetColors\">\n    </div>\n  </div>\n</form>\n"
+module.exports = "<form [formGroup]=\"form\">\n  <div class=\"row\">\n    <div class=\"col-md-6\">\n      <label for=\"roll-name\" class=\"col-form-label\">Наименование:</label>\n      <input type=\"text\" class=\"form-control\" id=\"roll-name\" formControlName=\"name\" [ngClass]=\"{\n            'is-invalid': form.get('name').invalid && isTouched('name'),\n            'is-valid': form.get('name').valid && isTouched('name')\n          }\">\n      <div class=\"invalid-feedback\" *ngIf=\"form.get('name').invalid && isTouched('name')\">\n        <span *ngIf=\"form.get('name').errors['required']\">Обязательное поле!</span>\n      </div>\n    </div>\n    <div class=\"col-md-4\">\n      <label for=\"product-weight\" class=\"col-form-label\">Вес:</label>\n      <input type=\"number\" class=\"form-control\" id=\"product-weight\" [step]=\"MIN_WEIGHT\" formControlName=\"weight\" [min]=\"MIN_WEIGHT\" [ngClass]=\"{\n          'is-invalid': form.get('weight').invalid && isTouched('weight'),\n          'is-valid': form.get('weight').valid && isTouched('weight')\n        }\">\n      <div class=\"invalid-feedback\" *ngIf=\"form.get('weight').invalid && isTouched('weight')\">\n        <span *ngIf=\"form.get('weight').errors['required']\">Обязательное поле!</span>\n        <span *ngIf=\"form.get('weight').errors['min']\">Вес должен быть больше {{ MIN_WEIGHT }}</span>\n      </div>\n    </div>\n    <div class=\"col-md-2\">\n      <label for=\"product-color\" class=\"col-form-label\">Цвет:</label>\n      <input type=\"button\" class=\"form-control\" id=\"product-color\" formControlName=\"colorCode\" [(colorPicker)]=\"colorCode\" [value]=\"colorCode\"\n        [style.background]=\"colorCode\" [style.color]=\"colorCode\" [cpOutputFormat]=\"'hex'\" [cpPosition]=\"'left'\" [cpOKButton]=\"true\"\n        [cpCancelButton]=\"true\" [cpPresetColors]=\"presetColors\" [cpWidth]=\"300\" [cpPositionOffset]=\"-500\">\n    </div>\n  </div>\n</form>\n"
 
 /***/ }),
 
@@ -219,7 +219,7 @@ module.exports = "td {\n    width: 12%;\n}\n\n.empty-row, .empty-row:hover {\n  
 /***/ "./src/app/modules/app-products/components/products-page/products-page.component.html":
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container-fluid mt-2\">\n  <button class=\"btn btn-outline-dark btn-sm\" (click)=\"openAddProductTypeModal()\">\n    <span class=\"material-icons\">add</span>\n  </button>\n  <div class=\"table-responsive mt-2\">\n    <table class=\"table table-bordered table-striped table-sm\">\n      <thead>\n        <tr class=\"table-header\">\n          <th scope=\"col\" rowspan=\"2\" class=\"align-middle\">Наименование</th>\n          <th scope=\"col\" rowspan=\"2\" class=\"align-middle\">Вес</th>\n          <th scope=\"col\" rowspan=\"2\" class=\"align-middle\">Цвет</th>\n          <th scope=\"col\" rowspan=\"2\" class=\"align-middle\">Остаток на начало месяца, тыс.шт.</th>\n          <th scope=\"col\" rowspan=\"1\" colspan=\"2\">Произведено тыс.шт.</th>\n          <th scope=\"col\" rowspan=\"1\" colspan=\"2\">Реализация тыс.шт.</th>\n          <th scope=\"col\" rowspan=\"2\" class=\"align-middle\">Текущий период, тыс.шт.</th>\n        </tr>\n        <tr class=\"table-header\">\n          <th scope=\"col\">за сутки</th>\n          <th scope=\"col\">за месяц</th>\n          <th scope=\"col\">за сутки</th>\n          <th scope=\"col\">за месяц</th>\n        </tr>\n      </thead>\n      <tbody *ngFor=\"let infoArray of productsInfo\">\n        <tr *ngFor=\"let productInfo of sortByNameAndWeight(infoArray)\" [contextMenu]=\"productsMenu\" [contextMenuSubject]=\"productInfo.type\">\n          <th scope=\"row\" class=\"row-name\">\n            {{ productInfo.type.name }}\n          </th>\n          <th scope=\"row\" class=\"row-name\">\n            {{ productInfo.type.weight }}\n          </th>\n          <th scope=\"row\" class=\"row-name\">\n            <span class=\"filled-circle\" [ngStyle]=\"{ 'background-color': productInfo.type.colorCode }\"></span>\n          </th>\n          <td>\n            {{ (productInfo.restLeftover.amount) | exponent }}\n          </td>\n          <td (click)=\"openAddProductOperation(productInfo.type.id, 'MANUFACTURED')\">\n            {{ productInfo.dayBatch.manufacturedAmount | empty | exponent }}\n          </td>\n          <td>\n            {{ productInfo.monthBatch.manufacturedAmount | empty | exponent }}\n          </td>\n          <td (click)=\"openAddProductOperation(productInfo.type.id, 'SOLD')\">\n            {{ productInfo.dayBatch.soldAmount | empty | exponent }}\n          </td>\n          <td>\n            {{ productInfo.monthBatch.soldAmount | empty | exponent }}\n          </td>\n          <td>\n            {{ productInfo.currentLeftover.amount | exponent }}\n          </td>\n        </tr>\n        <tr>\n          <th scope=\"row\" class=\"row-name\" colspan=\"3\">Итого</th>\n          <td *ngFor=\"let total of getSectionTotals(infoArray)\">\n            {{ total | exponent }}\n          </td>\n        </tr>\n        <td class=\"empty-row\"></td>\n      </tbody>\n      <tbody *ngIf=\"productsInfo.length != 0\">\n        <tr>\n          <th scope=\"row\" class=\"row-name\" colspan=\"3\">Всего</th>\n          <td *ngFor=\"let total of getTotals()\">\n            {{ total | exponent }}\n          </td>\n        </tr>\n      </tbody>\n    </table>\n  </div>\n</div>\n\n<context-menu #productsMenu>\n  <ng-template contextMenuItem let-item (execute)=\"openEditProductTypeModal($event.item)\">\n    Редактировать продукцию\n  </ng-template>\n  <ng-template contextMenuItem divider=\"true\"></ng-template>\n  <ng-template contextMenuItem let-item (execute)=\"openDeleteProductTypeModal($event.item)\">\n    Удалить продукцию\n  </ng-template>\n</context-menu>\n"
+module.exports = "<div class=\"container-fluid mt-2\">\n  <div class=\"row\">\n    <div class=\"col-md-1\">\n      <button class=\"btn btn-outline-dark btn-sm\" (click)=\"openAddProductTypeModal()\">\n        <span class=\"material-icons\">add</span>\n      </button>\n    </div>\n\n    <div class=\"col-md-3 offset-md-4\">\n      <form [formGroup]=\"form\">\n        <div class=\"form-row\">\n          <div class=\"pl-2 pr-2 pt-1 pb-1 pt-md-0 pb-md-0\">\n            <div class=\"input-group\">\n              <input type=\"date\" class=\"form-control form-control-sm\" id=\"daylyDate\" formControlName=\"daylyDate\" [ngClass]=\"{\n  'is-invalid': form.get('daylyDate').invalid,\n  'is-valid': form.get('daylyDate').valid && form.get('daylyDate').touched\n  }\">\n              <div class=\"invalid-feedback\" *ngIf=\"form.get('daylyDate').invalid\">\n                <span *ngIf=\"form.get('daylyDate').errors['required']\">Не может быть пустым!</span>\n              </div>\n            </div>\n          </div>\n\n          <div class=\"pl-2 pr-2 pt-1 pb-1 pt-md-0 pb-md-0\">\n            <button type=\"submit\" class=\"btn btn-outline-dark btn-sm\" [disabled]=\"form.invalid\" (click)=\"loadTable()\">Сменить дату</button>\n          </div>\n        </div>\n      </form>\n    </div>\n  </div>\n\n  <div class=\"table-responsive mt-2\">\n    <table class=\"table table-bordered table-striped table-sm\">\n      <thead>\n        <tr class=\"table-header\">\n          <th scope=\"col\" rowspan=\"2\" class=\"align-middle\">Наименование</th>\n          <th scope=\"col\" rowspan=\"2\" class=\"align-middle\">Вес</th>\n          <th scope=\"col\" rowspan=\"2\" class=\"align-middle\">Цвет</th>\n          <th scope=\"col\" rowspan=\"2\" class=\"align-middle\">Остаток на {{ fromDate | moment:'DD MMMM' }}, тыс.шт.</th>\n          <th scope=\"col\" rowspan=\"1\" colspan=\"2\">Произведено тыс.шт.</th>\n          <th scope=\"col\" rowspan=\"1\" colspan=\"2\">Реализация тыс.шт.</th>\n          <th scope=\"col\" rowspan=\"2\" class=\"align-middle\">Остаток на {{ toDate | moment:'DD MMMM' }}, тыс.шт.</th>\n        </tr>\n        <tr class=\"table-header\">\n          <th scope=\"col\">{{ daylyDate | moment:'DD MMMM' }}</th>\n          <th scope=\"col\">{{ daylyDate | moment:'MMMM' }}</th>\n          <th scope=\"col\">{{ daylyDate | moment:'DD MMMM' }}</th>\n          <th scope=\"col\">{{ daylyDate | moment:'MMMM' }}</th>\n        </tr>\n      </thead>\n      <tbody *ngFor=\"let infoArray of sortByColor(productsInfo)\">\n        <tr *ngFor=\"let productInfo of sortByNameAndWeight(infoArray)\" [contextMenu]=\"productsMenu\" [contextMenuSubject]=\"productInfo.type\">\n          <th scope=\"row\" class=\"row-name\">\n            {{ productInfo.type.name }}\n          </th>\n          <th scope=\"row\" class=\"row-name\">\n            {{ productInfo.type.weight }}\n          </th>\n          <th scope=\"row\" class=\"row-name\">\n            <span class=\"filled-circle\" [ngStyle]=\"{ 'background-color': productInfo.type.colorCode }\"></span>\n          </th>\n          <td>\n            {{ (productInfo.restLeftover.amount) | exponent }}\n          </td>\n          <td (click)=\"openAddProductOperation(productInfo.type.id, 'MANUFACTURED')\">\n            {{ productInfo.dayBatch.manufacturedAmount | empty | exponent }}\n          </td>\n          <td>\n            {{ productInfo.monthBatch.manufacturedAmount | empty | exponent }}\n          </td>\n          <td (click)=\"openAddProductOperation(productInfo.type.id, 'SOLD')\">\n            {{ productInfo.dayBatch.soldAmount | empty | exponent }}\n          </td>\n          <td>\n            {{ productInfo.monthBatch.soldAmount | empty | exponent }}\n          </td>\n          <td>\n            {{ productInfo.currentLeftover.amount | exponent }}\n          </td>\n        </tr>\n        <tr>\n          <th scope=\"row\" class=\"row-name\" colspan=\"3\">Итого</th>\n          <td *ngFor=\"let total of getSectionTotals(infoArray)\">\n            {{ total | exponent }}\n          </td>\n        </tr>\n        <td class=\"empty-row\"></td>\n      </tbody>\n      <tbody *ngIf=\"productsInfo.length != 0\">\n        <tr>\n          <th scope=\"row\" class=\"row-name\" colspan=\"3\">Всего</th>\n          <td *ngFor=\"let total of getTotals()\">\n            {{ total | exponent }}\n          </td>\n        </tr>\n      </tbody>\n    </table>\n  </div>\n</div>\n\n<context-menu #productsMenu>\n  <ng-template contextMenuItem let-item (execute)=\"openEditProductTypeModal($event.item)\">\n    Редактировать продукцию\n  </ng-template>\n  <ng-template contextMenuItem divider=\"true\"></ng-template>\n  <ng-template contextMenuItem let-item (execute)=\"openDeleteProductTypeModal($event.item)\">\n    Удалить продукцию\n  </ng-template>\n</context-menu>\n"
 
 /***/ }),
 
@@ -229,13 +229,15 @@ module.exports = "<div class=\"container-fluid mt-2\">\n  <button class=\"btn bt
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ProductsPageComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__("./node_modules/@angular/core/esm5/core.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ngx_modal_dialog__ = __webpack_require__("./node_modules/ngx-modal-dialog/index.js");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_products_service__ = __webpack_require__("./src/app/modules/app-products/services/products.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__app_utils_app_date_utils__ = __webpack_require__("./src/app/app-utils/app-date-utils.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_shared_services_app_modal_service__ = __webpack_require__("./src/app/modules/app-shared/services/app-modal.service.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__product_type_modal_product_type_modal_component__ = __webpack_require__("./src/app/modules/app-products/components/product-type-modal/product-type-modal.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_shared_components_simple_confirm_modal_simple_confirm_modal_component__ = __webpack_require__("./src/app/modules/app-shared/components/simple-confirm-modal/simple-confirm-modal.component.ts");
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__product_operation_modal_product_operation_modal_component__ = __webpack_require__("./src/app/modules/app-products/components/product-operation-modal/product-operation-modal.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_forms__ = __webpack_require__("./node_modules/@angular/forms/esm5/forms.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ngx_modal_dialog__ = __webpack_require__("./node_modules/ngx-modal-dialog/index.js");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_products_service__ = __webpack_require__("./src/app/modules/app-products/services/products.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__app_utils_app_date_utils__ = __webpack_require__("./src/app/app-utils/app-date-utils.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__app_shared_services_app_modal_service__ = __webpack_require__("./src/app/modules/app-shared/services/app-modal.service.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__product_type_modal_product_type_modal_component__ = __webpack_require__("./src/app/modules/app-products/components/product-type-modal/product-type-modal.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_shared_components_simple_confirm_modal_simple_confirm_modal_component__ = __webpack_require__("./src/app/modules/app-shared/components/simple-confirm-modal/simple-confirm-modal.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__product_operation_modal_product_operation_modal_component__ = __webpack_require__("./src/app/modules/app-products/components/product-operation-modal/product-operation-modal.component.ts");
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__app_utils_app_comparators__ = __webpack_require__("./src/app/app-utils/app-comparators.ts");
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -245,6 +247,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+
+
 
 
 
@@ -263,21 +267,40 @@ var ProductsPageComponent = /** @class */ (function () {
         this.COLLATOR = new Intl.Collator([], {
             sensitivity: "base"
         });
-        this.daylyDate = Object(__WEBPACK_IMPORTED_MODULE_3__app_utils_app_date_utils__["g" /* midnightDate */])();
-        this.toDate = Object(__WEBPACK_IMPORTED_MODULE_3__app_utils_app_date_utils__["g" /* midnightDate */])();
-        this.fromDate = Object(__WEBPACK_IMPORTED_MODULE_3__app_utils_app_date_utils__["e" /* getDateFirstDayOfMonth */])(this.daylyDate);
     }
     ProductsPageComponent.prototype.ngOnInit = function () {
+        this.form = new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["b" /* FormGroup */]({
+            daylyDate: new __WEBPACK_IMPORTED_MODULE_1__angular_forms__["a" /* FormControl */](Object(__WEBPACK_IMPORTED_MODULE_4__app_utils_app_date_utils__["d" /* formatDateServerToBrowser */])(Object(__WEBPACK_IMPORTED_MODULE_4__app_utils_app_date_utils__["b" /* formatDate */])(Object(__WEBPACK_IMPORTED_MODULE_4__app_utils_app_date_utils__["j" /* midnightDate */])())), __WEBPACK_IMPORTED_MODULE_1__angular_forms__["g" /* Validators */].required)
+        });
+        this.loadTable();
+    };
+    ProductsPageComponent.prototype.loadTable = function () {
+        this.initDates();
         this.fetchData();
+    };
+    ProductsPageComponent.prototype.initDates = function () {
+        this.daylyDate = Object(__WEBPACK_IMPORTED_MODULE_4__app_utils_app_date_utils__["e" /* getDate */])(this.form.value.daylyDate, 'YYYY-MM-DD');
+        this.fromDate = Object(__WEBPACK_IMPORTED_MODULE_4__app_utils_app_date_utils__["f" /* getDateFirstDayOfMonth */])(this.daylyDate);
+        if (Object(__WEBPACK_IMPORTED_MODULE_4__app_utils_app_date_utils__["i" /* isSameMonthYear */])(this.daylyDate, Object(__WEBPACK_IMPORTED_MODULE_4__app_utils_app_date_utils__["j" /* midnightDate */])())) {
+            this.toDate = Object(__WEBPACK_IMPORTED_MODULE_4__app_utils_app_date_utils__["j" /* midnightDate */])();
+        }
+        else {
+            this.toDate = Object(__WEBPACK_IMPORTED_MODULE_4__app_utils_app_date_utils__["g" /* getDateLastDayOfMotth */])(this.daylyDate);
+        }
     };
     ProductsPageComponent.prototype.fetchData = function () {
         var _this = this;
         this.productsService.getProductsInfo(this.daylyDate, this.fromDate, this.toDate)
             .subscribe(function (data) {
-            console.log(data);
             _this.productsInfo = data;
         }, function (error) {
             _this.appModalService.openHttpErrorModal(_this.ngxModalDialogService, _this.viewRef, error);
+        });
+    };
+    ProductsPageComponent.prototype.sortByColor = function (array) {
+        return array.sort(function (a, b) {
+            var byColor = Object(__WEBPACK_IMPORTED_MODULE_9__app_utils_app_comparators__["a" /* compareColors */])(a[0].type.colorCode, b[0].type.colorCode);
+            return byColor != 0 ? byColor : 1;
         });
     };
     ProductsPageComponent.prototype.sortByNameAndWeight = function (array) {
@@ -316,7 +339,7 @@ var ProductsPageComponent = /** @class */ (function () {
         };
         var modalOptions = {
             title: 'Новая продукция',
-            childComponent: __WEBPACK_IMPORTED_MODULE_5__product_type_modal_product_type_modal_component__["a" /* ProductTypeModalComponent */],
+            childComponent: __WEBPACK_IMPORTED_MODULE_6__product_type_modal_product_type_modal_component__["a" /* ProductTypeModalComponent */],
             data: {
                 operation: operation.bind(this)
             }
@@ -334,7 +357,7 @@ var ProductsPageComponent = /** @class */ (function () {
         };
         var modalOptions = {
             title: 'Редактирование продукции',
-            childComponent: __WEBPACK_IMPORTED_MODULE_5__product_type_modal_product_type_modal_component__["a" /* ProductTypeModalComponent */],
+            childComponent: __WEBPACK_IMPORTED_MODULE_6__product_type_modal_product_type_modal_component__["a" /* ProductTypeModalComponent */],
             data: {
                 productType: {
                     name: productType.name,
@@ -357,10 +380,10 @@ var ProductsPageComponent = /** @class */ (function () {
         };
         var modalOptions = {
             title: 'Операция над продукцией',
-            childComponent: __WEBPACK_IMPORTED_MODULE_7__product_operation_modal_product_operation_modal_component__["a" /* ProductOperationModalComponent */],
+            childComponent: __WEBPACK_IMPORTED_MODULE_8__product_operation_modal_product_operation_modal_component__["a" /* ProductOperationModalComponent */],
             data: {
                 productOperationRequest: {
-                    operationDate: Object(__WEBPACK_IMPORTED_MODULE_3__app_utils_app_date_utils__["b" /* formatDate */])(this.daylyDate),
+                    operationDate: Object(__WEBPACK_IMPORTED_MODULE_4__app_utils_app_date_utils__["b" /* formatDate */])(this.daylyDate),
                     productTypeId: productTypeId,
                     operationType: operationType,
                     amount: undefined
@@ -375,7 +398,7 @@ var ProductsPageComponent = /** @class */ (function () {
         var buttonClass = 'btn btn-outline-dark';
         var modalOptions = {
             title: 'Подтвердите удаление продукции',
-            childComponent: __WEBPACK_IMPORTED_MODULE_6__app_shared_components_simple_confirm_modal_simple_confirm_modal_component__["a" /* SimpleConfirmModalComponent */],
+            childComponent: __WEBPACK_IMPORTED_MODULE_7__app_shared_components_simple_confirm_modal_simple_confirm_modal_component__["a" /* SimpleConfirmModalComponent */],
             actionButtons: [{
                     text: 'Отменить',
                     buttonClass: buttonClass,
@@ -401,10 +424,10 @@ var ProductsPageComponent = /** @class */ (function () {
             template: __webpack_require__("./src/app/modules/app-products/components/products-page/products-page.component.html"),
             styles: [__webpack_require__("./src/app/modules/app-products/components/products-page/products-page.component.css")]
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__services_products_service__["a" /* ProductsService */],
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_3__services_products_service__["a" /* ProductsService */],
             __WEBPACK_IMPORTED_MODULE_0__angular_core__["_13" /* ViewContainerRef */],
-            __WEBPACK_IMPORTED_MODULE_1_ngx_modal_dialog__["b" /* ModalDialogService */],
-            __WEBPACK_IMPORTED_MODULE_4__app_shared_services_app_modal_service__["a" /* AppModalService */]])
+            __WEBPACK_IMPORTED_MODULE_2_ngx_modal_dialog__["b" /* ModalDialogService */],
+            __WEBPACK_IMPORTED_MODULE_5__app_shared_services_app_modal_service__["a" /* AppModalService */]])
     ], ProductsPageComponent);
     return ProductsPageComponent;
 }());
