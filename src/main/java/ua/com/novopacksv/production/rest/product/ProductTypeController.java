@@ -29,8 +29,8 @@ public class ProductTypeController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<List<ProductTypeResponse>> getList(@PathVariable String name){
+    @GetMapping(params = {"name"})
+    public ResponseEntity<List<ProductTypeResponse>> getList(@RequestParam("name") String name) {
         List<ProductType> productTypes = productTypeService.findAll(name);
         List<ProductTypeResponse> responses = conversionService.convert(productTypes, ProductTypeResponse.class);
         return new ResponseEntity<>(responses, HttpStatus.OK);
