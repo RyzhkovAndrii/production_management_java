@@ -29,6 +29,13 @@ public class ProductTypeController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping
+    public ResponseEntity<List<ProductTypeResponse>> getList(@PathVariable String name){
+        List<ProductType> productTypes = productTypeService.findAll(name);
+        List<ProductTypeResponse> responses = conversionService.convert(productTypes, ProductTypeResponse.class);
+        return new ResponseEntity<>(responses, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ProductTypeResponse> getById(@PathVariable Long id) {
         ProductType productType = productTypeService.findById(id);

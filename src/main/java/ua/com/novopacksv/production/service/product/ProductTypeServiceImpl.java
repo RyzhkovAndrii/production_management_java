@@ -45,6 +45,11 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     }
 
     @Override
+    public List<ProductType> findAll(String productTypeName) {
+        return productTypeRepository.findAllByName(productTypeName);
+    }
+
+    @Override
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public ProductType save(ProductType productType) {
             productTypeRepository.save(productType);
