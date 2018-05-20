@@ -33,4 +33,13 @@
                                  referencedTableName="product_type"
                                  referencedColumnNames="id"/>
     </changeSet>
+    <changeSet id="4" author="pryadilnikova@gmail.com">
+        <addUniqueConstraint
+                tableName="product_type"
+                columnNames="name, weight, color_code"
+                deferrable="true"
+                disabled="true"
+                initiallyDeferred="true"
+                constraintName="const_product_type"/>
+    </changeSet>
 </databaseChangeLog>
