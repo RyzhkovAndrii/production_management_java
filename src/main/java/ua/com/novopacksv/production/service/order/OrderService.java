@@ -10,4 +10,6 @@ public interface OrderService extends BaseEntityService<Order> {
 
     List<Order> findAll(LocalDate fromDeliveryDate, LocalDate toDeliveryDate);
 
+    LocalDate findMaxDeliveryDate();
+
 }

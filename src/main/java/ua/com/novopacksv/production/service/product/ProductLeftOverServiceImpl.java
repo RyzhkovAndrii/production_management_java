@@ -14,6 +14,7 @@ import ua.com.novopacksv.production.model.productModel.ProductOperationType;
 import ua.com.novopacksv.production.model.productModel.ProductType;
 import ua.com.novopacksv.production.repository.productRepository.ProductLeftOverRepository;
 import ua.com.novopacksv.production.service.order.OrderItemService;
+import ua.com.novopacksv.production.service.order.OrderService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -34,11 +35,21 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
     @Lazy
     private OrderItemService orderItemService;
 
+    @Autowired
+    @Lazy
+    private OrderService orderService;
+
     @Override
     public List<ProductLeftOver> findOnDate(LocalDate date) {
         List<ProductLeftOver> productLeftOvers = productLeftOverRepository.findAll();
         return productLeftOvers.stream()
                 .map((productLeftOver) -> getLeftOverOnDate(date, productLeftOver)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductLeftOver> findLatest() {
+        LocalDate latestDeliveryDate = orderService.findMaxDeliveryDate();
+        return findOnDate(latestDeliveryDate);
     }
 
     @Override

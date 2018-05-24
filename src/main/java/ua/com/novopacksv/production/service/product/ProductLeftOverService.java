@@ -12,6 +12,8 @@ public interface ProductLeftOverService extends BaseEntityService<ProductLeftOve
 
     List<ProductLeftOver> findOnDate(LocalDate date);
 
+    List<ProductLeftOver> findLatest();
+
     ProductLeftOver findByProductType_IdOnDate(Long productTypeId, LocalDate date);
 
     ProductLeftOver findByProductTypeId(Long productTypeId);

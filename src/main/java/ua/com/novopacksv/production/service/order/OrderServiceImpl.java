@@ -53,4 +53,9 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findAllByDeliveryDateBetween(fromDeliveryDate, toDeliveryDate);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public LocalDate findMaxDeliveryDate() {
+        return orderRepository.findFirstByOrderByDeliveryDateDesc().getDeliveryDate();
+    }
 }

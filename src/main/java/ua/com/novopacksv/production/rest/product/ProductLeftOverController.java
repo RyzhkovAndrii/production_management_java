@@ -40,4 +40,12 @@ public class ProductLeftOverController {
                 conversionService.convert(productLeftOvers, ProductLeftOverResponse.class);
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }
+
+    @GetMapping(params = {"latest"})
+    public ResponseEntity<List<ProductLeftOverResponse>> getAll(){
+        List<ProductLeftOver> productLeftOvers = productLeftOverService.findLatest();
+        List<ProductLeftOverResponse> responses =
+                conversionService.convert(productLeftOvers, ProductLeftOverResponse.class);
+        return new ResponseEntity<>(responses, HttpStatus.OK);
+    }
 }
