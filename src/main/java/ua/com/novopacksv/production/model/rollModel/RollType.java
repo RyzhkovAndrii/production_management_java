@@ -32,6 +32,10 @@ public class RollType extends BaseEntity {
     @Column(name = "max_weight", nullable = false)
     private Double maxWeight;
 
+    @Column(name = "length", nullable = false)
+    private Double length;
+
     @Column(name = "color_code", nullable = false)
     private String colorCode;
+
 }

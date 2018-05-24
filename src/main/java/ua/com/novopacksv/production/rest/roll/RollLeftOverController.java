@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ua.com.novopacksv.production.converter.ModelConversionService;
 import ua.com.novopacksv.production.dto.roll.RollLeftOverResponse;
+import ua.com.novopacksv.production.dto.roll.RollTotalLeftOverResponse;
 import ua.com.novopacksv.production.model.rollModel.RollLeftOver;
 import ua.com.novopacksv.production.service.roll.RollLeftOverService;
 
@@ -27,17 +28,24 @@ public class RollLeftOverController {
 
     @GetMapping(params = {"date"})
     public ResponseEntity<List<RollLeftOverResponse>> getAll(@RequestParam("date") LocalDate date) {
-        List<RollLeftOver> rollBatches =
+        List<RollLeftOver> rollLeftOvers =
                 rollLeftOverService.findAllByDate(date);
-        List<RollLeftOverResponse> response = conversionService.convert(rollBatches, RollLeftOverResponse.class);
+        List<RollLeftOverResponse> response = conversionService.convert(rollLeftOvers, RollLeftOverResponse.class);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(params = {"date", "total"})
+    public ResponseEntity<RollTotalLeftOverResponse> getSum(@RequestParam("date") LocalDate date) {
+        RollLeftOver rollLeftOver = rollLeftOverService.getTotalLeftOver(date);
+        RollTotalLeftOverResponse response = conversionService.convert(rollLeftOver, RollTotalLeftOverResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping(params = {"roll_type_id", "date"})
     public ResponseEntity<RollLeftOverResponse> getAll(@RequestParam("roll_type_id") Long rollTypeId,
                                                        @RequestParam("date") LocalDate date) {
-        RollLeftOver rollBatch = rollLeftOverService.findByRollTypeIdAndDate(rollTypeId, date);
-        RollLeftOverResponse response = conversionService.convert(rollBatch, RollLeftOverResponse.class);
+        RollLeftOver rollLeftOver = rollLeftOverService.findByRollTypeIdAndDate(rollTypeId, date);
+        RollLeftOverResponse response = conversionService.convert(rollLeftOver, RollLeftOverResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

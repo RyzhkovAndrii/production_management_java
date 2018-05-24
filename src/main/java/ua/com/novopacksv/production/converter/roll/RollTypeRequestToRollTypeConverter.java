@@ -15,6 +15,7 @@ public class RollTypeRequestToRollTypeConverter implements Converter<RollTypeReq
         result.setThickness(source.getThickness());
         result.setMinWeight(source.getMinWeight());
         result.setMaxWeight(source.getMaxWeight());
+        result.setLength(source.getLength());
         result.setColorCode(source.getColorCode());
         return result;
     }

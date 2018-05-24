@@ -219,6 +219,20 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
     }
 
     /**
+     * Вычисляет и возвращает общее количество оставшихся указанных рулонов {@code RollManufactured},
+     * <p>
+     * Не изменяет содержимого базы данных
+     *
+     * @param rollManufactured рулон, содержащий информацию о типе и дате производства
+     * @return оставшееся количество указанных рулонов
+     * @throws IllegalArgumentException если rollManufactured - null
+     */
+    @Override
+    public Integer getLeftOverAmount(RollManufactured rollManufactured) {
+        return getManufacturedRollAmount(rollManufactured) - getUsedRollAmount(rollManufactured);
+    }
+
+    /**
      * Ищет в базе рулоны за указанный период производсвта и у которых не установлено поле готовности к использованию
      * в значение {@code true}, а затем устанавливает данное поле в значение {@code true}
      *

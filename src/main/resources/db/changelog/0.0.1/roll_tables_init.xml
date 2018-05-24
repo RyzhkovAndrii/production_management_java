@@ -90,5 +90,14 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="6" author="andrii.ryzhkov@gmail.com">
+        <addColumn tableName="roll_type">
+            <column name="length" type="double" valueNumeric="0"/>
+        </addColumn>
+        <addNotNullConstraint tableName="roll_type"
+                              columnName="length"
+                              columnDataType="double"
+        />
+    </changeSet>
 
 </databaseChangeLog>

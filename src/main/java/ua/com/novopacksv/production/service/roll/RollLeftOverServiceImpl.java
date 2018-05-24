@@ -104,6 +104,15 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
      * @return roll's leftover
      */
     @Override
+    public RollLeftOver getTotalLeftOver(LocalDate date) {
+        Integer sumAmount = findAllByDate(date).stream().mapToInt(RollLeftOver::getAmount).sum();
+        RollLeftOver rollLeftOver = new RollLeftOver();
+        rollLeftOver.setDate(date);
+        rollLeftOver.setAmount(sumAmount);
+        return rollLeftOver;
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public RollLeftOver findById(Long id) {
         RollLeftOver rollLeftOver = rollLeftOverRepository.findById(id).orElseThrow(() -> {
