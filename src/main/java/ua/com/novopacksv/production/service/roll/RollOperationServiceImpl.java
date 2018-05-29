@@ -76,7 +76,7 @@ public class RollOperationServiceImpl implements RollOperationService {
     public List<RollOperation> findAllByRollTypeIdAndManufacturedPeriod(Long rollTypeId, LocalDate from, LocalDate to) {
         List<RollManufactured> rollManufacturedList = rollManufacturedService.findAll(from, to, rollTypeId);
         log.debug("Method findAllByRollTypeIDAndManufacturedPeriod(Long rollTypeId, LocalDate from, LocalDate to): " +
-                "Operations with roll's type id = {} for manufactured period from {} to {} are finding",
+                        "Operations with roll's type id = {} for manufactured period from {} to {} are finding",
                 rollTypeId, from, to);
         return rollOperationRepository.findAllByRollManufacturedIsIn(rollManufacturedList);
     }
@@ -126,7 +126,7 @@ public class RollOperationServiceImpl implements RollOperationService {
             log.error("Method findById(Long id): Roll operation with id {} was not found", id);
             return new ResourceNotFoundException(message);
         });
-        log.debug("Method findById(Long id): Roll operation {} with id {} is finding",rollOperation, id);
+        log.debug("Method findById(Long id): Roll operation {} with id {} is finding", rollOperation, id);
         return rollOperation;
     }
 
@@ -173,13 +173,12 @@ public class RollOperationServiceImpl implements RollOperationService {
      */
     @Override
     public RollOperation update(RollOperation rollOperation) throws NegativeRollAmountException {
-        checkOperationSaveAllowed(rollOperation);
-        RollOperation rollOperationOld = rollOperationRepository.getOne(rollOperation.getId());//update only for amount
-        RollManufactured rollManufactured = rollOperation.getRollManufactured();// what kind of operation
+        RollOperation oldRollOperation = rollOperationRepository.getOne(rollOperation.getId());
+        checkOperationUpdateAllowed(rollOperation, oldRollOperation);
         RollLeftOver rollLeftOver = rollLeftOverService
-                .findLastRollLeftOverByRollType(rollManufactured.getRollType());
-        rollLeftOverService.changeRollLeftOverAmount(rollLeftOver,
-                rollOperation.getRollAmount() - rollOperationOld.getRollAmount());
+                .findLastRollLeftOverByRollType(rollOperation.getRollManufactured().getRollType());
+        Integer differenceAmount = rollOperation.getRollAmount() - oldRollOperation.getRollAmount();
+        rollLeftOverService.changeRollLeftOverAmount(rollLeftOver, differenceAmount);
         log.debug("Method update(RollOperation rollOperation): Roll operation {} is updating", rollOperation);
         return rollOperationRepository.save(rollOperation);
     }
@@ -196,10 +195,10 @@ public class RollOperationServiceImpl implements RollOperationService {
         RollOperation rollOperation = findById(id);
         checkOperationDeleteAllowed(rollOperation);
         RollLeftOver rollLeftOver = rollLeftOverService
-                .findLastRollLeftOverByRollType(findById(id).getRollManufactured().getRollType());
+                .findLastRollLeftOverByRollType(rollOperation.getRollManufactured().getRollType());
         rollLeftOverService.changeRollLeftOverAmount(rollLeftOver, -getOperationAmountWithSign(rollOperation));
         rollOperationRepository.deleteById(id);
-        log.debug("Method delete(Long id): Operation {} with id {} was deleted",rollOperation, id);
+        log.debug("Method delete(Long id): Operation {} with id {} was deleted", rollOperation, id);
     }
 
     /**
@@ -301,6 +300,30 @@ public class RollOperationServiceImpl implements RollOperationService {
             }
             log.debug("Method checkOperationDeleteAllowed(RollOperation rollOperation): Operation {} is allowed", rollOperation);
         }
+    }
+
+    /**
+     * The method determines if operation can be updated
+     *
+     * @param rollOperation    - new roll operation
+     * @param oldRollOperation - old roll operation
+     * @throws NegativeRollAmountException - if manufacturedAmount is negative
+     */
+    private void checkOperationUpdateAllowed(RollOperation rollOperation, RollOperation oldRollOperation) {
+        Integer differenceAmount = rollOperation.getRollAmount() - oldRollOperation.getRollAmount();
+        RollManufactured rollManufactured = rollOperation.getRollManufactured();
+        Integer rollManufacturedAmount = rollManufacturedService.getManufacturedRollAmount(rollManufactured);
+        Integer rollUsedAmount = rollManufacturedService.getUsedRollAmount(rollManufactured);
+        Integer resultOfAmount = isItManufactureOperation(rollOperation)
+                ? rollManufacturedAmount - rollUsedAmount + differenceAmount
+                : rollManufacturedAmount - rollUsedAmount - differenceAmount;
+        if (resultOfAmount < 0) {
+            log.error("Method checkOperationUpdateAllowed(RollOperation rollOperation, RollOperation oldRollOperation):" +
+                    " Operation {} changes manufactureAmount to negative value", rollOperation);
+            throw new NegativeRollAmountException("Roll's left is negative!");
+        }
+        log.debug("Method checkOperationUpdateAllowed(RollOperation rollOperation, RollOperation oldRollOperation):" +
+                "Operation {} is allowed", rollOperation);
     }
 
     /**
