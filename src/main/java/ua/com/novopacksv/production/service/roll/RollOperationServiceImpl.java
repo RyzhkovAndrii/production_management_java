@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
-import ua.com.novopacksv.production.exception.NegativeRollAmountException;
+import ua.com.novopacksv.production.exception.NegativeAmountException;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.rollModel.*;
 import ua.com.novopacksv.production.repository.rollRepository.RollOperationRepository;
@@ -148,11 +148,11 @@ public class RollOperationServiceImpl implements RollOperationService {
      *
      * @param rollOperation - roll operation for save
      * @return this roll operation
-     * @throws NegativeRollAmountException - if this operation changes roll's leftover to negative value
+     * @throws NegativeAmountException - if this operation changes roll's leftover to negative value
      */
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED)
-    public RollOperation save(RollOperation rollOperation) throws NegativeRollAmountException {
+    public RollOperation save(RollOperation rollOperation) throws NegativeAmountException {
         checkOperationSaveAllowed(rollOperation);
         RollManufactured rollManufactured = rollOperation.getRollManufactured();
         Integer changingAmount = getOperationAmountWithSign(rollOperation);
@@ -169,10 +169,10 @@ public class RollOperationServiceImpl implements RollOperationService {
      *
      * @param rollOperation - updated roll operation
      * @return saved roll operation
-     * @throws NegativeRollAmountException - if roll operation changes roll's leftover to negative value
+     * @throws NegativeAmountException - if roll operation changes roll's leftover to negative value
      */
     @Override
-    public RollOperation update(RollOperation rollOperation) throws NegativeRollAmountException {
+    public RollOperation update(RollOperation rollOperation) throws NegativeAmountException {
         RollOperation oldRollOperation = rollOperationRepository.getOne(rollOperation.getId());
         checkOperationUpdateAllowed(rollOperation, oldRollOperation);
         RollLeftOver rollLeftOver = rollLeftOverService
@@ -188,10 +188,10 @@ public class RollOperationServiceImpl implements RollOperationService {
      *
      * @param id - operation id
      * @throws ResourceNotFoundException   - if there is not operation with this id
-     * @throws NegativeRollAmountException - if after trying to delete amount of roll's leftover is negative
+     * @throws NegativeAmountException - if after trying to delete amount of roll's leftover is negative
      */
     @Override
-    public void delete(Long id) throws ResourceNotFoundException, NegativeRollAmountException {
+    public void delete(Long id) throws ResourceNotFoundException, NegativeAmountException {
         RollOperation rollOperation = findById(id);
         checkOperationDeleteAllowed(rollOperation);
         RollLeftOver rollLeftOver = rollLeftOverService
@@ -259,15 +259,15 @@ public class RollOperationServiceImpl implements RollOperationService {
      * The method determines if saving of operation is allowed
      *
      * @param rollOperation - roll operation
-     * @throws NegativeRollAmountException - if operation change roll's leftover to negative value
+     * @throws NegativeAmountException - if operation change roll's leftover to negative value
      */
-    private void checkOperationSaveAllowed(RollOperation rollOperation) throws NegativeRollAmountException {
+    private void checkOperationSaveAllowed(RollOperation rollOperation) throws NegativeAmountException {
         RollManufactured rollManufactured = rollOperation.getRollManufactured();
         if (!isItManufactureOperation(rollOperation)) {
             if (isRollNew(rollManufactured)) {
                 log.error("Method checkOperationSaveAllowed(RollOperation rollOperation): Roll operation {} " +
                         "could not been saved if rolls were not manufactured", rollOperation);
-                throw new NegativeRollAmountException("Roll's left is negative!");
+                throw new NegativeAmountException("Roll's left is negative!");
             }
             Integer rollManufacturedAmount = rollManufacturedService.getManufacturedRollAmount(rollManufactured);
             Integer rollUsedAmount = rollManufacturedService.getUsedRollAmount(rollManufactured);
@@ -275,7 +275,7 @@ public class RollOperationServiceImpl implements RollOperationService {
             if (resultOfAmount < 0) {
                 log.error("Method checkOperationSaveAllowed(RollOperation rollOperation): Roll operation {} could " +
                         "not been saved if rollManufacturedAmount is negative", rollOperation);
-                throw new NegativeRollAmountException("Roll's left is negative!");
+                throw new NegativeAmountException("Roll's left is negative!");
             }
             log.debug("Method checkOperationSaveAllowed(RollOperation rollOperation): Roll operation {} is allowed", rollOperation);
         }
@@ -285,9 +285,9 @@ public class RollOperationServiceImpl implements RollOperationService {
      * The method determines if operation can be deleted
      *
      * @param rollOperation - roll operation
-     * @throws NegativeRollAmountException - if manufacturedAmount is negative
+     * @throws NegativeAmountException - if manufacturedAmount is negative
      */
-    private void checkOperationDeleteAllowed(RollOperation rollOperation) throws NegativeRollAmountException {
+    private void checkOperationDeleteAllowed(RollOperation rollOperation) throws NegativeAmountException {
         if (isItManufactureOperation(rollOperation)) {
             RollManufactured rollManufactured = rollOperation.getRollManufactured();
             Integer rollManufacturedAmount = rollManufacturedService.getManufacturedRollAmount(rollManufactured);
@@ -296,7 +296,7 @@ public class RollOperationServiceImpl implements RollOperationService {
             if (resultOfAmount < 0) {
                 log.error("Method checkOperationDeleteAllowed(RollOperation rollOperation): Operation {} changes manufactureAmount " +
                         "to negative value", rollOperation);
-                throw new NegativeRollAmountException("Roll's left is negative!");
+                throw new NegativeAmountException("Roll's left is negative!");
             }
             log.debug("Method checkOperationDeleteAllowed(RollOperation rollOperation): Operation {} is allowed", rollOperation);
         }
@@ -307,7 +307,7 @@ public class RollOperationServiceImpl implements RollOperationService {
      *
      * @param rollOperation    - new roll operation
      * @param oldRollOperation - old roll operation
-     * @throws NegativeRollAmountException - if manufacturedAmount is negative
+     * @throws NegativeAmountException - if manufacturedAmount is negative
      */
     private void checkOperationUpdateAllowed(RollOperation rollOperation, RollOperation oldRollOperation) {
         Integer differenceAmount = rollOperation.getRollAmount() - oldRollOperation.getRollAmount();
@@ -320,7 +320,7 @@ public class RollOperationServiceImpl implements RollOperationService {
         if (resultOfAmount < 0) {
             log.error("Method checkOperationUpdateAllowed(RollOperation rollOperation, RollOperation oldRollOperation):" +
                     " Operation {} changes manufactureAmount to negative value", rollOperation);
-            throw new NegativeRollAmountException("Roll's left is negative!");
+            throw new NegativeAmountException("Roll's left is negative!");
         }
         log.debug("Method checkOperationUpdateAllowed(RollOperation rollOperation, RollOperation oldRollOperation):" +
                 "Operation {} is allowed", rollOperation);

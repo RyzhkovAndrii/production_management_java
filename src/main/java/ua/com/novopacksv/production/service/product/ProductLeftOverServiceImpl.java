@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ua.com.novopacksv.production.exception.NotUniqueFieldException;
+import ua.com.novopacksv.production.exception.NegativeAmountException;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.orderModel.OrderItem;
 import ua.com.novopacksv.production.model.productModel.ProductLeftOver;
@@ -109,7 +109,7 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
 
     @Override
     public ProductLeftOver saveByProductType(ProductType productType) {
-            return createNewLeftOver(productType);
+        return createNewLeftOver(productType);
     }
 
     public Boolean isSoldOperation(ProductOperation productOperation) {
@@ -131,9 +131,14 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
         Integer amount = productLeftOver.getAmount();
         for (ProductOperation productOperation : operationsBetweenDates) {
             amount += isSoldOperation(productOperation) ?
-                    productOperation.getAmount() : - productOperation.getAmount();
+                    productOperation.getAmount() : -productOperation.getAmount();
         }
-        return amount;
+        if (amount >= 0) {
+            return amount;
+        } else {
+            throw new NegativeAmountException("Product's leftover can't be negative!");
+        }
+
     }
 
     private Integer countAmountOfLeftOverForFuture(LocalDate date, ProductLeftOver productLeftOver) {
