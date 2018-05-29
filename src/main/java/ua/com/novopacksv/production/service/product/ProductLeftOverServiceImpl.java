@@ -138,7 +138,6 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
         } else {
             throw new NegativeAmountException("Product's leftover can't be negative!");
         }
-
     }
 
     private Integer countAmountOfLeftOverForFuture(LocalDate date, ProductLeftOver productLeftOver) {
