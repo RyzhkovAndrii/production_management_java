@@ -67,7 +67,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     @Override
     @Transactional(readOnly = true)
     public List<OrderItem> findAllNotDelivered(ProductType productType, LocalDate toDate) {
-        return orderItemRepository.findAllByProductTypeAndOrder_IsDeliveredAndOrder_DeliveryDateBefore(productType,
-                false, toDate);
+        return orderItemRepository
+                .findAllByProductTypeAndOrder_IsDeliveredIsFalseAndOrder_DeliveryDateBefore(productType, toDate);
     }
 }
