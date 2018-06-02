@@ -174,10 +174,10 @@ public class RollOperationServiceImpl implements RollOperationService {
     @Override
     public RollOperation update(RollOperation rollOperation) throws NegativeAmountException {
         RollOperation oldRollOperation = rollOperationRepository.getOne(rollOperation.getId());
-        checkOperationUpdateAllowed(rollOperation, oldRollOperation);
+        checkOperationUpdateAllowed(rollOperation);
         RollLeftOver rollLeftOver = rollLeftOverService
                 .findLastRollLeftOverByRollType(rollOperation.getRollManufactured().getRollType());
-        Integer differenceAmount = rollOperation.getRollAmount() - oldRollOperation.getRollAmount();
+        Integer differenceAmount = oldRollOperation.getRollAmount() - rollOperation.getRollAmount();
         rollLeftOverService.changeRollLeftOverAmount(rollLeftOver, differenceAmount);
         log.debug("Method update(RollOperation rollOperation): Roll operation {} is updating", rollOperation);
         return rollOperationRepository.save(rollOperation);
@@ -209,8 +209,8 @@ public class RollOperationServiceImpl implements RollOperationService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<RollOperation> getAllManufacturedOperationsByRollManufactured(RollManufactured rollManufactured) {
-        log.debug("Method getAllManufacturedOperationsByRollManufactured(RollManufactured rollManufactured): " +
+    public List<RollOperation> findAllManufacturedOperationsByRollManufactured(RollManufactured rollManufactured) {
+        log.debug("Method findAllManufacturedOperationsByRollManufactured(RollManufactured rollManufactured): " +
                 "Roll operations with roll manufactured {} are finding", rollManufactured);
         return rollOperationRepository.findAllByOperationTypeAndRollManufactured(OperationType.MANUFACTURE,
                 rollManufactured);
@@ -224,8 +224,8 @@ public class RollOperationServiceImpl implements RollOperationService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<RollOperation> getAllUsedOperationsByRollManufactured(RollManufactured rollManufactured) {
-        log.debug("Method getAllUsedOperationsByRollManufactured(RollManufactured rollManufactured): " +
+    public List<RollOperation> findAllUsedOperationsByRollManufactured(RollManufactured rollManufactured) {
+        log.debug("Method findAllUsedOperationsByRollManufactured(RollManufactured rollManufactured): " +
                 "Roll operations with roll manufactured {} are finding", rollManufactured);
         return rollOperationRepository.findAllByOperationTypeAndRollManufactured(OperationType.USE, rollManufactured);
     }
@@ -303,18 +303,21 @@ public class RollOperationServiceImpl implements RollOperationService {
     /**
      * The method determines if operation can be updated
      *
-     * @param rollOperation    - new roll operation
-     * @param oldRollOperation - old roll operation
+     * @param rollOperation - new roll operation
      * @throws NegativeAmountException - if manufacturedAmount is negative
      */
-    private void checkOperationUpdateAllowed(RollOperation rollOperation, RollOperation oldRollOperation) {
-        Integer differenceAmount = rollOperation.getRollAmount() - oldRollOperation.getRollAmount();
-        RollManufactured rollManufactured = rollOperation.getRollManufactured();
-        Integer resultOfAmount = isItManufactureOperation(rollOperation)
-                ? rollManufacturedService.getLeftOverAmount(rollManufactured) + differenceAmount
-                : rollManufacturedService.getLeftOverAmount(rollManufactured) - differenceAmount;
-        if (resultOfAmount < 0) {
-            log.error("Method checkOperationUpdateAllowed(RollOperation rollOperation, RollOperation oldRollOperation):" +
+    private void checkOperationUpdateAllowed(RollOperation rollOperation) {
+        RollManufactured roll = rollOperation.getRollManufactured();
+        List<RollOperation> operationList = rollOperationRepository.findAllByRollManufactured(roll);
+        Integer resultAmount = 0;
+        for (RollOperation operation : operationList) {
+            if (Objects.equals(operation.getId(), rollOperation.getId())) {
+                resultAmount += getOperationAmountWithSign(rollOperation);
+            }
+            resultAmount += getOperationAmountWithSign(operation);
+        }
+        if (resultAmount < 0) {
+            log.error("Method checkOperationUpdateAllowed(RollOperation rollOperation):" +
                     " Operation {} changes manufactureAmount to negative value", rollOperation);
             throw new NegativeAmountException("Roll's left is negative!");
         }
