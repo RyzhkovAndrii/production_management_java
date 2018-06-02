@@ -312,7 +312,7 @@ public class RollOperationServiceImpl implements RollOperationService {
         Integer resultAmount = 0;
         for (RollOperation operation : operationList) {
             if (Objects.equals(operation.getId(), rollOperation.getId())) {
-                resultAmount += getOperationAmountWithSign(rollOperation);
+                operation = rollOperation;
             }
             resultAmount += getOperationAmountWithSign(operation);
         }
