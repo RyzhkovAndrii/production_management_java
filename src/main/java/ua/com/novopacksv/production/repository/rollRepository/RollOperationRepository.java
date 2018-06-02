@@ -18,6 +18,8 @@ public interface RollOperationRepository extends JpaRepository <RollOperation, L
 
     List<RollOperation> findAllByOperationTypeAndRollManufactured(OperationType operationType, RollManufactured rollManufactured);
 
+    List<RollOperation> findAllByRollManufactured(RollManufactured rollManufactured);
+
     List<RollOperation> findAllByRollManufacturedIsIn(List<RollManufactured> rollManufacturedList);
 
     List<RollOperation> findAllByRollManufactured_RollType_IdAndOperationDateBetween(Long id, LocalDate from, LocalDate to);

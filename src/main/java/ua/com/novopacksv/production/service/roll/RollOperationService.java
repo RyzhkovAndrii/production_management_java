@@ -18,9 +18,9 @@ public interface RollOperationService extends BaseEntityService<RollOperation> {
 
     List<RollOperation> findAllByRollTypeId(Long id);
 
-    List<RollOperation> getAllManufacturedOperationsByRollManufactured(RollManufactured rollManufactured);
+    List<RollOperation> findAllManufacturedOperationsByRollManufactured(RollManufactured rollManufactured);
 
-    List<RollOperation> getAllUsedOperationsByRollManufactured(RollManufactured rollManufactured);
+    List<RollOperation> findAllUsedOperationsByRollManufactured(RollManufactured rollManufactured);
 
     List<RollOperation> findAllByRollTypeAndManufacturedDateBetween(RollType rollType, LocalDate fromDate, LocalDate toDate);
 

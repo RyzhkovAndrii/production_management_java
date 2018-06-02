@@ -98,10 +98,10 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
     }
 
     /**
-     * The method finds roll's leftover by id on current date
+     * The method finds leftover for all rolls on current date
      *
-     * @param id - roll's leftover's id for searching
-     * @return roll's leftover
+     * @param date - pointed date for searching
+     * @return rolls' leftover
      */
     @Override
     public RollLeftOver getTotalLeftOver(LocalDate date) {
