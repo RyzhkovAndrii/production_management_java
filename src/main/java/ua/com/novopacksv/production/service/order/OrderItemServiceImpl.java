@@ -63,4 +63,11 @@ public class OrderItemServiceImpl implements OrderItemService {
     public List<OrderItem> findAll(ProductType productType, LocalDate fromDate, LocalDate toDate) {
         return orderItemRepository.findAllByProductTypeAndOrder_DeliveryDateBetween(productType, fromDate, toDate);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<OrderItem> findAllNotDelivered(ProductType productType, LocalDate toDate) {
+        return orderItemRepository.findAllByProductTypeAndOrder_IsDeliveredAndOrder_DeliveryDateBefore(productType,
+                false, toDate);
+    }
 }

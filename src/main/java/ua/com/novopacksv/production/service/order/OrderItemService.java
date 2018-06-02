@@ -13,4 +13,6 @@ public interface OrderItemService extends BaseEntityService<OrderItem> {
 
     List<OrderItem> findAll(ProductType productType, LocalDate fromDate, LocalDate toDate);
 
+    List<OrderItem> findAllNotDelivered(ProductType productType, LocalDate toDate);
+
 }
