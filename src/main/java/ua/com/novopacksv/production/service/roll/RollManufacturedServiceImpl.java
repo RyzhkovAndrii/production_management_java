@@ -186,7 +186,7 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
     @Override
     @Transactional(readOnly = true)
     public Integer getManufacturedRollAmount(RollManufactured rollManufactured) {
-        Integer amount = rollOperationService.getAllManufacturedOperationsByRollManufactured(rollManufactured)
+        Integer amount = rollOperationService.findAllManufacturedOperationsByRollManufactured(rollManufactured)
                 .stream()
                 .mapToInt(RollOperation::getRollAmount)
                 .sum();
@@ -209,7 +209,7 @@ public class RollManufacturedServiceImpl implements RollManufacturedService {
     @Override
     @Transactional(readOnly = true)
     public Integer getUsedRollAmount(RollManufactured rollManufactured) {
-        Integer amount = rollOperationService.getAllUsedOperationsByRollManufactured(rollManufactured)
+        Integer amount = rollOperationService.findAllUsedOperationsByRollManufactured(rollManufactured)
                 .stream()
                 .mapToInt(RollOperation::getRollAmount)
                 .sum();
