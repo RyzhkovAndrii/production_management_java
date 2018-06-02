@@ -44,4 +44,12 @@
                                  referencedTableName="roll_type"
                                  referencedColumnNames="id"/>
     </changeSet>
+    <changeSet id="5" author="pryadilnikova@gmail.com">
+        <addUniqueConstraint tableName="roll_type"
+                             columnNames="note,thickness, min_weight, max_weight, color_code"
+                             deferrable="true"
+                             disabled="true"
+                             initiallyDeferred="true"
+                             constraintName="const_roll_type"/>
+    </changeSet>
 </databaseChangeLog>
