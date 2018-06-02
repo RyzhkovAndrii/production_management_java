@@ -77,6 +77,18 @@ public class RollTypeServiceImpl implements RollTypeService {
     }
 
     /**
+     * The method finds and return all roll types with pointed thickness
+     * @param thickness - double value of thickness
+     * @return list of roll types with pointed thickness
+     */
+    @Override
+    public List<RollType> findAll(Double thickness) {
+        List<RollType> rollTypes = rollTypeRepository.findAllByThickness(thickness);
+        log.debug("Method findAll(Double thickness): All roll types with thickness = %d was found", thickness);
+        return rollTypes;
+    }
+
+    /**
      * Сохраняет в базу новый тип производимого на предприятии рулона.
      * <p>
      * При сохранении также создается и сохраняется в базу остаток для данного типа рулона {@see RollLeftOver}.

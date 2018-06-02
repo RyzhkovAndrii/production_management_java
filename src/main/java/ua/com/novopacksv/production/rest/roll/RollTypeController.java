@@ -30,6 +30,13 @@ public class RollTypeController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping(params = {"thickness"})
+    public ResponseEntity<List<RollTypeResponse>> getAll(@RequestParam("thickness") Double thickness) {
+        List<RollType> rollTypes = rollTypeService.findAll(thickness);
+        List<RollTypeResponse> responses = conversionService.convert(rollTypes, RollTypeResponse.class);
+        return new ResponseEntity<>(responses, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<RollTypeResponse> getOne(@PathVariable Long id) {
         RollType rollType = rollTypeService.findById(id);
