@@ -1,6 +1,7 @@
 package ua.com.novopacksv.production.service.product;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -20,102 +21,232 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * The class implements interface {@link ProductLeftOverService}, contains logic for work with products' leftovers
+ */
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class ProductLeftOverServiceImpl implements ProductLeftOverService {
 
+    /**
+     * An object of repository layer for have access to methods of work with DB
+     */
     private final ProductLeftOverRepository productLeftOverRepository;
 
+    /**
+     * An object of service layer for have access to methods of work with product operations
+     */
     @Autowired
     @Lazy
     private ProductOperationService productOperationService;
 
+    /**
+     * An object of service layer for have access to methods of work with order items
+     */
     @Autowired
     @Lazy
     private OrderItemService orderItemService;
 
+    /**
+     * An object of service layer for have access to methods of work with orders
+     */
     @Autowired
     @Lazy
     private OrderService orderService;
 
+    /**
+     * Method finds all leftovers on pointed date
+     *
+     * @param date - date on witch leftovers are finding
+     * @return list of leftovers
+     */
     @Override
     public List<ProductLeftOver> findOnDate(LocalDate date) {
         List<ProductLeftOver> productLeftOvers = productLeftOverRepository.findAll();
-        return productLeftOvers.stream()
+        List<ProductLeftOver> productLeftOversOnDate = productLeftOvers.stream()
                 .map((productLeftOver) -> getLeftOverOnDate(date, productLeftOver)).collect(Collectors.toList());
+        log.debug("Method findOnDate (LocalDate date): List of leftovers on date {} was found: {}", date,
+                productLeftOversOnDate);
+        return productLeftOversOnDate;
     }
 
+    /**
+     * Method finds leftover on the latest date of delivery
+     *
+     * @return list of product leftovers
+     */
     @Override
     public List<ProductLeftOver> findLatest() {
         LocalDate latestDeliveryDate = orderService.findMaxDeliveryDate();
-        return findOnDate(latestDeliveryDate);
+        List<ProductLeftOver> productLeftOvers = findOnDate(latestDeliveryDate);
+        log.debug("Method findLatest(): leftovers on the latest delivery date {} were found: {}", latestDeliveryDate,
+                productLeftOvers);
+        return productLeftOvers;
     }
 
+    /**
+     * Method finds leftover for one product type on pointed date
+     *
+     * @param productTypeId - product type's id
+     * @param date          - date on witch leftover is finding
+     * @return product's leftover on date
+     * @throws ResourceNotFoundException if leftover doesn't exist in db
+     */
     @Override
     public ProductLeftOver findByProductType_IdOnDate(Long productTypeId, LocalDate date)
             throws ResourceNotFoundException {
         ProductLeftOver productLeftOver =
                 productLeftOverRepository.findByProductType_Id(productTypeId).orElseThrow(() -> {
-                    String message = String.format("Product type with Id = %d was not found", productTypeId);
+                    String message = String.format("Leftover for product type with Id = %d was not found", productTypeId);
+                    log.error("Method findByProductType_IdOnDate(Long productTypeId, LocalDate date): " +
+                            "Leftover for product type with id = {} was not found", productTypeId);
                     return new ResourceNotFoundException(message);
                 });
-        return getLeftOverOnDate(date, productLeftOver);
+        ProductLeftOver productLeftOverOnDate = getLeftOverOnDate(date, productLeftOver);
+        log.debug("Method findByProductType_IdOnDate(Long productTypeId, LocalDate date): Leftover for product type " +
+                "with id = {} was found: {}", productTypeId, productLeftOverOnDate);
+        return productLeftOverOnDate;
     }
 
+    /**
+     * Method find product leftover by id
+     *
+     * @param id - product leftover's id
+     * @return leftover
+     * @throws ResourceNotFoundException if product leftover with this id doesn't exist
+     */
     @Override
     public ProductLeftOver findById(Long id) throws ResourceNotFoundException {
-        return productLeftOverRepository.findById(id).orElseThrow(() -> {
+        ProductLeftOver productLeftOver = productLeftOverRepository.findById(id).orElseThrow(() -> {
             String message = String.format("Product leftover with id = %d was not found", id);
+            log.error("Method findById(Long id): leftover with id = {} was not found", id);
             return new ResourceNotFoundException(message);
         });
+        log.debug("Method findById(Long id): leftover with id = {} was found: {}", id, productLeftOver);
+        return productLeftOver;
     }
 
+    /**
+     * Method finds leftover by product type's id
+     *
+     * @param productTypeId - product type's id
+     * @return product's leftover
+     * @throws ResourceNotFoundException if product's leftover doesn't exist
+     */
     @Override
     public ProductLeftOver findByProductTypeId(Long productTypeId) throws ResourceNotFoundException {
-        return productLeftOverRepository.findByProductType_Id(productTypeId).orElseThrow(() -> {
+        ProductLeftOver productLeftOver = productLeftOverRepository.findByProductType_Id(productTypeId).orElseThrow(() -> {
             String message = String.format("Product type with id = %d was not found", productTypeId);
+            log.error("Method findByProductTypeId(Long productTypeId): leftover of product type with id ={} was not found",
+                    productTypeId);
             return new ResourceNotFoundException(message);
         });
+        log.debug("Method findByProductTypeId(Long productTypeId): leftover of product type with id ={} was found: {}",
+                productTypeId, productLeftOver);
+        return productLeftOver;
     }
 
+    /**
+     * Method finds all product leftovers
+     *
+     * @return list of leftovers
+     */
     @Override
     public List<ProductLeftOver> findAll() {
-        return productLeftOverRepository.findAll();
+        List<ProductLeftOver> productLeftOvers = productLeftOverRepository.findAll();
+        log.debug("Method findAll(): All leftovers were found");
+        return productLeftOvers;
     }
 
+    /**
+     * Method saves product's leftover
+     *
+     * @param productLeftOver - product's leftover for save
+     * @return saved product's leftover
+     */
     @Override
     public ProductLeftOver save(ProductLeftOver productLeftOver) {
+        log.debug("Method save(ProductLeftOver productLeftOver): product's leftover {} are saving", productLeftOver);
         return productLeftOverRepository.save(productLeftOver);
     }
 
+    /**
+     * Method tests if exist and updates product's leftover
+     *
+     * @param productLeftOver - leftover for update
+     * @return updated leftover
+     */
     @Override
-    public ProductLeftOver update(ProductLeftOver productLeftOver) {
+    public ProductLeftOver update(ProductLeftOver productLeftOver) throws ResourceNotFoundException {
+        findById(productLeftOver.getId());
+        log.debug("Method update(ProductLeftOver productLeftOver): product's leftover {} are updating", productLeftOver);
         return productLeftOverRepository.save(productLeftOver);
     }
 
+    /**
+     * Method tests if exist and deletes product's leftover by it's id
+     *
+     * @param id - leftover's id
+     */
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws ResourceNotFoundException {
+        ProductLeftOver productLeftOver = findById(id);
         productLeftOverRepository.deleteById(id);
+        log.debug("Method delete(Long id): product's leftover with id = {} was found: {}", id, productLeftOver);
     }
 
+    /**
+     * Method returns leftover on date. This leftover doesn't input in db
+     *
+     * @param date            - date on witch leftover is finding
+     * @param productLeftOver - current leftover from db
+     * @return leftover on pointed date
+     */
     private ProductLeftOver getLeftOverOnDate(LocalDate date, ProductLeftOver productLeftOver) {
         ProductLeftOver productLeftOverTemp = new ProductLeftOver();
         productLeftOverTemp.setLeftDate(date);
         productLeftOverTemp.setProductType(productLeftOver.getProductType());
         productLeftOverTemp.setAmount(amountOfLeftOverOnDate(date, productLeftOver));
+        log.debug("Method gatLeftOverOnDate(LocalDate date, ProductLeftOver productLeftOver): leftover on date {} " +
+                "was found: {}", date, productLeftOverTemp);
         return productLeftOverTemp;
     }
 
+    /**
+     * Method save new leftover for new product type
+     *
+     * @param productType - new product type
+     * @return new leftover
+     */
     @Override
     public ProductLeftOver saveByProductType(ProductType productType) {
-        return createNewLeftOver(productType);
+        ProductLeftOver productLeftOver = createNewLeftOver(productType);
+        log.debug("Method saveByProductType(ProductType productType): for product type {} new leftover was created: {}",
+                productType, productLeftOver);
+        return productLeftOver;
     }
 
+    /**
+     * Method determines if operation type is SOLD
+     *
+     * @param productOperation - operation for determine
+     * @return true if operation type is SOLD and false if no
+     */
     public Boolean isSoldOperation(ProductOperation productOperation) {
-        return productOperation.getProductOperationType().equals(ProductOperationType.SOLD);
+        Boolean result = productOperation.getProductOperationType().equals(ProductOperationType.SOLD);
+        log.debug("Method isSoldOperation(ProductOperation productOperation): is operation type SOLD for operation {} " +
+                "is determined as {}", productOperation, result);
+        return result;
     }
 
+    /**
+     * Method returns an amount of leftover on date
+     * @param date - pointed date
+     * @param productLeftOver - current leftover from db
+     * @return amount of leftovers on date
+     */
     private Integer amountOfLeftOverOnDate(LocalDate date, ProductLeftOver productLeftOver) {
         if (date.isBefore(LocalDate.now()) || date.isEqual(LocalDate.now())) {
             return countAmountOfLeftOverForPast(date, productLeftOver);

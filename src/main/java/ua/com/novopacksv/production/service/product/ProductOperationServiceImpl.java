@@ -112,7 +112,7 @@ public class ProductOperationServiceImpl implements ProductOperationService {
      * operation
      *
      * @param id - product operation's id
-     * @throws ResourceNotFoundException if there is not peroduct operation with pointed id
+     * @throws ResourceNotFoundException if there is not product operation with pointed id
      */
     @Override
     public void delete(Long id) throws ResourceNotFoundException {
@@ -163,7 +163,7 @@ public class ProductOperationServiceImpl implements ProductOperationService {
      *
      * @param productOperation - operation that changes leftover
      * @param changingAmount   - amount for change
-     * @throws ResourceNotFoundException if leftover don't exist in db
+     * @throws ResourceNotFoundException if leftover doesn't exist in db
      */
     private void changingLeftOver(ProductOperation productOperation, Integer changingAmount)
             throws ResourceNotFoundException {
