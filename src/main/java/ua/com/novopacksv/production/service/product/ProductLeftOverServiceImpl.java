@@ -243,11 +243,13 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
 
     /**
      * Method returns an amount of leftover on date
-     * @param date - pointed date
+     *
+     * @param date            - pointed date
      * @param productLeftOver - current leftover from db
      * @return amount of leftovers on date
      */
     private Integer amountOfLeftOverOnDate(LocalDate date, ProductLeftOver productLeftOver) {
+        log.debug("Method amountOfLeftOverOnDate(LocalDate date, ProductLeftOver productLeftOver) in process");
         if (date.isBefore(LocalDate.now()) || date.isEqual(LocalDate.now())) {
             return countAmountOfLeftOverForPast(date, productLeftOver);
         } else {
@@ -255,6 +257,13 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
         }
     }
 
+    /**
+     * Method counts amount of product's leftover on past date
+     *
+     * @param date            - previous date
+     * @param productLeftOver - current product's leftover from db
+     * @return integer amount of product's leftover on date
+     */
     private Integer countAmountOfLeftOverForPast(LocalDate date, ProductLeftOver productLeftOver) {
         List<ProductOperation> operationsBetweenDates =
                 productOperationService.findAllOperationBetweenDatesByTypeId(productLeftOver.getProductType().getId(),
@@ -265,12 +274,23 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
                     productOperation.getAmount() : -productOperation.getAmount();
         }
         if (amount >= 0) {
+            log.debug("Method countAmountOfLeftOverForPast(LocalDate date, ProductLeftOver productLeftOver): Amount of " +
+                    "leftover is {} on date {} for current leftover {}", amount, date, productLeftOver);
             return amount;
         } else {
+            log.error("Method countAmountOfLeftOverForPast(LocalDate date, ProductLeftOver productLeftOver): Amount of" +
+                    "leftover is negative on date {} for current leftover {}", date, productLeftOver);
             throw new NegativeAmountException("Product's leftover can't be negative!");
         }
     }
 
+    /**
+     * Method counts amount of product's leftover for future date from undelivered orders
+     *
+     * @param date            - future date
+     * @param productLeftOver - current product's leftover
+     * @return - integer amount of planning leftover on future date
+     */
     private Integer countAmountOfLeftOverForFuture(LocalDate date, ProductLeftOver productLeftOver) {
         ProductType productType = productLeftOver.getProductType();
         List<OrderItem> orderItems = orderItemService.findAllNotDelivered(productType, date);
@@ -278,14 +298,24 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
         for (OrderItem orderItem : orderItems) {
             amount -= orderItem.getAmount();
         }
+        log.debug("Method countAmountOfLeftOverForFuture(LocalDate date, ProductLeftOver productLeftOver): " +
+                "Amount of leftover on date {} is {} for current leftover {}", date, amount, productLeftOver);
         return amount;
     }
 
+    /**
+     * Method create and save new leftover for new product
+     *
+     * @param productType - new product type
+     * @return new saved product's leftover
+     */
     private ProductLeftOver createNewLeftOver(ProductType productType) {
         ProductLeftOver productLeftOver = new ProductLeftOver();
         productLeftOver.setProductType(productType);
         productLeftOver.setAmount(0);
         productLeftOver.setLeftDate(LocalDate.now());
+        log.debug("Method createNewLeftOver(ProductType productType): new leftover {} was created for product type {}",
+                productLeftOver, productType);
         return productLeftOverRepository.save(productLeftOver);
     }
 }
