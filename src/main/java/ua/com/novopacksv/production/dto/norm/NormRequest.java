@@ -13,5 +13,5 @@ public class NormRequest {
 
     private Long productTypeId;
 
-    private Double norm;
+    private Integer norm;
 }

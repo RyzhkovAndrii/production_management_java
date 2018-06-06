@@ -1,0 +1,205 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+   http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="1" author="pryadilnikova@gmail.com">
+        <insert tableName="norm">
+            <column name="id" value="1"/>
+            <column name="product_type_id" value="1"/>
+            <column name="norm" value="7400"/>
+        </insert>
+    </changeSet>
+    <changeSet id="2" author="pryadilnikova@gmail.com">
+        <insert tableName="norm">
+            <column name="id" value="2"/>
+            <column name="product_type_id" value="15"/>
+            <column name="norm" value="6800"/>
+        </insert>
+    </changeSet>
+    <changeSet id="3" author="pryadilnikova@gmail.com">
+        <insert tableName="norm">
+            <column name="id" value="3"/>
+            <column name="product_type_id" value="2"/>
+            <column name="norm" value="7400"/>
+        </insert>
+    </changeSet>
+    <changeSet id="4" author="pryadilnikova@gmail.com">
+        <insert tableName="norm">
+            <column name="id" value="4"/>
+            <column name="product_type_id" value="16"/>
+            <column name="norm" value="6800"/>
+        </insert>
+    </changeSet>
+    <!--<changeSet id="5" author="pryadilnikova@gmail.com">-->
+        <!--<insert tableName="norm">-->
+            <!--<column name="norm_roll_type_id" value="2"/>-->
+            <!--<column name="product_type_id" value="17"/>-->
+            <!--<column name="norm" value="7000"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+    <!--<changeSet id="6" author="pryadilnikova@gmail.com">-->
+        <!--<insert tableName="norm">-->
+            <!--<column name="norm_roll_type_id" value="1"/>-->
+            <!--<column name="product_type_id" value="3"/>-->
+            <!--<column name="norm" value="7200"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+    <!--<changeSet id="7" author="pryadilnikova@gmail.com">-->
+        <!--<insert tableName="norm">-->
+            <!--<column name="norm_roll_type_id" value="2"/>-->
+            <!--<column name="product_type_id" value="18"/>-->
+            <!--<column name="norm" value="7000"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+    <!--<changeSet id="8" author="pryadilnikova@gmail.com">-->
+        <!--<insert tableName="norm">-->
+            <!--<column name="norm_roll_type_id" value="1"/>-->
+            <!--<column name="product_type_id" value="4"/>-->
+            <!--<column name="norm" value="7500"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+    <!--<changeSet id="9" author="pryadilnikova@gmail.com">-->
+        <!--<insert tableName="norm">-->
+            <!--<column name="norm_roll_type_id" value="1"/>-->
+            <!--<column name="product_type_id" value="5"/>-->
+            <!--<column name="norm" value="7600"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+    <!--<changeSet id="10" author="pryadilnikova@gmail.com">-->
+        <!--<insert tableName="norm">-->
+            <!--<column name="norm_roll_type_id" value="2"/>-->
+            <!--<column name="product_type_id" value="19"/>-->
+            <!--<column name="norm" value="7600"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+    <!--<changeSet id="11" author="pryadilnikova@gmail.com">-->
+        <!--<insert tableName="norm">-->
+            <!--<column name="norm_roll_type_id" value="1"/>-->
+            <!--<column name="product_type_id" value="6"/>-->
+            <!--<column name="norm" value="9000"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+    <!--<changeSet id="12" author="pryadilnikova@gmail.com">-->
+        <!--<insert tableName="norm">-->
+            <!--<column name="norm_roll_type_id" value="2"/>-->
+            <!--<column name="product_type_id" value="20"/>-->
+            <!--<column name="norm" value="8000"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+    <!--<changeSet id="13" author="pryadilnikova@gmail.com">-->
+        <!--<insert tableName="norm">-->
+            <!--<column name="norm_roll_type_id" value="1"/>-->
+            <!--<column name="product_type_id" value="7"/>-->
+            <!--<column name="norm" value="9120"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+    <!--<changeSet id="14" author="pryadilnikova@gmail.com">-->
+        <!--<insert tableName="norm">-->
+            <!--<column name="norm_roll_type_id" value="2"/>-->
+            <!--<column name="product_type_id" value="21"/>-->
+            <!--<column name="norm" value="8160"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+    <!--<changeSet id="15" author="pryadilnikova@gmail.com">-->
+        <!--<insert tableName="norm">-->
+            <!--<column name="norm_roll_type_id" value="1"/>-->
+            <!--<column name="product_type_id" value="8"/>-->
+            <!--<column name="norm" value="9300"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+    <!--<changeSet id="16" author="pryadilnikova@gmail.com">-->
+        <!--<insert tableName="norm">-->
+            <!--<column name="norm_roll_type_id" value="2"/>-->
+            <!--<column name="product_type_id" value="22"/>-->
+            <!--<column name="norm" value="7800"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+    <!--<changeSet id="17" author="pryadilnikova@gmail.com">-->
+        <!--<insert tableName="norm">-->
+            <!--<column name="norm_roll_type_id" value="1"/>-->
+            <!--<column name="product_type_id" value="9"/>-->
+            <!--<column name="norm" value="9000"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+    <!--<changeSet id="18" author="pryadilnikova@gmail.com">-->
+        <!--<insert tableName="norm">-->
+            <!--<column name="norm_roll_type_id" value="2"/>-->
+            <!--<column name="product_type_id" value="23"/>-->
+            <!--<column name="norm" value="7600"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+    <!--<changeSet id="19" author="pryadilnikova@gmail.com">-->
+        <!--<insert tableName="norm">-->
+            <!--<column name="norm_roll_type_id" value="1"/>-->
+            <!--<column name="product_type_id" value="10"/>-->
+            <!--<column name="norm" value="8000"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+    <!--<changeSet id="20" author="pryadilnikova@gmail.com">-->
+        <!--<insert tableName="norm">-->
+            <!--<column name="norm_roll_type_id" value="2"/>-->
+            <!--<column name="product_type_id" value="24"/>-->
+            <!--<column name="norm" value="7800"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+    <!--<changeSet id="21" author="pryadilnikova@gmail.com">-->
+        <!--<insert tableName="norm">-->
+            <!--<column name="norm_roll_type_id" value="1"/>-->
+            <!--<column name="product_type_id" value="11"/>-->
+            <!--<column name="norm" value="11200"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+    <!--<changeSet id="22" author="pryadilnikova@gmail.com">-->
+        <!--<insert tableName="norm">-->
+            <!--<column name="norm_roll_type_id" value="2"/>-->
+            <!--<column name="product_type_id" value="25"/>-->
+            <!--<column name="norm" value="10000"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+    <!--<changeSet id="23" author="pryadilnikova@gmail.com">-->
+        <!--<insert tableName="norm">-->
+            <!--<column name="norm_roll_type_id" value="1"/>-->
+            <!--<column name="product_type_id" value="12"/>-->
+            <!--<column name="norm" value="10500"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+    <!--<changeSet id="24" author="pryadilnikova@gmail.com">-->
+        <!--<insert tableName="norm">-->
+            <!--<column name="norm_roll_type_id" value="2"/>-->
+            <!--<column name="product_type_id" value="26"/>-->
+            <!--<column name="norm" value="9600"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+    <!--<changeSet id="25" author="pryadilnikova@gmail.com">-->
+        <!--<insert tableName="norm">-->
+            <!--<column name="norm_roll_type_id" value="1"/>-->
+            <!--<column name="product_type_id" value="13"/>-->
+            <!--<column name="norm" value="10500"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+    <!--<changeSet id="26" author="pryadilnikova@gmail.com">-->
+        <!--<insert tableName="norm">-->
+            <!--<column name="norm_roll_type_id" value="2"/>-->
+            <!--<column name="product_type_id" value="27"/>-->
+            <!--<column name="norm" value="9600"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+    <!--<changeSet id="27" author="pryadilnikova@gmail.com">-->
+        <!--<insert tableName="norm">-->
+            <!--<column name="norm_roll_type_id" value="1"/>-->
+            <!--<column name="product_type_id" value="14"/>-->
+            <!--<column name="norm" value="12000"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+    <!--<changeSet id="28" author="pryadilnikova@gmail.com">-->
+        <!--<insert tableName="norm">-->
+            <!--<column name="norm_roll_type_id" value="2"/>-->
+            <!--<column name="product_type_id" value="28"/>-->
+            <!--<column name="norm" value="10000"/>-->
+        <!--</insert>-->
+    <!--</changeSet>-->
+</databaseChangeLog>

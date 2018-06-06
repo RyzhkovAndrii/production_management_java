@@ -11,13 +11,23 @@
             <column name="id" type="bigint" autoIncrement="true" startWith="1" incrementBy="1">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="roll_type_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
             <column name="product_type_id" type="bigint">
                 <constraints nullable="false"/>"
             </column>
-            <column name="norm" type="double">
+            <column name="norm" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="pryadilnikova@gmail.com">
+        <createTable tableName="norm_roll_type">
+            <column name="id" type="bigint" autoIncrement="true" startWith="1" incrementBy="1">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="norm_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="roll_type_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>

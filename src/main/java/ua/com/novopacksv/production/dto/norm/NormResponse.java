@@ -14,5 +14,5 @@ public class NormResponse extends BaseEntityResponse {
 
     private Long productTypeId;
 
-    private Double norm;
+    private Integer norm;
 }

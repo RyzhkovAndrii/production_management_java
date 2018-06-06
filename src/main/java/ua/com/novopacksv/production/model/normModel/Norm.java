@@ -20,7 +20,9 @@ import java.util.List;
 public class Norm extends BaseEntity {
 
     @ManyToMany
-    @PrimaryKeyJoinColumn
+    @JoinTable(name = "norm_roll_type",
+            joinColumns = {@JoinColumn(name = "norm_id")},
+            inverseJoinColumns = {@JoinColumn(name = "roll_type_id")})
     private List<RollType> rollTypes;
 
     @OneToOne
@@ -29,5 +31,5 @@ public class Norm extends BaseEntity {
     private ProductType productType;
 
     @Column(name = "norm", nullable = false)
-    private Double norm;
+    private Integer norm;
 }
