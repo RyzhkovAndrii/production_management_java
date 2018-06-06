@@ -10,6 +10,6 @@
     <include file="db/changelog/0.0.1/test_roll_db.xml"/>
     <include file="db/changelog/0.0.1/test_product_db.xml"/>
     <include file="db/changelog/0.0.3/test_order_db.xml"/>
-    <include file="db/changelog/0.0.2/test_norm_roll_type_db.xml"/>
     <include file="db/changelog/0.0.2/test_norm_db.xml"/>
+    <include file="db/changelog/0.0.2/test_norm_roll_type_db.xml"/>
 </databaseChangeLog>
