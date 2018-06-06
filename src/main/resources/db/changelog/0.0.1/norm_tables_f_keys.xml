@@ -1,0 +1,35 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+   http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="1" author="pryadilnikova@gmail.com">
+        <addForeignKeyConstraint baseTableName="norm"
+                                 baseColumnNames="roll_type_id"
+                                 constraintName="fk_norm_roll_type"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 referencedTableName="roll_type"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="2" author="pryadilnikova@gmail.com">
+        <addForeignKeyConstraint baseTableName="norm"
+                                 baseColumnNames="product_type_id"
+                                 constraintName="fk_norm_product_type"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 referencedTableName="product_type"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="3" author="pryadilnikova@gmail.com">
+        <addUniqueConstraint tableName="norm"
+                             columnNames="roll_type_id, product_type_id, norm"
+                             deferrable="true"
+                             disabled="true"
+                             initiallyDeferred="true"
+                             constraintName="const_norm"/>
+    </changeSet>
+</databaseChangeLog>
