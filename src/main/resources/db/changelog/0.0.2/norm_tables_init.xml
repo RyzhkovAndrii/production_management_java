@@ -21,9 +21,6 @@
     </changeSet>
     <changeSet id="2" author="pryadilnikova@gmail.com">
         <createTable tableName="norm_roll_type">
-            <column name="id" type="bigint" autoIncrement="true" startWith="1" incrementBy="1">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
             <column name="norm_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
