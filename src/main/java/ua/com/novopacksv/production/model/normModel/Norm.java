@@ -26,7 +26,7 @@ public class Norm extends BaseEntity {
     private List<RollType> rollTypes;
 
     @OneToOne
-    @PrimaryKeyJoinColumn
+    @JoinColumn(name = "id")
     @MapsId
     private ProductType productType;
 

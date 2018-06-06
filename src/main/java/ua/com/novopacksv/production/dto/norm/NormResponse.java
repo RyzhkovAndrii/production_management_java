@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class NormResponse extends BaseEntityResponse {
+public class NormResponse {
 
     private List<Long> rollTypeIds;
 

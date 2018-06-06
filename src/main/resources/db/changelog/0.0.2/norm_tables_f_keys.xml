@@ -8,7 +8,7 @@
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     <changeSet id="1" author="pryadilnikova@gmail.com">
         <addForeignKeyConstraint baseTableName="norm"
-                                 baseColumnNames="product_type_id"
+                                 baseColumnNames="id"
                                  constraintName="fk_norm_product_type"
                                  onDelete="CASCADE"
                                  onUpdate="CASCADE"
