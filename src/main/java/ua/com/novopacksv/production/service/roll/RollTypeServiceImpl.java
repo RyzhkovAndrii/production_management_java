@@ -84,7 +84,19 @@ public class RollTypeServiceImpl implements RollTypeService {
     @Override
     public List<RollType> findAll(Double thickness) {
         List<RollType> rollTypes = rollTypeRepository.findAllByThickness(thickness);
-        log.debug("Method findAll(Double thickness): All roll types with thickness = %d was found", thickness);
+        log.debug("Method findAll(Double thickness): All roll types with thickness = {} were found", thickness);
+        return rollTypes;
+    }
+
+    /**
+     * The method finds and return all roll types with pointed color
+     * @param colorCode - color's code
+     * @return list of roll types with pointed color
+     */
+    @Override
+    public List<RollType> findAll(String colorCode) {
+        List<RollType> rollTypes = rollTypeRepository.findAllByColorCode(colorCode);
+        log.debug("Method findAll(String colorCode): All roll types with color code = {} were found", colorCode);
         return rollTypes;
     }
 

@@ -8,4 +8,6 @@ import java.util.List;
 public interface RollTypeService extends BaseEntityService<RollType> {
 
     List<RollType> findAll(Double thickness);
+
+    List<RollType> findAll(String colorCode);
 }

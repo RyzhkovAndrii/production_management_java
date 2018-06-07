@@ -10,4 +10,6 @@ import java.util.List;
 public interface RollTypeRepository extends JpaRepository <RollType, Long> {
 
     List<RollType> findAllByThickness(Double thickness);
+
+    List<RollType> findAllByColorCode(String colorCode);
 }

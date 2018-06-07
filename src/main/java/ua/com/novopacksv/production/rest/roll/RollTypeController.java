@@ -37,6 +37,13 @@ public class RollTypeController {
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
+    @GetMapping(params = {"color"})
+    public ResponseEntity<List<RollTypeResponse>> getAll(@RequestParam("color") String colorCode) {
+        List<RollType> rollTypes = rollTypeService.findAll(colorCode);
+        List<RollTypeResponse> responses = conversionService.convert(rollTypes, RollTypeResponse.class);
+        return new ResponseEntity<>(responses, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<RollTypeResponse> getOne(@PathVariable Long id) {
         RollType rollType = rollTypeService.findById(id);

@@ -13,7 +13,7 @@
             <column name="min_weight" value="50.0"/>
             <column name="max_weight" value="51.0"/>
             <column name="length" value="380.0"/>
-            <column name="color_code" value="#FFFFFF"/>
+            <column name="color_code" value="#ffffff"/>
         </insert>
     </changeSet>
     <changeSet id="2" author="pryadilnikova@gmail.com">
@@ -24,7 +24,7 @@
             <column name="min_weight" value="50.0"/>
             <column name="max_weight" value="51.0"/>
             <column name="length" value="340.0"/>
-            <column name="color_code" value="#FFFF00"/>
+            <column name="color_code" value="#ffff00"/>
         </insert>
     </changeSet>
     <changeSet id="3" author="pryadilnikova@gmail.com">
