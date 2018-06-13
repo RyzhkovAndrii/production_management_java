@@ -11,4 +11,6 @@ public interface ProductPlanOperationService extends BaseEntityService<ProductPl
     List<ProductPlanOperation> getAll(Long productTypeId, LocalDate fromDate, LocalDate toDate);
 
     List<ProductPlanOperation> getAllByRollTypeId(Long rollTypeId, LocalDate fromDate, LocalDate toDate);
+
+    ProductPlanOperation create(Long productTypeId, Long rollTypeId, Integer productQuantity, LocalDate date);
 }

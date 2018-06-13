@@ -17,6 +17,14 @@ public class NormServiceImpl implements NormService {
     private final NormRepository normRepository;
 
     @Override
+    public Norm findOne(Long productTypeId) {
+        return normRepository.findByProductType_Id(productTypeId).orElseThrow(() -> {
+            String message = String.format("Norm with product id = %d was not found", productTypeId);
+            return new ResourceNotFoundException(message);
+        });
+    }
+
+    @Override
     public Norm findById(Long id) throws ResourceNotFoundException {
         return normRepository.findById(id).orElseThrow(() ->
         {
