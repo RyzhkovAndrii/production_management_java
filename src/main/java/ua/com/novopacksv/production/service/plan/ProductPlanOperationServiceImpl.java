@@ -20,8 +20,13 @@ public class ProductPlanOperationServiceImpl implements ProductPlanOperationServ
     private final ProductPlanOperationRepository productPlanOperationRepository;
 
     @Override
-    public List<ProductPlanOperation> getAll(Long productTypeId, LocalDate date) {
-        return productPlanOperationRepository.findByProductType_IdAndDateBetween(productTypeId, LocalDate.now(), date);
+    public List<ProductPlanOperation> getAll(Long productTypeId,LocalDate fromDate, LocalDate toDate) {
+        return productPlanOperationRepository.findByProductType_IdAndDateBetween(productTypeId, fromDate, toDate);
+    }
+
+    @Override
+    public List<ProductPlanOperation> getAllByRollTypeId(Long rollTypeId, LocalDate fromDate, LocalDate toDate) {
+        return productPlanOperationRepository.findAllByRollType_IdAndDateBetween(rollTypeId, fromDate, toDate);
     }
 
     @Override

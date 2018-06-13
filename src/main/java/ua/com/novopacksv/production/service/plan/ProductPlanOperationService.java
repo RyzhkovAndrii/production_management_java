@@ -8,5 +8,7 @@ import java.util.List;
 
 public interface ProductPlanOperationService extends BaseEntityService<ProductPlanOperation> {
 
-    List<ProductPlanOperation> getAll(Long productTypeId, LocalDate date);
+    List<ProductPlanOperation> getAll(Long productTypeId, LocalDate fromDate, LocalDate toDate);
+
+    List<ProductPlanOperation> getAllByRollTypeId(Long rollTypeId, LocalDate fromDate, LocalDate toDate);
 }

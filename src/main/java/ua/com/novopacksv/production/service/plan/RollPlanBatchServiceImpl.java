@@ -1,6 +1,5 @@
 package ua.com.novopacksv.production.service.plan;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -40,7 +39,7 @@ public class RollPlanBatchServiceImpl implements RollPlanBatchService {
     }
 
     private Integer countRollPlanAmount(Long rollTypeId, LocalDate date) {
-        return productPlanOperationService.getAll(rollTypeId, date).stream()
+        return productPlanOperationService.getAllByRollTypeId(rollTypeId, date, date).stream()
                 .mapToInt((planOperation) -> planOperation.getRollAmount()).sum();
     }
 }

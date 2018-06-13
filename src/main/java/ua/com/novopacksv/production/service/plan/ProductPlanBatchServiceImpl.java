@@ -45,7 +45,7 @@ public class ProductPlanBatchServiceImpl implements ProductPlanBatchService {
     }
 
     private Integer countProductPlanAmount(Long productTypeId, LocalDate date) {
-        List<ProductPlanOperation> productPlanOperations = productPlanOperationService.getAll(productTypeId, date);
+        List<ProductPlanOperation> productPlanOperations = productPlanOperationService.getAll(productTypeId, date, date);
         Integer amount = productPlanOperations.stream().mapToInt(ProductPlanOperation::getProductAmount).sum();
         return amount;
     }

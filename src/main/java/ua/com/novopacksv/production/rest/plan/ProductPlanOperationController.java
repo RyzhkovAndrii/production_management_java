@@ -23,13 +23,26 @@ public class ProductPlanOperationController {
 
     private final ModelConversionService conversionService;
 
-    @GetMapping(params = {"id", "date"})
-    public ResponseEntity<List<ProductPlanOperationResponse>> getAll(@RequestParam("id") Long productTypeId,
-                                                                     @RequestParam("date") LocalDate date) {
-        List<ProductPlanOperation> productPlanOperations = productPlanOperationService.getAll(productTypeId, date);
+    @GetMapping(params = {"id", "from", "to"})
+    public ResponseEntity<List<ProductPlanOperationResponse>> getAllByProduct(@RequestParam("id") Long productTypeId,
+                                                                              @RequestParam("from") LocalDate fromDate,
+                                                                              @RequestParam("to") LocalDate toDate) {
+        List<ProductPlanOperation> productPlanOperations = productPlanOperationService.getAll(productTypeId, fromDate,
+                toDate);
         List<ProductPlanOperationResponse> response = conversionService.convert(productPlanOperations,
                 ProductPlanOperationResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(params = {"roll_id", "from", "to"})
+    public ResponseEntity<List<ProductPlanOperationResponse>> getAllByRoll(@RequestParam("roll_id") Long rollTypeId,
+                                                                           @RequestParam("from") LocalDate fromDate,
+                                                                           @RequestParam("to") LocalDate toDate) {
+        List<ProductPlanOperation> productPlanOperations = productPlanOperationService.getAllByRollTypeId(rollTypeId,
+                fromDate, toDate);
+        List<ProductPlanOperationResponse> responses = conversionService.convert(productPlanOperations,
+                ProductPlanOperationResponse.class);
+        return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
     @GetMapping
@@ -67,7 +80,7 @@ public class ProductPlanOperationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id){
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         productPlanOperationService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
