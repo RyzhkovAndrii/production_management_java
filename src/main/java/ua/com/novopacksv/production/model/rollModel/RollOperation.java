@@ -29,6 +29,6 @@ public class RollOperation extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private OperationType operationType;
 
-    @Column(name = "roll_amount", nullable = false)
+    @Column(name = "rollAmount", nullable = false)
     private Integer rollAmount;
 }

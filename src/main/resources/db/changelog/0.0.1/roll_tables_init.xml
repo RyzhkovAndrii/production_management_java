@@ -40,7 +40,7 @@
             <column name="operation_type" type="varchar(30)">
                 <constraints nullable="false"/>
             </column>
-            <column name="roll_amount" type="int">
+            <column name="rollAmount" type="int">
                 <constraints nullable="false"/>
             </column>
         </createTable>
