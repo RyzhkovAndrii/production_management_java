@@ -1,7 +1,6 @@
 package ua.com.novopacksv.production.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -11,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
-    private RestHandlerInterceptor restHandlerInterceptor;
+    private AngularHandlerInterceptor angularHandlerInterceptor;
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -22,6 +21,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(restHandlerInterceptor);
+        registry.addInterceptor(angularHandlerInterceptor);
     }
 }
