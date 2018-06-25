@@ -36,6 +36,13 @@ public class NormController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping(params = "rollTypeId")
+    public ResponseEntity<List<NormResponse>> getByRollTypeId(@RequestParam("rollTypeId") Long rollTypeId) {
+        List<Norm> norms = normService.findNorms(rollTypeId);
+        List<NormResponse> responses = conversionService.convert(norms, NormResponse.class);
+        return new ResponseEntity<>(responses, HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<NormResponse> save(@RequestBody NormRequest request) {
         Norm norm = conversionService.convert(request, Norm.class);
