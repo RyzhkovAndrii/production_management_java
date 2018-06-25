@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface NormService extends BaseEntityService<Norm> {
     List<Norm> findNorms(Long rollTypeId);
+    void deleteNormsWithoutRolls();
 }

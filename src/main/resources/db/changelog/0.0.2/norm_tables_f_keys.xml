@@ -19,6 +19,8 @@
         <addForeignKeyConstraint baseTableName="norm_roll_type"
                                  baseColumnNames="roll_type_id"
                                  constraintName="fk_norm_roll_type_roll_type"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
                                  referencedTableName="roll_type"
                                  referencedColumnNames="id"/>
     </changeSet>
@@ -26,6 +28,8 @@
         <addForeignKeyConstraint baseTableName="norm_roll_type"
                                  baseColumnNames="norm_id"
                                  constraintName="fk_norm_roll_type_norm"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
                                  referencedTableName="norm"
                                  referencedColumnNames="id"/>
     </changeSet>

@@ -50,4 +50,9 @@ public class NormServiceImpl implements NormService {
     public List<Norm> findNorms(Long rollTypeId) {
         return normRepository.getByRollTypeId(rollTypeId);
     }
+
+    @Override
+    public void deleteNormsWithoutRolls() {
+        normRepository.deleteNormsByRollTypesNull();
+    }
 }

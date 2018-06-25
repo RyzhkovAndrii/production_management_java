@@ -8,6 +8,7 @@ import ua.com.novopacksv.production.exception.RangeException;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.rollModel.RollType;
 import ua.com.novopacksv.production.repository.rollRepository.RollTypeRepository;
+import ua.com.novopacksv.production.service.norm.NormService;
 
 import java.util.List;
 
@@ -38,6 +39,8 @@ public class RollTypeServiceImpl implements RollTypeService {
      * Содержит методы для работы с сущностью {@code RollCheck}
      */
     private final RollCheckService rollCheckService;
+
+    private final NormService normService;
 
     /**
      * Ищет в базе и возвращает тип произоводимого на предприятии рулона по указанному id.
@@ -152,6 +155,7 @@ public class RollTypeServiceImpl implements RollTypeService {
     public void delete(Long id) throws ResourceNotFoundException {
         RollType rollType = findById(id);
         rollTypeRepository.delete(findById(id));
+        normService.deleteNormsWithoutRolls();
         log.debug("Method delete(Long id): Roll type {} with id {} was deleted",rollType, id);
     }
 

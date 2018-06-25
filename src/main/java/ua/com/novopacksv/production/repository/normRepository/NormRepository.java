@@ -11,4 +11,6 @@ import java.util.List;
 public interface NormRepository extends JpaRepository<Norm, Long> {
     @Query("from Norm n join n.rollTypes r where r.id = ?1")
     List<Norm> getByRollTypeId(Long rollTypeId);
+
+    void deleteNormsByRollTypesNull();
 }
