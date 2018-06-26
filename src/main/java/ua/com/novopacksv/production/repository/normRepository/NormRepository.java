@@ -6,11 +6,15 @@ import org.springframework.stereotype.Repository;
 import ua.com.novopacksv.production.model.normModel.Norm;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface NormRepository extends JpaRepository<Norm, Long> {
+
     @Query("from Norm n join n.rollTypes r where r.id = ?1")
     List<Norm> getByRollTypeId(Long rollTypeId);
 
     void deleteNormsByRollTypesNull();
+
+    Optional <Norm> findByProductType_Id(Long productTypeId);
 }

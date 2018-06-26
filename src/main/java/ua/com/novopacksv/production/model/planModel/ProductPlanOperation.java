@@ -30,9 +30,9 @@ public class ProductPlanOperation extends BaseEntity {
     @PrimaryKeyJoinColumn
     private RollType rollType;
 
-    @Column(name = "rollAmount", nullable = false)
+    @Column(name = "roll_amount", nullable = false)
     private Integer rollAmount;
 
-    @Column(name = "productAmount", nullable = false)
+    @Column(name = "product_amount", nullable = false)
     private Integer productAmount;
 }
