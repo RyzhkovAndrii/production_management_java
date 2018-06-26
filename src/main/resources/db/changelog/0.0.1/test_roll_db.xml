@@ -60,7 +60,7 @@
             <column name="operation_date" value="2018-04-08"/>
             <column name="roll_manufactured_id" value="1"/>
             <column name="operation_type" value="MANUFACTURE"/>
-            <column name="rollAmount" value="560"/>
+            <column name="roll_amount" value="560"/>
         </insert>
     </changeSet>
     <changeSet id="8" author="pryadilnikova@gmail.com">
@@ -68,7 +68,7 @@
             <column name="operation_date" value="2018-04-10"/>
             <column name="roll_manufactured_id" value="2"/>
             <column name="operation_type" value="MANUFACTURE"/>
-            <column name="rollAmount" value="600"/>
+            <column name="roll_amount" value="600"/>
         </insert>
     </changeSet>
     <changeSet id="9" author="pryadilnikova@gmail.com">
@@ -76,7 +76,7 @@
             <column name="operation_date" value="2018-04-10"/>
             <column name="roll_manufactured_id" value="3"/>
             <column name="operation_type" value="MANUFACTURE"/>
-            <column name="rollAmount" value="480"/>
+            <column name="roll_amount" value="480"/>
         </insert>
     </changeSet>
     <changeSet id="10" author="pryadilnikova@gmail.com">
@@ -84,7 +84,7 @@
             <column name="operation_date" value="2018-04-11"/>
             <column name="roll_manufactured_id" value="4"/>
             <column name="operation_type" value="MANUFACTURE"/>
-            <column name="rollAmount" value="620"/>
+            <column name="roll_amount" value="620"/>
         </insert>
     </changeSet>
     <changeSet id="11" author="pryadilnikova@gmail.com">
