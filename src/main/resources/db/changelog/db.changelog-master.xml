@@ -15,4 +15,6 @@
     <include file="db/changelog/0.0.3/order_tables_f_keys.xml"/>
     <include file="db/changelog/0.0.2/norm_tables_init.xml"/>
     <include file="db/changelog/0.0.2/norm_tables_f_keys.xml"/>
+    <include file="db/changelog/0.0.4/plan_tables_init.xml"/>
+    <include file="db/changelog/0.0.4/plan_tables_f_keys.xml"/>
 </databaseChangeLog>
