@@ -11,9 +11,6 @@
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <!--<column name="product_type_id" type="bigint">-->
-                <!--<constraints nullable="false"/>"-->
-            <!--</column>-->
             <column name="norm" type="int">
                 <constraints nullable="false"/>
             </column>

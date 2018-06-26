@@ -53,4 +53,14 @@ public class NormServiceImpl implements NormService {
     public void delete(Long id) throws ResourceNotFoundException {
         normRepository.delete(findById(id));
     }
+
+    @Override
+    public List<Norm> findNorms(Long rollTypeId) {
+        return normRepository.getByRollTypeId(rollTypeId);
+    }
+
+    @Override
+    public void deleteNormsWithoutRolls() {
+        normRepository.deleteNormsByRollTypesNull();
+    }
 }

@@ -3,7 +3,9 @@ package ua.com.novopacksv.production.service.norm;
 import ua.com.novopacksv.production.model.normModel.Norm;
 import ua.com.novopacksv.production.service.BaseEntityService;
 
-public interface NormService extends BaseEntityService<Norm> {
+import java.util.List;
 
-    Norm findOne(Long productTypeId);
+public interface NormService extends BaseEntityService<Norm> {
+    List<Norm> findNorms(Long rollTypeId);
+    void deleteNormsWithoutRolls();
 }
