@@ -1,0 +1,19 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+   http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+    <changeSet id="1" author="pryadilnikova@gmail.com">
+        <insert tableName="product_plan_operation">
+            <column name="id" value="1"/>
+            <column name="date" value="2018-08-01"/>
+            <column name="product_type_id" value="1"/>
+            <column name="roll_type_id" value="1"/>
+            <column name="roll_amount" value="2"/>
+            <column name="product_amount" value="14800"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
