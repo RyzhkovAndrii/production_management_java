@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.novopacksv.production.model.orderModel.OrderItem;
 import ua.com.novopacksv.production.model.planModel.ProductPlanBatch;
 import ua.com.novopacksv.production.model.planModel.ProductPlanOperation;
 import ua.com.novopacksv.production.model.productModel.ProductType;
@@ -32,7 +33,6 @@ public class ProductPlanBatchServiceImpl implements ProductPlanBatchService {
     @Lazy
     private OrderItemServiceImpl orderItemService;
 
-    //todo made batch with counting of orders
     @Override
     public ProductPlanBatch getOne(Long productTypeId, LocalDate date) {
         ProductPlanBatch productPlanBatch = new ProductPlanBatch();
@@ -58,6 +58,15 @@ public class ProductPlanBatchServiceImpl implements ProductPlanBatchService {
     }
 
     private Integer countProductPlanUsedAmount(Long productTypeId, LocalDate date){
-        return null;
+        Integer amount = findOrders(productTypeId, date).stream().mapToInt(OrderItem :: getAmount).sum();
+        return amount;
+    }
+
+    private List<OrderItem> findOrders(Long productTypeId, LocalDate date){
+        if(date.isAfter(LocalDate.now())){
+           return orderItemService.findAll(productTypeService.findById(productTypeId), date, date);
+        }else {
+            return orderItemService.findAllNotDelivered(productTypeService.findById(productTypeId), date);
+        }
     }
 }

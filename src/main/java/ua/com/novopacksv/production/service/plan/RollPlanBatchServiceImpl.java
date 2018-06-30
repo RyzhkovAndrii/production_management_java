@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.model.planModel.RollPlanBatch;
+import ua.com.novopacksv.production.model.planModel.RollPlanOperation;
 import ua.com.novopacksv.production.service.roll.RollTypeService;
 
 import java.time.LocalDate;
@@ -23,12 +24,17 @@ public class RollPlanBatchServiceImpl implements RollPlanBatchService {
     @Lazy
     private ProductPlanOperationService productPlanOperationService;
 
+    @Autowired
+    @Lazy
+    private RollPlanOperationService rollPlanOperationService;
+
     @Override
     public RollPlanBatch getOne(Long rollTypeId, LocalDate date) {
         RollPlanBatch rollPlanBatch = new RollPlanBatch();
         rollPlanBatch.setDate(date);
         rollPlanBatch.setRollType(rollTypeService.findById(rollTypeId));
-        rollPlanBatch.setRollPlanUsedAmount(countRollPlanAmount(rollTypeId, date));
+        rollPlanBatch.setRollPlanUsedAmount(countRollPlanUsedAmount(rollTypeId, date));
+        rollPlanBatch.setRollPlanManufacturedAmount(countRollPlanManufacturedAmount(rollTypeId, date));
         return rollPlanBatch;
     }
 
@@ -38,8 +44,15 @@ public class RollPlanBatchServiceImpl implements RollPlanBatchService {
                 .collect(Collectors.toList());
     }
 
-    private Integer countRollPlanAmount(Long rollTypeId, LocalDate date) {
+    private Integer countRollPlanUsedAmount(Long rollTypeId, LocalDate date) {
         return productPlanOperationService.getAllByRollTypeId(rollTypeId, date, date).stream()
                 .mapToInt((planOperation) -> planOperation.getRollAmount()).sum();
+    }
+
+    private Integer countRollPlanManufacturedAmount(Long rollTypeId, LocalDate date){
+        return rollPlanOperationService.findAll(rollTypeId, date, date)
+                .stream()
+                .mapToInt(RollPlanOperation::getRollQuantity)
+                .sum();
     }
 }
