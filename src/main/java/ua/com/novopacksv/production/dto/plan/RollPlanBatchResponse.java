@@ -11,5 +11,7 @@ public class RollPlanBatchResponse {
 
     private Long rollTypeId;
 
-    private Integer rollAmount;
+    private Integer usedAmount;
+
+    private Integer manufacturedAmount;
 }

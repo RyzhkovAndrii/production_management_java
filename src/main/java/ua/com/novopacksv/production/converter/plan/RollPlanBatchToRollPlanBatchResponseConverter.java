@@ -21,7 +21,8 @@ public class RollPlanBatchToRollPlanBatchResponseConverter implements Converter<
         String date = conversionService.convert(source.getDate(), String.class);
         result.setDate(date);
         result.setRollTypeId(source.getRollType().getId());
-        result.setRollAmount(source.getRollAmount());
+        result.setManufacturedAmount(source.getRollPlanManufacturedAmount());
+        result.setUsedAmount(source.getRollPlanUsedAmount());
         return result;
     }
 }

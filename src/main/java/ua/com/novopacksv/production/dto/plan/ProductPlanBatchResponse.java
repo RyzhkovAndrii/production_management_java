@@ -11,5 +11,7 @@ public class ProductPlanBatchResponse {
 
     private Long productTypeId;
 
-    private Integer amount;
+    private Integer manufacturedAmount;
+
+    private Integer soldAmount;
 }

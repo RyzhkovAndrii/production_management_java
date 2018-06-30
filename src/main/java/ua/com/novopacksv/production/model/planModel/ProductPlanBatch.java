@@ -14,5 +14,7 @@ public class ProductPlanBatch {
 
     private ProductType productType;
 
-    private Integer amount;
+    private Integer manufacturedAmount;
+
+    private Integer usedAmount;
 }

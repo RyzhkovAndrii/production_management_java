@@ -14,5 +14,7 @@ public class RollPlanBatch {
 
     private RollType rollType;
 
-    private Integer rollAmount;
+    private Integer rollPlanManufacturedAmount;
+
+    private Integer rollPlanUsedAmount;
 }

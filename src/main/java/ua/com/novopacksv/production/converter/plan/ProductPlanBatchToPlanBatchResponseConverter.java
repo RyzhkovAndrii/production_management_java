@@ -21,7 +21,8 @@ public class ProductPlanBatchToPlanBatchResponseConverter implements Converter<P
         ProductPlanBatchResponse result = new ProductPlanBatchResponse();
         String date = conversionService.convert(source.getDate(), String.class);
         result.setDate(date);
-        result.setAmount(source.getAmount());
+        result.setManufacturedAmount(source.getManufacturedAmount());
+        result.setSoldAmount(source.getUsedAmount());
         result.setProductTypeId(source.getProductType().getId());
         return result;
     }
