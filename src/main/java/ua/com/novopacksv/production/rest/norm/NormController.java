@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ua.com.novopacksv.production.converter.ModelConversionService;
+import ua.com.novopacksv.production.dto.norm.NormForRollResponse;
 import ua.com.novopacksv.production.dto.norm.NormRequest;
 import ua.com.novopacksv.production.dto.norm.NormResponse;
 import ua.com.novopacksv.production.model.normModel.Norm;
@@ -33,6 +34,13 @@ public class NormController {
     public ResponseEntity<NormResponse> getOne(@PathVariable Long id) {
         Norm norm = normService.findById(id);
         NormResponse response = conversionService.convert(norm, NormResponse.class);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(params = {"id"})
+    public ResponseEntity<NormForRollResponse> getNormWithRolls(@RequestParam ("id") Long id){
+        Norm norm = normService.findById(id);
+        NormForRollResponse response = conversionService.convert(norm, NormForRollResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
