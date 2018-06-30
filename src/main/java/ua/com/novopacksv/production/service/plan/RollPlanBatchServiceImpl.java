@@ -28,7 +28,7 @@ public class RollPlanBatchServiceImpl implements RollPlanBatchService {
         RollPlanBatch rollPlanBatch = new RollPlanBatch();
         rollPlanBatch.setDate(date);
         rollPlanBatch.setRollType(rollTypeService.findById(rollTypeId));
-        rollPlanBatch.setRollAmount(countRollPlanAmount(rollTypeId, date));
+        rollPlanBatch.setRollPlanUsedAmount(countRollPlanAmount(rollTypeId, date));
         return rollPlanBatch;
     }
 

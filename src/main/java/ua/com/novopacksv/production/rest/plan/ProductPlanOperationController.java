@@ -45,18 +45,6 @@ public class ProductPlanOperationController {
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
-    @GetMapping(params = {"product_id", "roll_id", "quantity", "date"})
-    public ResponseEntity<ProductPlanOperationResponse> create(@RequestParam("product_id") Long productTypeId,
-                                                               @RequestParam("roll_id") Long rollTypeId,
-                                                               @RequestParam("quantity") Integer productQuantity,
-                                                               @RequestParam("date") LocalDate date) {
-        ProductPlanOperation productPlanOperation = productPlanOperationService.create(productTypeId, rollTypeId,
-                productQuantity, date);
-        ProductPlanOperationResponse response = conversionService.convert(productPlanOperation,
-                ProductPlanOperationResponse.class);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
     @GetMapping
     public ResponseEntity<List<ProductPlanOperationResponse>> getAll() {
         List<ProductPlanOperation> productPlanOperations = productPlanOperationService.findAll();

@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.model.planModel.ProductPlanBatch;
 import ua.com.novopacksv.production.model.planModel.ProductPlanOperation;
 import ua.com.novopacksv.production.model.productModel.ProductType;
+import ua.com.novopacksv.production.service.order.OrderItemServiceImpl;
 import ua.com.novopacksv.production.service.product.ProductTypeService;
 
 import java.time.LocalDate;
@@ -27,12 +28,18 @@ public class ProductPlanBatchServiceImpl implements ProductPlanBatchService {
     @Lazy
     private ProductTypeService productTypeService;
 
+    @Autowired
+    @Lazy
+    private OrderItemServiceImpl orderItemService;
+
+    //todo made batch with counting of orders
     @Override
     public ProductPlanBatch getOne(Long productTypeId, LocalDate date) {
         ProductPlanBatch productPlanBatch = new ProductPlanBatch();
         productPlanBatch.setDate(date);
         productPlanBatch.setProductType(productTypeService.findById(productTypeId));
-        productPlanBatch.setAmount(countProductPlanAmount(productTypeId, date));
+        productPlanBatch.setManufacturedAmount(countProductPlanManufacturedAmount(productTypeId, date));
+        productPlanBatch.setUsedAmount(countProductPlanUsedAmount(productTypeId, date));
         return productPlanBatch;
     }
 
@@ -44,9 +51,13 @@ public class ProductPlanBatchServiceImpl implements ProductPlanBatchService {
         return productPlanBatches;
     }
 
-    private Integer countProductPlanAmount(Long productTypeId, LocalDate date) {
+    private Integer countProductPlanManufacturedAmount(Long productTypeId, LocalDate date) {
         List<ProductPlanOperation> productPlanOperations = productPlanOperationService.getAll(productTypeId, date, date);
         Integer amount = productPlanOperations.stream().mapToInt(ProductPlanOperation::getProductAmount).sum();
         return amount;
+    }
+
+    private Integer countProductPlanUsedAmount(Long productTypeId, LocalDate date){
+        return null;
     }
 }

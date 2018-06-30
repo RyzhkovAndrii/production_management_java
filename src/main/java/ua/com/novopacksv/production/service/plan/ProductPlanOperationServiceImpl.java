@@ -46,18 +46,6 @@ public class ProductPlanOperationServiceImpl implements ProductPlanOperationServ
     }
 
     @Override
-    public ProductPlanOperation create(Long productTypeId, Long rollTypeId, Integer productQuantity, LocalDate date) {
-        ProductPlanOperation productPlanOperation = new ProductPlanOperation();
-        productPlanOperation.setDate(date);
-        productPlanOperation.setProductType(productTypeService.findById(productTypeId));
-        productPlanOperation.setRollType(rollTypeService.findById(rollTypeId));
-        Integer rollQuantity = getRollQuantity(productTypeId, productQuantity);
-        productPlanOperation.setRollAmount(rollQuantity);
-        productPlanOperation.setProductAmount(getProductQuantity(productTypeId, rollQuantity));
-        return productPlanOperation;
-    }
-
-    @Override
     public ProductPlanOperation findById(Long id) throws ResourceNotFoundException {
         ProductPlanOperation productPlanOperation = productPlanOperationRepository.findById(id).orElseThrow(() -> {
             String message = String.format("The product plan operation with id = %d was not found", id);
