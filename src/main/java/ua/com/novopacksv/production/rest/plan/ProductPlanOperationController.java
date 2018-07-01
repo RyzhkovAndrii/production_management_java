@@ -64,6 +64,7 @@ public class ProductPlanOperationController {
     @PostMapping
     public ResponseEntity<ProductPlanOperationResponse> save(@RequestBody ProductPlanOperationRequest request) {
         ProductPlanOperation productPlanOperation = conversionService.convert(request, ProductPlanOperation.class);
+        productPlanOperationService.save(productPlanOperation);
         ProductPlanOperationResponse response = conversionService.convert(productPlanOperation,
                 ProductPlanOperationResponse.class);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
@@ -74,6 +75,7 @@ public class ProductPlanOperationController {
                                                                @RequestBody ProductPlanOperationRequest request) {
         ProductPlanOperation productPlanOperation = conversionService.convert(request, ProductPlanOperation.class);
         productPlanOperation.setId(id);
+        productPlanOperationService.update(productPlanOperation);
         ProductPlanOperationResponse response = conversionService.convert(productPlanOperation,
                 ProductPlanOperationResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
