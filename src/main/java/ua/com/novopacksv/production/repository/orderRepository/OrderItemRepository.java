@@ -17,6 +17,6 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     List<OrderItem> findAllByProductTypeAndOrder_DeliveryDateBetween(ProductType productType,
                                                                      LocalDate fromDate, LocalDate toDate);
 
-    List<OrderItem> findAllByProductTypeAndOrder_IsDeliveredIsFalseAndOrder_DeliveryDateBefore
+    List<OrderItem> findAllByProductTypeAndOrder_ActualDeliveryDateIsNullAndOrder_DeliveryDateBefore
             (ProductType productType, LocalDate date);
 }

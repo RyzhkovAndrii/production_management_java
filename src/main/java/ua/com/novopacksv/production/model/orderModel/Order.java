@@ -40,9 +40,6 @@ public class Order extends BaseEntity {
     @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
 
-    @Column(name = "is_overdue", nullable = false)
-    private Boolean isOverdue;
-
     @OneToMany(mappedBy = "order", orphanRemoval = true)
     private List<OrderItem> orderItems;
 
