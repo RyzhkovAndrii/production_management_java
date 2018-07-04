@@ -8,10 +8,10 @@ import ua.com.novopacksv.production.dto.BaseEntityResponse;
 @Setter
 public class OrderItemResponse extends BaseEntityResponse {
 
+    private Long orderId;
+
     private Long productTypeId;
 
     private Integer amount;
-
-    private Long orderId;
 
 }

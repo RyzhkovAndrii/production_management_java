@@ -10,10 +10,18 @@ public class OrderResponse extends BaseEntityResponse {
 
     private Long clientId;
 
+    private String city;
+
+    private String deliveryDate;
+
     private Boolean isImportant;
+
+    private Boolean isDelivered;
+
+    private String actualDeliveryDate;
 
     private String creationDate;
 
-    private String deliveryDate;
+    private Boolean isOverdue;
 
 }
