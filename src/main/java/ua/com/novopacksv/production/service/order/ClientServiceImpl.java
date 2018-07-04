@@ -1,6 +1,7 @@
 package ua.com.novopacksv.production.service.order;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.NotUniqueFieldException;
@@ -52,11 +53,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     @Transactional(readOnly = true)
-    public Client findOne(String name) {
-        return clientRepository.findByName(name).orElseThrow(() -> {
-            String message = String.format("Client whit name = %s is not found!", name);
-            return new ResourceNotFoundException(message);
-        });
+    public List<Client> findAll(String sortProperties) {
+        Sort sort = new Sort(Sort.Direction.ASC, sortProperties);
+        return clientRepository.findAll(sort);
     }
 
     private void checkNameUnique(Client client) {

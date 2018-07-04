@@ -24,16 +24,9 @@ public class ClientController {
     private final ModelConversionService conversionService;
 
     @GetMapping
-    public ResponseEntity<List<ClientResponse>> getAll() {
-        List<Client> clients = clientService.findAll();
+    public ResponseEntity<List<ClientResponse>> getAll(@RequestParam(name="sort", defaultValue = "id") String sort) {
+        List<Client> clients = clientService.findAll(sort);
         List<ClientResponse> response = conversionService.convert(clients, ClientResponse.class);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @GetMapping(params = {"name"})
-    public ResponseEntity<ClientResponse> getOne(@RequestParam String name) {
-        Client client = clientService.findOne(name);
-        ClientResponse response = conversionService.convert(client, ClientResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
