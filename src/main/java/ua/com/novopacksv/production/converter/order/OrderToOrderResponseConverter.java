@@ -19,12 +19,18 @@ public class OrderToOrderResponseConverter implements Converter<Order, OrderResp
     public OrderResponse convert(Order source) {
         String deliveryDate = conversionService.convert(source.getDeliveryDate(), String.class);
         String creationDate = conversionService.convert(source.getCreationDate(), String.class);
+        String actualDeliveryDate = conversionService.convert(source.getActualDeliveryDate(), String.class);
+        Boolean isDelivered = source.getActualDeliveryDate() != null;
         OrderResponse result = new OrderResponse();
         result.setId(source.getId());
         result.setClientId(source.getClient().getId());
-        result.setIsImportant(source.getIsImportant());
-        result.setCreationDate(creationDate);
+        result.setCity(source.getCity());
         result.setDeliveryDate(deliveryDate);
+        result.setIsImportant(source.getIsImportant());
+        result.setIsDelivered(isDelivered);
+        result.setActualDeliveryDate(actualDeliveryDate);
+        result.setCreationDate(creationDate);
+        result.setIsOverdue(source.getIsOverdue());
         return result;
     }
 
