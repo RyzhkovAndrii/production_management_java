@@ -9,11 +9,19 @@
     <changeSet id="1" author="pryadilnikova@gmail.com">
         <insert tableName="product_plan_operation">
             <column name="id" value="1"/>
-            <column name="date" value="2018-08-01"/>
+            <column name="date" value="2018-07-10"/>
             <column name="product_type_id" value="1"/>
             <column name="roll_type_id" value="1"/>
             <column name="roll_amount" value="2"/>
             <column name="product_amount" value="14800"/>
+        </insert>
+    </changeSet>
+    <changeSet id="2" author="pryadilnikova@gmail.com">
+        <insert tableName="roll_plan_operation">
+            <column name="id" value="1"/>
+            <column name="date" value="2018-07-10"/>
+            <column name="roll_type_id" value="1"/>
+            <column name="quantity" value="30"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

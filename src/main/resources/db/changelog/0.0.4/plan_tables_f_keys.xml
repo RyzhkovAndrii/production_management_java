@@ -24,4 +24,13 @@
                                  referencedTableName="roll_type"
                                  referencedColumnNames="id"/>
     </changeSet>
+    <changeSet id="3" author="pryadilnikova@gmail.com">
+        <addForeignKeyConstraint baseTableName="roll_plan_operation"
+                                 baseColumnNames="roll_type_id"
+                                 constraintName="fk_plan_operation_roll_type"
+                                 onUpdate="CASCADE"
+                                 onDelete="CASCADE"
+                                 referencedTableName="roll_type"
+                                 referencedColumnNames="id"/>
+    </changeSet>
 </databaseChangeLog>

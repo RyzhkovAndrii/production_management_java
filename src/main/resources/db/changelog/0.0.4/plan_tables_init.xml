@@ -28,4 +28,20 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="2" author="pryadilnikova@gmail.com">
+        <createTable tableName="roll_plan_operation">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="roll_type_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
