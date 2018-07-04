@@ -10,6 +10,7 @@ import ua.com.novopacksv.production.validator.PastOrPresent;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 @Getter
 @Setter
@@ -20,6 +21,7 @@ public class OrderRequest {
     private Long clientId;
 
     @NotBlank(message = "city is a required field!")
+    @Size(max = 50, message = "city must be less then 50 symbols long!")
     private String city;
 
     @NotBlank(message = "delivery date is a required field!")
