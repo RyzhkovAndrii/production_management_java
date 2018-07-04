@@ -1,10 +1,7 @@
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
-   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
-   http://www.liquibase.org/xml/ns/dbchangelog
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
 
     <changeSet id="1" author="ryzhkov.andrii@gmail.com">
@@ -26,16 +23,17 @@
             <column name="client_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="is_important" type="boolean">
-                <constraints nullable="false"/>
-            </column>
-            <column name="creation_date" type="timestamp">
+            <column name="city" type="varchar(50)">
                 <constraints nullable="false"/>
             </column>
             <column name="delivery_date" type="date">
                 <constraints nullable="false"/>
             </column>
-            <column name="is_delivered" type="boolean">
+            <column name="is_important" type="boolean">
+                <constraints nullable="false"/>
+            </column>
+            <column name="actual_delivery_date" type="date"/>
+            <column name="creation_date" type="timestamp">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -46,13 +44,13 @@
             <column name="id" type="bigint" autoIncrement="true" startWith="1" incrementBy="1">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
+            <column name="order_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
             <column name="product_type_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
             <column name="amount" type="int">
-                <constraints nullable="false"/>
-            </column>
-            <column name="order_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
