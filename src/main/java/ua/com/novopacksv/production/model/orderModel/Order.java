@@ -24,20 +24,26 @@ public class Order extends BaseEntity {
     @PrimaryKeyJoinColumn
     private Client client;
 
-    @OneToMany(mappedBy = "order", orphanRemoval = true)
-    private List<OrderItem> orderItems;
+    @Column(name = "city", nullable = false)
+    private String city;
+
+    @Column(name = "delivery_date", nullable = false)
+    private LocalDate deliveryDate;
 
     @Column(name = "is_important", nullable = false)
     private Boolean isImportant;
+
+    @Column(name = "actual_delivery_date")
+    private LocalDate actualDeliveryDate;
 
     @CreationTimestamp
     @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
 
-    @Column(name = "delivery_date", nullable = false)
-    private LocalDate deliveryDate;
+    @Column(name = "is_overdue", nullable = false)
+    private Boolean isOverdue;
 
-    @Column(name = "is_delivered", nullable = false)
-    private Boolean isDelivered;
+    @OneToMany(mappedBy = "order", orphanRemoval = true)
+    private List<OrderItem> orderItems;
 
 }
