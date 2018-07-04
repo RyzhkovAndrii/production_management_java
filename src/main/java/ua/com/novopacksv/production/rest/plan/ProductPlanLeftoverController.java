@@ -31,34 +31,34 @@ public class ProductPlanLeftoverController {
     private ModelConversionService conversionService;
 
     @GetMapping(params = {"id", "from", "to"})
-    public ResponseEntity<ProductLeftOverResponse> getOneWithoutPlan(@RequestParam ("id") Long productTypeId,
-                                                                     @RequestParam ("from")LocalDate fromDate,
-                                                                     @RequestParam ("to") LocalDate toDate){
+    public ResponseEntity<ProductLeftOverResponse> getOneWithoutPlan(@RequestParam("id") Long productTypeId,
+                                                                     @RequestParam("from") LocalDate fromDate,
+                                                                     @RequestParam("to") LocalDate toDate) {
         ProductLeftOver productLeftOver = productPlanLeftoverService.getOneWithoutPlan(productTypeId, fromDate, toDate);
         ProductLeftOverResponse response = conversionService.convert(productLeftOver, ProductLeftOverResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping(params = {"id", "from", "to"})
-    public ResponseEntity<ProductLeftOverResponse> getOneTotal(@RequestParam ("id") Long productTypeId,
-                                                               @RequestParam ("from")LocalDate fromDate,
-                                                               @RequestParam ("to") LocalDate toDate){
+    @GetMapping(params = {"id", "from_date", "to_date"})
+    public ResponseEntity<ProductLeftOverResponse> getOneTotal(@RequestParam("id") Long productTypeId,
+                                                               @RequestParam("from_date") LocalDate fromDate,
+                                                               @RequestParam("to_date") LocalDate toDate) {
         ProductLeftOver productLeftOver = productPlanLeftoverService.getOneTotal(productTypeId, fromDate, toDate);
         ProductLeftOverResponse response = conversionService.convert(productLeftOver, ProductLeftOverResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping(params = {"from", "to"})
-    public ResponseEntity<List<ProductLeftOverResponse>> getAllWithoutPlan(@RequestParam ("from")LocalDate fromDate,
-                                                                           @RequestParam ("to") LocalDate toDate){
+    public ResponseEntity<List<ProductLeftOverResponse>> getAllWithoutPlan(@RequestParam("from") LocalDate fromDate,
+                                                                           @RequestParam("to") LocalDate toDate) {
         List<ProductLeftOver> productLeftOvers = productPlanLeftoverService.getAllWithoutPlan(fromDate, toDate);
         List<ProductLeftOverResponse> responses = conversionService.convert(productLeftOvers, ProductLeftOverResponse.class);
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
-    @GetMapping(params = {"from", "to"})
-    public ResponseEntity<List<ProductLeftOverResponse>> getAllTotal(@RequestParam ("from")LocalDate fromDate,
-                                                                           @RequestParam ("to") LocalDate toDate){
+    @GetMapping(params = {"from_date", "to_date"})
+    public ResponseEntity<List<ProductLeftOverResponse>> getAllTotal(@RequestParam("from_date") LocalDate fromDate,
+                                                                     @RequestParam("to_date") LocalDate toDate) {
         List<ProductLeftOver> productLeftOvers = productPlanLeftoverService.getAllTotal(fromDate, toDate);
         List<ProductLeftOverResponse> responses = conversionService.convert(productLeftOvers, ProductLeftOverResponse.class);
         return new ResponseEntity<>(responses, HttpStatus.OK);
