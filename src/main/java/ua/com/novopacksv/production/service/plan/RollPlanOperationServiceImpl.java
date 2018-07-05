@@ -25,6 +25,13 @@ public class RollPlanOperationServiceImpl implements RollPlanOperationService {
      */
     private final RollPlanOperationRepository rollPlanOperationRepository;
 
+    /**
+     * Method finds all operations for pointed roll type for a period
+     * @param rollTypeId - searching roll type's id
+     * @param fromDate - a beginning of a period
+     * @param toDate - an end of a period
+     * @return list of roll plan operations
+     */
     @Override
     public List<RollPlanOperation> findAll(Long rollTypeId, LocalDate fromDate, LocalDate toDate) {
         return rollPlanOperationRepository.findAllByRollType_IdAndDateBetween(rollTypeId, fromDate, toDate);

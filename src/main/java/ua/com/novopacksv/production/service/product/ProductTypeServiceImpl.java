@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.novopacksv.production.exception.NotAvailableColorException;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.productModel.ProductType;
 import ua.com.novopacksv.production.repository.productRepository.ProductTypeRepository;
@@ -122,7 +123,9 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     public ProductType update(ProductType productType) throws ResourceNotFoundException {
         ProductType oldProductType = findById(productType.getId());
         if(isProductTypeInNorm(productType)) {
-            productType.setColorCode(oldProductType.getColorCode());
+            if(!productType.getColorCode().equals(oldProductType.getColorCode())){
+                throw new NotAvailableColorException("Color can't be changed");
+            }
         }
             productTypeRepository.save(productType);
             log.debug("Method update(ProductType productType): product type {} was updated", productType);
