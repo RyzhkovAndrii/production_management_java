@@ -23,8 +23,8 @@ public class OrderItemsOfOrderController {
     private final ModelConversionService conversionService;
 
     @GetMapping
-    public ResponseEntity<List<OrderItemResponse>> getAllOrderItemsForOrder(@PathVariable("orderId") Long id) {
-        Order order = orderService.findById(id);
+    public ResponseEntity<List<OrderItemResponse>> getAllForOrder(@PathVariable("orderId") Long orderId) {
+        Order order = orderService.findById(orderId);
         List<OrderItem> orderItems = order.getOrderItems();
         List<OrderItemResponse> response = conversionService.convert(orderItems, OrderItemResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
