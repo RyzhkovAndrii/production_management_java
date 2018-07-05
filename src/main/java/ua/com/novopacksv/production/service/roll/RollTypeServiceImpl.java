@@ -136,7 +136,10 @@ public class RollTypeServiceImpl implements RollTypeService {
      */
     @Override
     public RollType update(RollType rollType) throws ResourceNotFoundException {
-        findById(rollType.getId());
+        RollType oldRollType = findById(rollType.getId());
+        if(normService.findFirstByRollTypeId(rollType.getId())){
+            rollType.setColorCode(oldRollType.getColorCode());
+        }
         checkWeightRange(rollType);
         log.debug("Method update(RollType rollType): Method save(RollType rollType) is calling");
         return rollTypeRepository.save(rollType);

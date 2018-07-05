@@ -12,4 +12,8 @@ public interface NormService extends BaseEntityService<Norm> {
     void deleteNormsWithoutRolls();
 
     Norm findOne(Long productTypeId);
+
+    Boolean findFirstByProductTypeId(Long productTypeId);
+
+    Boolean findFirstByRollTypeId(Long rollTypeId);
 }

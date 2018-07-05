@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import ua.com.novopacksv.production.model.normModel.Norm;
+import ua.com.novopacksv.production.model.productModel.ProductType;
+import ua.com.novopacksv.production.model.rollModel.RollType;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,4 +19,8 @@ public interface NormRepository extends JpaRepository<Norm, Long> {
     void deleteNormsByRollTypesNull();
 
     Optional <Norm> findByProductType_Id(Long productTypeId);
+
+    Norm findFirstByProductType_Id(Long productTypeId);
+
+    Norm findFirstByRollTypesContains(RollType rollType);
 }

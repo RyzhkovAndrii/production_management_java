@@ -1,6 +1,7 @@
 package ua.com.novopacksv.production.service.plan;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
@@ -10,11 +11,18 @@ import ua.com.novopacksv.production.repository.planRepository.RollPlanOperationR
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Class implements interface {@link RollPlanOperationService} and contains methods for work with repository's level
+ */
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class RollPlanOperationServiceImpl implements RollPlanOperationService {
 
+    /**
+     * An object of repository layer for have access to methods for work with db
+     */
     private final RollPlanOperationRepository rollPlanOperationRepository;
 
     @Override
@@ -26,7 +34,7 @@ public class RollPlanOperationServiceImpl implements RollPlanOperationService {
     public RollPlanOperation findById(Long id) throws ResourceNotFoundException {
         return rollPlanOperationRepository.findById(id).orElseThrow(() -> {
             String message = String.format("The roll plan operation with id = %d was not found", id);
-//            log.error("Method findById(Long id): The roll plan operation with id =() does not exist", id);
+            log.error("Method findById(Long id): The roll plan operation with id =() does not exist", id);
             return new ResourceNotFoundException(message);
         });
     }

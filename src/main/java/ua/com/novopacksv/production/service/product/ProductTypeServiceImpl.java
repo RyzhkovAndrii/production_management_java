@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.productModel.ProductType;
 import ua.com.novopacksv.production.repository.productRepository.ProductTypeRepository;
+import ua.com.novopacksv.production.service.norm.NormService;
 
 import java.util.List;
 
@@ -41,6 +42,13 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     @Autowired
     @Lazy
     private ProductCheckService productCheckService;
+
+    /**
+     * An object of service layer for have access to methods of work with norms
+     */
+    @Autowired
+    @Lazy
+    private NormService normService;
 
     /**
      * Method finds product type by it's id
@@ -112,10 +120,13 @@ public class ProductTypeServiceImpl implements ProductTypeService {
      */
     @Override
     public ProductType update(ProductType productType) throws ResourceNotFoundException {
-        findById(productType.getId());
-        productTypeRepository.save(productType);
-        log.debug("Method update(ProductType productType): product type {} was updated", productType);
-        return productType;
+        ProductType oldProductType = findById(productType.getId());
+        if(isProductTypeInNorm(productType)) {
+            productType.setColorCode(oldProductType.getColorCode());
+        }
+            productTypeRepository.save(productType);
+            log.debug("Method update(ProductType productType): product type {} was updated", productType);
+            return productType;
     }
 
     /**
@@ -131,4 +142,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
         log.debug("Method delete(Long id): product type {} with id = {} was deleted", productType, id);
     }
 
+    private Boolean isProductTypeInNorm(ProductType productType){
+        return normService.findFirstByProductTypeId(productType.getId()) != null;
+    }
 }
