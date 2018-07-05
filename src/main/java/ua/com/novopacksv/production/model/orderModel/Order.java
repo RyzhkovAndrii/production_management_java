@@ -36,11 +36,11 @@ public class Order extends BaseEntity {
     @Column(name = "actual_delivery_date")
     private LocalDate actualDeliveryDate;
 
-    @CreationTimestamp
-    @Column(name = "creation_date", nullable = false)
+    @CreationTimestamp // todo return null when update operation
+    @Column(name = "creation_date", nullable = false, updatable = false)
     private LocalDateTime creationDate;
 
-    @OneToMany(mappedBy = "order", orphanRemoval = true)
+    @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems;
 
 }
