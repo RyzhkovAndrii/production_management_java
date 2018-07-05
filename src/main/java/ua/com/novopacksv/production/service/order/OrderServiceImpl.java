@@ -1,6 +1,7 @@
 package ua.com.novopacksv.production.service.order;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
@@ -57,5 +58,21 @@ public class OrderServiceImpl implements OrderService {
     @Transactional(readOnly = true)
     public LocalDate findMaxDeliveryDate() {
         return orderRepository.findFirstByOrderByDeliveryDateDesc().getDeliveryDate();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Order> findAllNotDelivered(String sortProperties) {
+        Sort sort = new Sort(Sort.Direction.ASC, sortProperties);
+        return orderRepository.findAllByActualDeliveryDateIsNull(sort);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Order> findAllDelivered(LocalDate from, String sortProperties) {
+        Sort sort = new Sort(Sort.Direction.ASC, sortProperties);
+        return from == null
+                ? orderRepository.findAllByActualDeliveryDateIsNotNull(sort)
+                : orderRepository.findAllByActualDeliveryDateAfter(from, sort);
     }
 }

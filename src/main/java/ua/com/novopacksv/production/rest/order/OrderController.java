@@ -12,6 +12,7 @@ import ua.com.novopacksv.production.model.orderModel.Order;
 import ua.com.novopacksv.production.service.order.OrderService;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -26,6 +27,19 @@ public class OrderController {
     @GetMapping
     public ResponseEntity<List<OrderResponse>> getAll() {
         List<Order> clients = orderService.findAll();
+        List<OrderResponse> response = conversionService.convert(clients, OrderResponse.class);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping(params = {"isDelivered"})
+    public ResponseEntity<List<OrderResponse>> getAll(
+            @RequestParam(name = "isDelivered") Boolean isDelivered,
+            @RequestParam(name = "from", required = false) LocalDate from,
+            @RequestParam(name = "sort", defaultValue = "id") String sort
+    ) {
+        List<Order> clients = isDelivered
+                ? orderService.findAllDelivered(from, sort)
+                : orderService.findAllNotDelivered(sort);
         List<OrderResponse> response = conversionService.convert(clients, OrderResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
