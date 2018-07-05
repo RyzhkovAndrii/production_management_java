@@ -23,9 +23,9 @@ public class OrderItemController {
 
     private final ModelConversionService conversionService;
 
-    @GetMapping(params = {"orderId"})
-    public ResponseEntity<List<OrderItemResponse>> getAll(@RequestParam("orderId") Long orderId) {
-        List<OrderItem> orderItems = orderItemService.findAll(orderId);
+    @GetMapping
+    public ResponseEntity<List<OrderItemResponse>> getAll() {
+        List<OrderItem> orderItems = orderItemService.findAll();
         List<OrderItemResponse> response = conversionService.convert(orderItems, OrderItemResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -52,6 +52,12 @@ public class OrderItemController {
         orderItem = orderItemService.update(orderItem);
         OrderItemResponse response = conversionService.convert(orderItem, OrderItemResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        orderItemService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }
