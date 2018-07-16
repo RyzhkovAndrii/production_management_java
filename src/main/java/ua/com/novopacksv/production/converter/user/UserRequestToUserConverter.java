@@ -19,7 +19,7 @@ public class UserRequestToUserConverter implements Converter<UserRequest, User> 
                 .map(Role::valueOf)
                 .collect(Collectors.toList());
         User result = new User();
-        result.setUserName(source.getUserName());
+        result.setUsername(source.getUsername());
         result.setPassword(source.getPassword());
         result.setFirstName(source.getFirstName());
         result.setLastName(source.getLastName());

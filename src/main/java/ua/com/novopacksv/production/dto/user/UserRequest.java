@@ -9,7 +9,7 @@ import java.util.List;
 @Setter
 public class UserRequest {
 
-    private String userName;
+    private String username;
 
     private String password;
 
