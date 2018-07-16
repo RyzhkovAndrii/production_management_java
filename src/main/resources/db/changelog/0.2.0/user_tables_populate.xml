@@ -6,11 +6,12 @@
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
    http://www.liquibase.org/xml/ns/dbchangelog
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
-    <include file="db/changelog/db.changelog-master.xml"/>
-    <include file="db/changelog/0.0.1/test_roll_db.xml"/>
-    <include file="db/changelog/0.0.1/test_product_db.xml"/>
-    <include file="db/changelog/0.0.3/test_order_db.xml"/>
-    <include file="db/changelog/0.0.2/test_norm_db.xml"/>
-    <include file="db/changelog/0.0.2/test_norm_roll_type_db.xml"/>
-    <include file="db/changelog/0.2.0/test_user_db.xml"/>
+    <changeSet id="1" author="ryzhkov.andrii@gmail.com">
+        <insert tableName="users">
+            <column name="username" value="admin"/>
+            <column name="password" value="amin"/>
+            <column name="first_name" value="Властелин"/>
+            <column name="last_name" value="Админыч"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>
