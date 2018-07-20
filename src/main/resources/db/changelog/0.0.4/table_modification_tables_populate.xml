@@ -1,0 +1,53 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+   http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <changeSet id="1" author="ryzhkov.andrii@gmail.com">
+        <insert tableName="table_modifications">
+            <column name="user_id" value="1"/>
+            <column name="modification_date" value="1987-09-17 00:00:00"/>
+            <column name="table_type" value="ROLLS"/>
+        </insert>
+    </changeSet>
+    <changeSet id="2" author="ryzhkov.andrii@gmail.com">
+        <insert tableName="table_modifications">
+            <column name="user_id" value="1"/>
+            <column name="modification_date" value="1987-09-17 00:00:00"/>
+            <column name="table_type" value="PRODUCTS"/>
+        </insert>
+    </changeSet>
+    <changeSet id="3" author="ryzhkov.andrii@gmail.com">
+        <insert tableName="table_modifications">
+            <column name="user_id" value="1"/>
+            <column name="modification_date" value="1987-09-17 00:00:00"/>
+            <column name="table_type" value="ORDERS"/>
+        </insert>
+    </changeSet>
+    <changeSet id="4" author="ryzhkov.andrii@gmail.com">
+        <insert tableName="table_modifications">
+            <column name="user_id" value="1"/>
+            <column name="modification_date" value="1987-09-17 00:00:00"/>
+            <column name="table_type" value="NORMS"/>
+        </insert>
+    </changeSet>
+    <changeSet id="5" author="ryzhkov.andrii@gmail.com">
+        <insert tableName="table_modifications">
+            <column name="user_id" value="1"/>
+            <column name="modification_date" value="1987-09-17 00:00:00"/>
+            <column name="table_type" value="ROLL_PLANS"/>
+        </insert>
+    </changeSet>
+    <changeSet id="6" author="ryzhkov.andrii@gmail.com">
+        <insert tableName="table_modifications">
+            <column name="user_id" value="1"/>
+            <column name="modification_date" value="1987-09-17 00:00:00"/>
+            <column name="table_type" value="PRODUCT_PLANS"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

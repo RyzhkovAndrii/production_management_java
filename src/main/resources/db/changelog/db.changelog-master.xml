@@ -18,4 +18,7 @@
     <include file="db/changelog/0.2.0/user_tables_init.xml"/>
     <include file="db/changelog/0.2.0/user_tables_f_keys.xml"/>
     <include file="db/changelog/0.2.0/user_tables_populate.xml"/>
+    <include file="db/changelog/0.0.4/table_modification_tables_init.xml"/>
+    <include file="db/changelog/0.0.4/table_modification_tables_f_key.xml"/>
+    <include file="db/changelog/0.0.4/table_modification_tables_populate.xml"/>
 </databaseChangeLog>

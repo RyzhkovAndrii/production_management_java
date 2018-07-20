@@ -13,18 +13,18 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "modification")
+@Table(name = "table_modifications")
 public class TableModification extends BaseEntity {
 
     @ManyToOne
     @PrimaryKeyJoinColumn
     private final User user;
 
-    @Column(name = "modification_date")
+    @Column(name = "modification_date", nullable = false)
     @UpdateTimestamp
     private LocalDateTime modificationDateTime;
 
-    @Column(name = "table_type")
+    @Column(name = "table_type", nullable = false, unique = true)
     @Enumerated(EnumType.STRING)
     private final TableType tableType;
 
