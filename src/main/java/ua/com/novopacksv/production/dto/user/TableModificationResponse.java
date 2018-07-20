@@ -6,12 +6,12 @@ import ua.com.novopacksv.production.dto.BaseEntityResponse;
 
 @Getter
 @Setter
-public class ModificationResponse extends BaseEntityResponse {
+public class TableModificationResponse extends BaseEntityResponse {
 
     private Long userId;
 
-    private String modificationDate;
+    private String modificationDateTime;
 
-    private String table;
+    private String tableType;
 
 }

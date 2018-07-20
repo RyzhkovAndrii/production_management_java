@@ -1,30 +1,31 @@
 package ua.com.novopacksv.production.model.userModel;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.UpdateTimestamp;
 import ua.com.novopacksv.production.model.BaseEntity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@javax.persistence.Table(name = "modification")
-public class Modification extends BaseEntity {
+@Table(name = "modification")
+public class TableModification extends BaseEntity {
 
     @ManyToOne
     @PrimaryKeyJoinColumn
-    private User user;
+    private final User user;
 
     @Column(name = "modification_date")
-    private LocalDateTime modificationDate;
+    @UpdateTimestamp
+    private LocalDateTime modificationDateTime;
 
     @Column(name = "table_type")
     @Enumerated(EnumType.STRING)
-    private Table tableType;
+    private final TableType tableType;
+
 }
