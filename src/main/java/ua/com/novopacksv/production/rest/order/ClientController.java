@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ua.com.novopacksv.production.converter.ModelConversionService;
 import ua.com.novopacksv.production.dto.order.ClientRequest;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/clients", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_CMO', 'ROLE_ECONOMIST')")
 @RequiredArgsConstructor
 public class ClientController {
 
@@ -38,6 +40,7 @@ public class ClientController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER')")
     public ResponseEntity<ClientResponse> save(@Valid @RequestBody ClientRequest request) {
         Client client = conversionService.convert(request, Client.class);
         client = clientService.save(client);
@@ -46,6 +49,7 @@ public class ClientController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER')")
     public ResponseEntity<ClientResponse> update(@PathVariable Long id, @Valid @RequestBody ClientRequest request) {
         Client client = conversionService.convert(request, Client.class);
         client.setId(id);
@@ -55,6 +59,7 @@ public class ClientController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER')")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         clientService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

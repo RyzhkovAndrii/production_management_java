@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ua.com.novopacksv.production.converter.ModelConversionService;
 import ua.com.novopacksv.production.dto.product.ProductTypeRequest;
@@ -15,6 +16,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/product-types", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CMO', 'ROLE_CTO'," +
+        " 'ROLE_ACOUNTER', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER')")
 @RequiredArgsConstructor
 public class ProductTypeController {
 
@@ -44,6 +47,7 @@ public class ProductTypeController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CTO')")
     public ResponseEntity<ProductTypeResponse> save(@RequestBody ProductTypeRequest request) {
         ProductType productType = conversionService.convert(request, ProductType.class);
         productType = productTypeService.save(productType);
@@ -52,6 +56,7 @@ public class ProductTypeController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CTO')")
     public ResponseEntity<ProductTypeResponse> update(@PathVariable Long id, @RequestBody ProductTypeRequest request) {
         ProductType productType = conversionService.convert(request, ProductType.class);
         productType.setId(id);
@@ -61,6 +66,7 @@ public class ProductTypeController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CTO')")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         productTypeService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

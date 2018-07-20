@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ua.com.novopacksv.production.converter.ModelConversionService;
 import ua.com.novopacksv.production.dto.roll.RollCheckRequest;
@@ -16,6 +17,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/roll-checks", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO'," +
+        " 'ROLE_ACOUNTER', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER')")
 @RequiredArgsConstructor
 public class RollCheckController {
 
@@ -38,6 +41,7 @@ public class RollCheckController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_ACOUNTER', 'ROLE_STOREKEEPER')")
     public ResponseEntity<RollCheckResponse> update(@PathVariable Long id, @RequestBody @Valid RollCheckRequest request) {
         RollCheck rollCheck = conversionService.convert(request, RollCheck.class);
         rollCheck.setId(id);

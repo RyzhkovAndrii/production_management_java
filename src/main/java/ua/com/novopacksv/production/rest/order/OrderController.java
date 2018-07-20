@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ua.com.novopacksv.production.converter.ModelConversionService;
 import ua.com.novopacksv.production.dto.order.OrderRequest;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/orders", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_CMO', 'ROLE_ECONOMIST')")
 @RequiredArgsConstructor
 public class OrderController {
 
@@ -52,6 +54,7 @@ public class OrderController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER')")
     public ResponseEntity<OrderResponse> save(@Valid @RequestBody OrderRequest request) {
         Order order = conversionService.convert(request, Order.class);
         order = orderService.save(order);
@@ -60,6 +63,7 @@ public class OrderController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER')")
     public ResponseEntity<OrderResponse> update(@PathVariable Long id, @Valid @RequestBody OrderRequest request) {
         Order order = conversionService.convert(request, Order.class);
         order.setId(id);
@@ -69,6 +73,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER')")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         orderService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
