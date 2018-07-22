@@ -7,10 +7,12 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.novopacksv.production.exception.NotAvailableColorException;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.productModel.ProductType;
 import ua.com.novopacksv.production.model.userModel.TableType;
 import ua.com.novopacksv.production.repository.productRepository.ProductTypeRepository;
+import ua.com.novopacksv.production.service.norm.NormService;
 import ua.com.novopacksv.production.service.user.TableModificationService;
 
 import java.util.List;
@@ -47,6 +49,13 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     @Autowired
     @Lazy
     private ProductCheckService productCheckService;
+
+    /**
+     * An object of service layer for have access to methods of work with norms
+     */
+    @Autowired
+    @Lazy
+    private NormService normService;
 
     /**
      * Method finds product type by it's id
@@ -119,10 +128,16 @@ public class ProductTypeServiceImpl implements ProductTypeService {
      */
     @Override
     public ProductType update(ProductType productType) throws ResourceNotFoundException {
-        findById(productType.getId());
-        tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
-        log.debug("Method update(ProductType productType): product type {} was updated", productType);
-        return productType;
+        ProductType oldProductType = findById(productType.getId());
+        if(isProductTypeInNorm(productType)) {
+            if(!productType.getColorCode().equals(oldProductType.getColorCode())){
+                throw new NotAvailableColorException("Color can't be changed");
+            }
+        }
+            tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
+            productTypeRepository.save(productType);
+            log.debug("Method update(ProductType productType): product type {} was updated", productType);
+            return productType;
     }
 
     /**
@@ -139,4 +154,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
         log.debug("Method delete(Long id): product type {} with id = {} was deleted", productType, id);
     }
 
+    private Boolean isProductTypeInNorm(ProductType productType){
+        return normService.findFirstByProductTypeId(productType.getId()) != null;
+    }
 }

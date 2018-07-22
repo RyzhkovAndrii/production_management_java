@@ -111,7 +111,7 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
     }
 
     /**
-     * Method find product leftover by id
+     * Method finds product leftover by id
      *
      * @param id - product leftover's id
      * @return leftover

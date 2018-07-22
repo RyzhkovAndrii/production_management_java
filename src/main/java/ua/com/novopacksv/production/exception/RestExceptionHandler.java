@@ -28,7 +28,7 @@ public class RestExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler({NegativeAmountException.class, NotUniqueFieldException.class, RangeException.class})
+    @ExceptionHandler({NegativeAmountException.class, NotUniqueFieldException.class, RangeException.class, NotAvailableColorException.class})
     public ResponseEntity<ExceptionResponse> handleIncorrectResponseDataException(Exception ex) {
         String message = Optional.of(ex.getMessage()).orElse(ex.getClass().getSimpleName());
         ExceptionResponse response = new ExceptionResponse();

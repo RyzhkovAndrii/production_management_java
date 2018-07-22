@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.novopacksv.production.exception.NotAvailableColorException;
 import ua.com.novopacksv.production.exception.RangeException;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.rollModel.RollType;
@@ -143,7 +144,12 @@ public class RollTypeServiceImpl implements RollTypeService {
      */
     @Override
     public RollType update(RollType rollType) throws ResourceNotFoundException {
-        findById(rollType.getId());
+        RollType oldRollType = findById(rollType.getId());
+        if(normService.findFirstByRollTypeId(rollType.getId())){
+            if (!rollType.getColorCode().equals(oldRollType.getColorCode())){
+                throw new NotAvailableColorException("Color can't be changed");
+            }
+        }
         checkWeightRange(rollType);
         tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
         log.debug("Method update(RollType rollType): Method save(RollType rollType) is calling");
