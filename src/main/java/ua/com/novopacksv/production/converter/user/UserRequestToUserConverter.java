@@ -20,7 +20,6 @@ public class UserRequestToUserConverter implements Converter<UserRequest, User> 
                 .collect(Collectors.toList());
         User result = new User();
         result.setUsername(source.getUsername());
-        result.setPassword(source.getPassword());
         result.setFirstName(source.getFirstName());
         result.setLastName(source.getLastName());
         result.setRoles(roles);

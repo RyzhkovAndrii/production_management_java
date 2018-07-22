@@ -1,6 +1,7 @@
 package ua.com.novopacksv.production.service.user;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.NotUniqueFieldException;
@@ -17,6 +18,8 @@ import java.util.Objects;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     @Transactional(readOnly = true)
@@ -36,13 +39,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public User save(User user) {
         checkUsernameUnique(user);
+        user.setPassword(passwordEncoder.encode(user.getUsername()));
         return userRepository.save(user);
     }
 
     @Override
     public User update(User user) {
-        findById(user.getId());
-        return save(user);
+        checkUsernameUnique(user);
+        User entity = findById(user.getId());
+        user.setPassword(entity.getPassword());
+        return userRepository.save(user);
     }
 
     @Override

@@ -18,10 +18,6 @@ public class UserRequest {
     @Size(max = 30, message = "username must be less then 30 symbols long!")
     private String username;
 
-    @NotBlank(message = "password is a required field!")
-    @Size(max = 30, message = "password must be less then 30 symbols long!")
-    private String password;
-
     @NotBlank(message = "first name is a required field!")
     @Size(max = 30, message = "first name must be less then 30 symbols long!")
     private String firstName;
