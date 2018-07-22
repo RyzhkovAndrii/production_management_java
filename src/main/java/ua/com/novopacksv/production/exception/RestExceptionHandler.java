@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.validation.ConstraintViolationException;
 import java.io.IOException;
 import java.util.Optional;
 
@@ -47,8 +48,18 @@ public class RestExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ConstraintViolationExceptionResponse> handleConstraintViolationException(ConstraintViolationException ex) {
+        ConstraintViolationExceptionResponse response = new ConstraintViolationExceptionResponse();
+        response.setStatus(400);
+        response.setError("Bad Request");
+        response.setMessage("Invalid " + ex.getLocalizedMessage());
+        ex.getConstraintViolations().forEach(response::addViolation);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity <ExceptionResponse>handleAccessDeniedException() throws IOException {
+    public ResponseEntity<ExceptionResponse> handleAccessDeniedException() throws IOException {
         ExceptionResponse response = new ExceptionResponse();
         response.setStatus(403);
         response.setError("Forbidden");
