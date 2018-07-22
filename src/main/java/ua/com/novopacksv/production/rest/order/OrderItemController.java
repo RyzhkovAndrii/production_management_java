@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ua.com.novopacksv.production.converter.ModelConversionService;
 import ua.com.novopacksv.production.dto.order.OrderItemRequest;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/order-items", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_CMO', 'ROLE_ECONOMIST')")
 @RequiredArgsConstructor
 public class OrderItemController {
 
@@ -23,9 +25,9 @@ public class OrderItemController {
 
     private final ModelConversionService conversionService;
 
-    @GetMapping(params = {"orderId"})
-    public ResponseEntity<List<OrderItemResponse>> getAll(@RequestParam("orderId") Long orderId) {
-        List<OrderItem> orderItems = orderItemService.findAll(orderId);
+    @GetMapping
+    public ResponseEntity<List<OrderItemResponse>> getAll() {
+        List<OrderItem> orderItems = orderItemService.findAll();
         List<OrderItemResponse> response = conversionService.convert(orderItems, OrderItemResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -38,6 +40,7 @@ public class OrderItemController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER')")
     public ResponseEntity<OrderItemResponse> save(@Valid @RequestBody OrderItemRequest request) {
         OrderItem orderItem = conversionService.convert(request, OrderItem.class);
         orderItem = orderItemService.save(orderItem);
@@ -46,12 +49,20 @@ public class OrderItemController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER')")
     public ResponseEntity<OrderItemResponse> update(@PathVariable Long id, @Valid @RequestBody OrderItemRequest request) {
         OrderItem orderItem = conversionService.convert(request, OrderItem.class);
         orderItem.setId(id);
         orderItem = orderItemService.update(orderItem);
         OrderItemResponse response = conversionService.convert(orderItem, OrderItemResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER')")
+    public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+        orderItemService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
 }

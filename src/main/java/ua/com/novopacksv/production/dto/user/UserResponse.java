@@ -10,7 +10,7 @@ import java.util.List;
 @Setter
 public class UserResponse extends BaseEntityResponse {
 
-    private String userName;
+    private String username;
 
     private String firstName;
 

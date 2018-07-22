@@ -19,7 +19,7 @@ public class UserToUserResponseConverter implements Converter<User, UserResponse
                 .collect(Collectors.toList());
         UserResponse result = new UserResponse();
         result.setId(source.getId());
-        result.setUserName(source.getUserName());
+        result.setUsername(source.getUsername());
         result.setFirstName(source.getFirstName());
         result.setLastName(source.getLastName());
         result.setRoles(roles);

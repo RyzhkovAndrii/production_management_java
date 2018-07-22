@@ -7,8 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.RangeException;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.rollModel.RollType;
+import ua.com.novopacksv.production.model.userModel.TableType;
 import ua.com.novopacksv.production.repository.rollRepository.RollTypeRepository;
 import ua.com.novopacksv.production.service.norm.NormService;
+import ua.com.novopacksv.production.service.user.TableModificationService;
 
 import java.util.List;
 
@@ -24,6 +26,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class RollTypeServiceImpl implements RollTypeService {
+
+    private final static TableType TABLE_TYPE_FOR_UPDATE = TableType.ROLLS;
 
     /**
      * Содержит методы для работы с базой данных (DAO уровень) для сущности {@code RollType}
@@ -41,6 +45,8 @@ public class RollTypeServiceImpl implements RollTypeService {
     private final RollCheckService rollCheckService;
 
     private final NormService normService;
+
+    private final TableModificationService tableModificationService;
 
     /**
      * Ищет в базе и возвращает тип произоводимого на предприятии рулона по указанному id.
@@ -117,6 +123,7 @@ public class RollTypeServiceImpl implements RollTypeService {
     @Override
     public RollType save(RollType rollType) {
         checkWeightRange(rollType);
+        tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
         RollType entityRollType = rollTypeRepository.save(rollType);
         rollLeftOverService.createNewLeftOverAndSave(entityRollType);
         rollCheckService.createNewRollCheckAndSave(entityRollType);
@@ -138,6 +145,7 @@ public class RollTypeServiceImpl implements RollTypeService {
     public RollType update(RollType rollType) throws ResourceNotFoundException {
         findById(rollType.getId());
         checkWeightRange(rollType);
+        tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
         log.debug("Method update(RollType rollType): Method save(RollType rollType) is calling");
         return rollTypeRepository.save(rollType);
     }
@@ -154,6 +162,7 @@ public class RollTypeServiceImpl implements RollTypeService {
     @Override
     public void delete(Long id) throws ResourceNotFoundException {
         RollType rollType = findById(id);
+        tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
         rollTypeRepository.delete(findById(id));
         normService.deleteNormsWithoutRolls();
         log.debug("Method delete(Long id): Roll type {} with id {} was deleted",rollType, id);

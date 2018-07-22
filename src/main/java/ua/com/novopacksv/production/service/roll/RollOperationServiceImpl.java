@@ -10,7 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.NegativeAmountException;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.rollModel.*;
+import ua.com.novopacksv.production.model.userModel.TableType;
 import ua.com.novopacksv.production.repository.rollRepository.RollOperationRepository;
+import ua.com.novopacksv.production.service.user.TableModificationService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,10 +28,14 @@ import java.util.Objects;
 @Slf4j
 public class RollOperationServiceImpl implements RollOperationService {
 
+    private final static TableType TABLE_TYPE_FOR_UPDATE = TableType.ROLLS;
+
     /**
      * Object of repository's level for work with DB with roll operations (DAO layer)
      */
     private final RollOperationRepository rollOperationRepository;
+
+    private final TableModificationService tableModificationService;
 
     /**
      * Object of service layer, it gives access to roll's leftover
@@ -173,7 +179,7 @@ public class RollOperationServiceImpl implements RollOperationService {
      */
     @Override
     public RollOperation update(RollOperation rollOperation) throws NegativeAmountException {
-        RollOperation oldRollOperation = rollOperationRepository.getOne(rollOperation.getId());
+        RollOperation oldRollOperation = rollOperationRepository.getOne(rollOperation.getId()); //todo why getOne ???
         checkOperationUpdateAllowed(rollOperation);
         RollLeftOver rollLeftOver = rollLeftOverService
                 .findLastRollLeftOverByRollType(rollOperation.getRollManufactured().getRollType());

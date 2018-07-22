@@ -27,10 +27,13 @@ public class OrderRequestToOrderConverter implements Converter<OrderRequest, Ord
     public Order convert(OrderRequest source) {
         Client client = clientService.findById(source.getClientId());
         LocalDate deliveryDate = conversionService.convert(source.getDeliveryDate(), LocalDate.class);
+        LocalDate actualDeliveryDate = conversionService.convert(source.getActualDeliveryDate(), LocalDate.class);
         Order result = new Order();
         result.setClient(client);
-        result.setIsImportant(source.getIsImportant());
+        result.setCity(source.getCity());
         result.setDeliveryDate(deliveryDate);
+        result.setIsImportant(source.getIsImportant());
+        result.setActualDeliveryDate(actualDeliveryDate);
         return result;
     }
 

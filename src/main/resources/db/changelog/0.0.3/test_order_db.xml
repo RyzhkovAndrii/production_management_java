@@ -9,7 +9,7 @@
 
     <changeSet id="1" author="ryzhkov.andrii@gmail.com">
             <insert tableName="clients">
-                <column name="name" value="ООО &quot;Рога и Копыта&quot;"/>
+                <column name="name" value="ООО &quot;Наша ряба&quot;"/>
         </insert>
     </changeSet>
 
@@ -20,96 +20,196 @@
     </changeSet>
 
     <changeSet id="3" author="ryzhkov.andrii@gmail.com">
-        <insert tableName="orders">
-            <column name="client_id" value="1"/>
-            <column name="is_important" value="true"/>
-            <column name="creation_date" value="2018-04-27 18:45:06"/>
-            <column name="delivery_date" value="2018-05-15"/>
-            <column name="is_delivered" value="false"/>
+        <insert tableName="clients">
+            <column name="name" value="ОАО &quot;Ваша кура&quot;"/>
         </insert>
     </changeSet>
 
     <changeSet id="4" author="ryzhkov.andrii@gmail.com">
-        <insert tableName="orders">
-            <column name="client_id" value="1"/>
-            <column name="is_important" value="false"/>
-            <column name="creation_date" value="2018-04-26 12:09:45"/>
-            <column name="delivery_date" value="2018-04-30"/>
-            <column name="is_delivered" value="false"/>
+        <insert tableName="clients">
+            <column name="name" value="ПАО &quot;Тестим вместе&quot;"/>
         </insert>
     </changeSet>
 
     <changeSet id="5" author="ryzhkov.andrii@gmail.com">
         <insert tableName="orders">
-            <column name="client_id" value="2"/>
-            <column name="is_important" value="false"/>
-            <column name="creation_date" value="2018-04-27 09:10:52"/>
-            <column name="delivery_date" value="2018-05-01"/>
-            <column name="is_delivered" value="false"/>
+            <column name="client_id" value="1"/>
+            <column name="city" value="Киев"/>
+            <column name="delivery_date" value="2018-05-15"/>
+            <column name="is_important" value="true"/>
+            <column name="creation_date" value="2018-04-27 18:45:06"/>
         </insert>
     </changeSet>
 
     <changeSet id="6" author="ryzhkov.andrii@gmail.com">
-        <insert tableName="order_items">
-            <column name="product_type_id" value="1"/>
-            <column name="amount" value="6365"/>
-            <column name="order_id" value="1"/>
+        <insert tableName="orders">
+            <column name="client_id" value="1"/>
+            <column name="city" value="Полтава"/>
+            <column name="delivery_date" value="2018-05-23"/>
+            <column name="is_important" value="true"/>
+            <column name="actual_delivery_date" value="2018-05-26"/>
+            <column name="creation_date" value="2018-04-27 18:45:06"/>
         </insert>
     </changeSet>
 
     <changeSet id="7" author="ryzhkov.andrii@gmail.com">
-        <insert tableName="order_items">
-            <column name="product_type_id" value="2"/>
-            <column name="amount" value="2015"/>
-            <column name="order_id" value="1"/>
+        <insert tableName="orders">
+            <column name="client_id" value="2"/>
+            <column name="city" value="Полтава"/>
+            <column name="delivery_date" value="2018-07-02"/>
+            <column name="is_important" value="false"/>
+            <column name="actual_delivery_date" value="2018-06-20"/>
+            <column name="creation_date" value="2018-05-24 12:26:07"/>
         </insert>
     </changeSet>
 
     <changeSet id="8" author="ryzhkov.andrii@gmail.com">
-        <insert tableName="order_items">
-            <column name="product_type_id" value="3"/>
-            <column name="amount" value="560"/>
-            <column name="order_id" value="1"/>
+        <insert tableName="orders">
+            <column name="client_id" value="4"/>
+            <column name="city" value="Харьков"/>
+            <column name="delivery_date" value="2018-07-15"/>
+            <column name="is_important" value="false"/>
+            <column name="creation_date" value="2018-05-24 12:26:07"/>
         </insert>
     </changeSet>
 
     <changeSet id="9" author="ryzhkov.andrii@gmail.com">
-        <insert tableName="order_items">
-            <column name="product_type_id" value="1"/>
-            <column name="amount" value="1115"/>
-            <column name="order_id" value="2"/>
+        <insert tableName="orders">
+            <column name="client_id" value="3"/>
+            <column name="city" value="Львов"/>
+            <column name="delivery_date" value="2018-08-06"/>
+            <column name="is_important" value="false"/>
+            <column name="creation_date" value="2018-05-24 12:26:07"/>
         </insert>
     </changeSet>
 
     <changeSet id="10" author="ryzhkov.andrii@gmail.com">
-        <insert tableName="order_items">
-            <column name="product_type_id" value="3"/>
-            <column name="amount" value="658"/>
-            <column name="order_id" value="2"/>
+        <insert tableName="orders">
+            <column name="client_id" value="3"/>
+            <column name="city" value="Львов"/>
+            <column name="delivery_date" value="2018-08-15"/>
+            <column name="is_important" value="false"/>
+            <column name="creation_date" value="2018-05-24 12:26:07"/>
         </insert>
     </changeSet>
 
     <changeSet id="11" author="ryzhkov.andrii@gmail.com">
         <insert tableName="order_items">
+            <column name="order_id" value="1"/>
             <column name="product_type_id" value="1"/>
-            <column name="amount" value="1320"/>
-            <column name="order_id" value="3"/>
+            <column name="amount" value="6365"/>
         </insert>
     </changeSet>
 
     <changeSet id="12" author="ryzhkov.andrii@gmail.com">
         <insert tableName="order_items">
+            <column name="order_id" value="1"/>
             <column name="product_type_id" value="2"/>
-            <column name="amount" value="3658"/>
-            <column name="order_id" value="3"/>
+            <column name="amount" value="2015"/>
         </insert>
     </changeSet>
 
     <changeSet id="13" author="ryzhkov.andrii@gmail.com">
         <insert tableName="order_items">
+            <column name="order_id" value="1"/>
             <column name="product_type_id" value="3"/>
-            <column name="amount" value="120"/>
+            <column name="amount" value="560"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="14" author="ryzhkov.andrii@gmail.com">
+        <insert tableName="order_items">
+            <column name="order_id" value="2"/>
+            <column name="product_type_id" value="1"/>
+            <column name="amount" value="1115"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="15" author="ryzhkov.andrii@gmail.com">
+        <insert tableName="order_items">
+            <column name="order_id" value="2"/>
+            <column name="product_type_id" value="3"/>
+            <column name="amount" value="658"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="16" author="ryzhkov.andrii@gmail.com">
+        <insert tableName="order_items">
             <column name="order_id" value="3"/>
+            <column name="product_type_id" value="1"/>
+            <column name="amount" value="1320"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="17" author="ryzhkov.andrii@gmail.com">
+        <insert tableName="order_items">
+            <column name="order_id" value="3"/>
+            <column name="product_type_id" value="2"/>
+            <column name="amount" value="3658"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="18" author="ryzhkov.andrii@gmail.com">
+        <insert tableName="order_items">
+            <column name="order_id" value="3"/>
+            <column name="product_type_id" value="3"/>
+            <column name="amount" value="6500"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="19" author="ryzhkov.andrii@gmail.com">
+        <insert tableName="order_items">
+            <column name="order_id" value="4"/>
+            <column name="product_type_id" value="1"/>
+            <column name="amount" value="2000"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="20" author="ryzhkov.andrii@gmail.com">
+        <insert tableName="order_items">
+            <column name="order_id" value="4"/>
+            <column name="product_type_id" value="4"/>
+            <column name="amount" value="365"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="21" author="ryzhkov.andrii@gmail.com">
+        <insert tableName="order_items">
+            <column name="order_id" value="4"/>
+            <column name="product_type_id" value="2"/>
+            <column name="amount" value="500"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="22" author="ryzhkov.andrii@gmail.com">
+        <insert tableName="order_items">
+            <column name="order_id" value="4"/>
+            <column name="product_type_id" value="3"/>
+            <column name="amount" value="9860"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="23" author="ryzhkov.andrii@gmail.com">
+        <insert tableName="order_items">
+            <column name="order_id" value="5"/>
+            <column name="product_type_id" value="4"/>
+            <column name="amount" value="670"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="24" author="ryzhkov.andrii@gmail.com">
+        <insert tableName="order_items">
+            <column name="order_id" value="6"/>
+            <column name="product_type_id" value="1"/>
+            <column name="amount" value="3400"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="25" author="ryzhkov.andrii@gmail.com">
+        <insert tableName="order_items">
+            <column name="order_id" value="6"/>
+            <column name="product_type_id" value="2"/>
+            <column name="amount" value="6800"/>
         </insert>
     </changeSet>
 

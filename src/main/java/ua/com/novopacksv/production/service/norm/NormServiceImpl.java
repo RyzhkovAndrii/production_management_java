@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.normModel.Norm;
+import ua.com.novopacksv.production.model.userModel.TableType;
 import ua.com.novopacksv.production.repository.normRepository.NormRepository;
+import ua.com.novopacksv.production.service.user.TableModificationService;
 
 import java.util.List;
 
@@ -14,12 +16,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class NormServiceImpl implements NormService {
 
+    private final static TableType TABLE_TYPE_FOR_UPDATE = TableType.NORMS;
+
     private final NormRepository normRepository;
+
+    private final TableModificationService tableModificationService;
 
     @Override
     public Norm findById(Long id) throws ResourceNotFoundException {
-        return normRepository.findById(id).orElseThrow(() ->
-        {
+        return normRepository.findById(id).orElseThrow(() -> {
             String message = String.format("Norm with id = %d was not found", id);
             return new ResourceNotFoundException(message);
         });
@@ -32,17 +37,19 @@ public class NormServiceImpl implements NormService {
 
     @Override
     public Norm save(Norm norm) {
+        tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
         return normRepository.save(norm);
     }
 
     @Override
     public Norm update(Norm norm) throws ResourceNotFoundException {
         findById(norm.getId());
-        return normRepository.save(norm);
+        return save(norm);
     }
 
     @Override
     public void delete(Long id) throws ResourceNotFoundException {
+        tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
         normRepository.delete(findById(id));
     }
 
@@ -55,4 +62,5 @@ public class NormServiceImpl implements NormService {
     public void deleteNormsWithoutRolls() {
         normRepository.deleteNormsByRollTypesNull();
     }
+
 }
