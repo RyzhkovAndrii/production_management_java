@@ -36,7 +36,7 @@ public class ProductPlanOperationServiceImpl implements ProductPlanOperationServ
     private RollTypeService rollTypeService;
 
     @Override
-    public List<ProductPlanOperation> getAll(Long productTypeId,LocalDate fromDate, LocalDate toDate) {
+    public List<ProductPlanOperation> getAll(Long productTypeId, LocalDate fromDate, LocalDate toDate) {
         return productPlanOperationRepository.findByProductType_IdAndDateBetween(productTypeId, fromDate, toDate);
     }
 
@@ -64,12 +64,15 @@ public class ProductPlanOperationServiceImpl implements ProductPlanOperationServ
 
     @Override
     public ProductPlanOperation save(ProductPlanOperation productPlanOperation) {
-        return productPlanOperationRepository.save(productPlanOperation);
+        return productPlanOperationRepository.save(setAmountByNorm(productPlanOperation));
     }
 
     @Override
     public ProductPlanOperation update(ProductPlanOperation productPlanOperation) throws ResourceNotFoundException {
-        findById(productPlanOperation.getId());
+        ProductPlanOperation planOperationOld = findById(productPlanOperation.getId());
+        if (!planOperationOld.getProductAmount().equals(productPlanOperation.getProductAmount())) {
+            productPlanOperation = setAmountByNorm(productPlanOperation);
+        }
         return productPlanOperationRepository.save(productPlanOperation);
     }
 
@@ -78,13 +81,22 @@ public class ProductPlanOperationServiceImpl implements ProductPlanOperationServ
         productPlanOperationRepository.delete(findById(id));
     }
 
-    private Integer getRollQuantity(Long productTypeId, Integer amount){
+    private Integer getRollQuantity(Long productTypeId, Integer amount) {
         Norm norm = normService.findOne(productTypeId);
         return (int) Math.floor(amount / norm.getNorm());
     }
 
-    private Integer getProductQuantity(Long productTypeId, Integer rollQuantity){
+    private Integer getProductQuantity(Long productTypeId, Integer rollQuantity) {
         Norm norm = normService.findOne(productTypeId);
-        return norm.getNorm()*rollQuantity;
+        return norm.getNorm() * rollQuantity;
+    }
+
+    private ProductPlanOperation setAmountByNorm(ProductPlanOperation productPlanOperation) {
+        Integer rollQuantity = getRollQuantity(productPlanOperation.getProductType().getId(),
+                productPlanOperation.getProductAmount());
+        productPlanOperation.setRollAmount(rollQuantity);
+        productPlanOperation.setProductAmount(getProductQuantity(productPlanOperation.getProductType().getId(),
+                rollQuantity));
+        return productPlanOperation;
     }
 }
