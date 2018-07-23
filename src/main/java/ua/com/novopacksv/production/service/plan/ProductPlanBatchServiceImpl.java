@@ -1,6 +1,7 @@
 package ua.com.novopacksv.production.service.plan;
 
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -84,12 +85,19 @@ public class ProductPlanBatchServiceImpl implements ProductPlanBatchService {
         }
     }
 
+    @Nullable
     private ProductPlanBatch getOne(ProductType productType, LocalDate date) {
+        Integer manufacturedAmount = countProductPlanManufacturedAmount(productType.getId(), date);
+        Integer usedAmount = countProductPlanUsedAmount(productType.getId(), date);
+        if (manufacturedAmount == 0 && usedAmount == 0) {
+            return null;
+        }
+
         ProductPlanBatch productPlanBatch = new ProductPlanBatch();
         productPlanBatch.setDate(date);
         productPlanBatch.setProductType(productType);
-        productPlanBatch.setManufacturedAmount(countProductPlanManufacturedAmount(productType.getId(), date));
-        productPlanBatch.setUsedAmount(countProductPlanUsedAmount(productType.getId(), date));
+        productPlanBatch.setManufacturedAmount(manufacturedAmount);
+        productPlanBatch.setUsedAmount(usedAmount);
         return productPlanBatch;
     }
 
@@ -97,7 +105,10 @@ public class ProductPlanBatchServiceImpl implements ProductPlanBatchService {
         List<ProductPlanBatch> productPlanBatches = new ArrayList<>();
         LocalDate date = LocalDate.from(fromDate);
         do {
-            productPlanBatches.add(getOne(productType, date));
+            ProductPlanBatch planBatch = getOne(productType, date);
+            if (planBatch != null) {
+                productPlanBatches.add(planBatch);
+            }
         } while ((date = date.plusDays(1)).isBefore(toDate));
         return productPlanBatches;
     }
