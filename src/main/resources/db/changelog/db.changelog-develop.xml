@@ -13,4 +13,5 @@
     <include file="db/changelog/0.0.2/test_norm_db.xml"/>
     <include file="db/changelog/0.0.2/test_norm_roll_type_db.xml"/>
     <include file="db/changelog/0.0.4/test_plan_db.xml"/>
+    <include file="db/changelog/0.2.0/test_user_db.xml"/>
 </databaseChangeLog>

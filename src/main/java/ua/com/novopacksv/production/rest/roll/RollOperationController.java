@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ua.com.novopacksv.production.converter.ModelConversionService;
 import ua.com.novopacksv.production.dto.roll.RollOperationRequest;
@@ -17,6 +18,8 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/roll-operations", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO'," +
+        " 'ROLE_ACOUNTER', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER')")
 @RequiredArgsConstructor
 public class RollOperationController {
 
@@ -68,6 +71,7 @@ public class RollOperationController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CTO')")
     public ResponseEntity<RollOperationResponse> save(@Valid @RequestBody RollOperationRequest request) {
         RollOperation rollOperation = conversionService.convert(request, RollOperation.class);
         rollOperation = rollOperationService.save(rollOperation);
@@ -76,6 +80,7 @@ public class RollOperationController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CTO')")
     public ResponseEntity<RollOperationResponse> update(@PathVariable Long id, @Valid @RequestBody RollOperationRequest request) {
         RollOperation rollOperation = conversionService.convert(request, RollOperation.class);
         rollOperation.setId(id);
@@ -85,6 +90,7 @@ public class RollOperationController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CTO')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         rollOperationService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

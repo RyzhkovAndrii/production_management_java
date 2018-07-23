@@ -10,8 +10,10 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.NotAvailableColorException;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.productModel.ProductType;
+import ua.com.novopacksv.production.model.userModel.TableType;
 import ua.com.novopacksv.production.repository.productRepository.ProductTypeRepository;
 import ua.com.novopacksv.production.service.norm.NormService;
+import ua.com.novopacksv.production.service.user.TableModificationService;
 
 import java.util.List;
 
@@ -25,10 +27,14 @@ import java.util.List;
 @Slf4j
 public class ProductTypeServiceImpl implements ProductTypeService {
 
+    private final static TableType TABLE_TYPE_FOR_UPDATE = TableType.PRODUCTS;
+
     /**
      * An object of repository layer for have access to methods of work with DB
      */
     private final ProductTypeRepository productTypeRepository;
+
+    private final TableModificationService tableModificationService;
 
     /**
      * An object of service layer for have access to methods of work with products' leftovers
@@ -109,6 +115,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
         log.debug("Method save(ProductType productType): product type {} was saved", productType);
         productLeftOverService.saveByProductType(productType);
         productCheckService.createNewProductCheckAndSave(productType);
+        tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
         return productType;
     }
 
@@ -127,6 +134,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
                 throw new NotAvailableColorException("Color can't be changed");
             }
         }
+            tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
             productTypeRepository.save(productType);
             log.debug("Method update(ProductType productType): product type {} was updated", productType);
             return productType;
@@ -142,6 +150,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     public void delete(Long id) throws ResourceNotFoundException {
         ProductType productType = findById(id);
         productTypeRepository.delete(productType);
+        tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
         log.debug("Method delete(Long id): product type {} with id = {} was deleted", productType, id);
     }
 

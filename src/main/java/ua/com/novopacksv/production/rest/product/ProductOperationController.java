@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ua.com.novopacksv.production.converter.ModelConversionService;
 import ua.com.novopacksv.production.dto.product.ProductOperationRequest;
@@ -17,6 +18,8 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "product-operations", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CMO', 'ROLE_CTO'," +
+        " 'ROLE_ACOUNTER', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER')")
 public class ProductOperationController {
 
     private final ProductOperationService productOperationService;
@@ -50,6 +53,7 @@ public class ProductOperationController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER')")
     public ResponseEntity<ProductOperationResponse> save(@RequestBody ProductOperationRequest request) {
         ProductOperation productOperation = conversionService.convert(request, ProductOperation.class);
         productOperation = productOperationService.save(productOperation);
@@ -58,6 +62,7 @@ public class ProductOperationController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER')")
     public ResponseEntity<ProductOperationResponse> update(@PathVariable Long id,
                                                            @RequestBody ProductOperationRequest request) {
         ProductOperation productOperation = conversionService.convert(request, ProductOperation.class);
@@ -68,8 +73,10 @@ public class ProductOperationController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         productOperationService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 }

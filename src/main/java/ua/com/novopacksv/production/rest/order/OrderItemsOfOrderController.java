@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ua.com.novopacksv.production.converter.ModelConversionService;
 import ua.com.novopacksv.production.dto.order.OrderItemResponse;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/orders/{orderId}/order-items", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_CMO', 'ROLE_ECONOMIST')")
 @RequiredArgsConstructor
 public class OrderItemsOfOrderController {
 
@@ -23,8 +25,8 @@ public class OrderItemsOfOrderController {
     private final ModelConversionService conversionService;
 
     @GetMapping
-    public ResponseEntity<List<OrderItemResponse>> getAllOrderItemsForOrder(@PathVariable("orderId") Long id) {
-        Order order = orderService.findById(id);
+    public ResponseEntity<List<OrderItemResponse>> getAllForOrder(@PathVariable("orderId") Long orderId) {
+        Order order = orderService.findById(orderId);
         List<OrderItem> orderItems = order.getOrderItems();
         List<OrderItemResponse> response = conversionService.convert(orderItems, OrderItemResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);

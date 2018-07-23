@@ -76,10 +76,10 @@ public class ProductPlanBatchServiceImpl implements ProductPlanBatchService {
         return amount;
     }
 
-    private List<OrderItem> findOrders(Long productTypeId, LocalDate date) {
-        if (date.isAfter(LocalDate.now())) {
-            return orderItemService.findAll(productTypeService.findById(productTypeId), date, date);
-        } else {
+    private List<OrderItem> findOrders(Long productTypeId, LocalDate date){
+        if(date.isAfter(LocalDate.now())){
+           return orderItemService.findAll(productTypeService.findById(productTypeId), date, date);
+        }else {
             return orderItemService.findAllNotDelivered(productTypeService.findById(productTypeId), date);
         }
     }

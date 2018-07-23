@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ua.com.novopacksv.production.converter.ModelConversionService;
 import ua.com.novopacksv.production.dto.norm.NormForRollResponse;
@@ -16,6 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "/norms", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST')")
 @RequiredArgsConstructor
 public class NormController {
 
@@ -52,6 +54,7 @@ public class NormController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST')")
     public ResponseEntity<NormResponse> save(@RequestBody NormRequest request) {
         Norm norm = conversionService.convert(request, Norm.class);
         normService.save(norm);
@@ -60,6 +63,7 @@ public class NormController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST')")
     public ResponseEntity<NormResponse> update(@PathVariable Long id, @RequestBody NormRequest request) {
         Norm norm = conversionService.convert(request, Norm.class);
         norm.setId(id);
@@ -69,8 +73,10 @@ public class NormController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST')")
     public ResponseEntity<NormResponse> delete(@PathVariable Long id) {
         normService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 }

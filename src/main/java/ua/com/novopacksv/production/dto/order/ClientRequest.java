@@ -12,6 +12,7 @@ public class ClientRequest {
 
     @NotBlank(message = "client name is a required field!")
     @Size(max = 50, message = "client name must be less then 50 symbols long!")
+    // todo unique name validator
     private String name;
 
 }

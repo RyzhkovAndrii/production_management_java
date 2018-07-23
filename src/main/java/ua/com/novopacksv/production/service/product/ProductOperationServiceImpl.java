@@ -13,7 +13,9 @@ import ua.com.novopacksv.production.model.productModel.ProductLeftOver;
 import ua.com.novopacksv.production.model.productModel.ProductOperation;
 import ua.com.novopacksv.production.model.productModel.ProductOperationType;
 import ua.com.novopacksv.production.model.productModel.ProductType;
+import ua.com.novopacksv.production.model.userModel.TableType;
 import ua.com.novopacksv.production.repository.productRepository.ProductOperationRepository;
+import ua.com.novopacksv.production.service.user.TableModificationService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -28,6 +30,8 @@ import java.util.List;
 @Slf4j
 public class ProductOperationServiceImpl implements ProductOperationService {
 
+    private final static TableType TABLE_TYPE_FOR_UPDATE = TableType.PRODUCTS;
+
     /**
      * An object of repository layer for have access to methods of work with DB
      */
@@ -37,6 +41,8 @@ public class ProductOperationServiceImpl implements ProductOperationService {
      * An object of service layer for have access to methods of work with product's leftover
      */
     private final ProductLeftOverService productLeftOverService;
+
+    private final TableModificationService tableModificationService;
 
     /**
      * An object of service layer for have access to methods of work with product type
@@ -88,6 +94,7 @@ public class ProductOperationServiceImpl implements ProductOperationService {
     @Transactional(isolation = Isolation.READ_COMMITTED)
     public ProductOperation save(ProductOperation productOperation) throws ResourceNotFoundException {
         changingLeftOver(productOperation, getChangingAmount(productOperation));
+        tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
         log.debug("Method save(ProductOperation productOperation): product operation {} is saving", productOperation);
         return productOperationRepository.save(productOperation);
     }
@@ -103,6 +110,7 @@ public class ProductOperationServiceImpl implements ProductOperationService {
     public ProductOperation update(ProductOperation productOperation) throws ResourceNotFoundException {
         ProductOperation productOperationOld = findById(productOperation.getId());
         changingLeftOver(productOperation, productOperation.getAmount() - productOperationOld.getAmount());
+        tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
         log.debug("Method update(ProductOperation productOperation): product operation {} is updating", productOperation);
         return productOperationRepository.save(productOperation);
     }
@@ -118,8 +126,9 @@ public class ProductOperationServiceImpl implements ProductOperationService {
     public void delete(Long id) throws ResourceNotFoundException {
         ProductOperation productOperation = findById(id);
         changingLeftOver(productOperation, -getChangingAmount(productOperation));
-        productOperationRepository.delete(productOperation);
+        tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
         log.debug("Method delete(Long id): product operation {} with id {} was deleted", productOperation, id);
+        productOperationRepository.delete(productOperation);
     }
 
     /**

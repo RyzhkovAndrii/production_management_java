@@ -8,7 +8,6 @@ import ua.com.novopacksv.production.model.BaseEntity;
 import ua.com.novopacksv.production.model.productModel.ProductType;
 
 import javax.persistence.*;
-import javax.persistence.Table;
 
 @Data
 @NoArgsConstructor
@@ -20,13 +19,13 @@ public class OrderItem extends BaseEntity {
 
     @ManyToOne
     @PrimaryKeyJoinColumn
+    private Order order;
+
+    @ManyToOne
+    @PrimaryKeyJoinColumn
     private ProductType productType;
 
     @Column(name = "amount", nullable = false)
     private Integer amount;
-
-    @ManyToOne
-    @PrimaryKeyJoinColumn
-    private Order order;
 
 }
