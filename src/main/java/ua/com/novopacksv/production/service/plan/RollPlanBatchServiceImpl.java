@@ -6,10 +6,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.model.planModel.RollPlanBatch;
 import ua.com.novopacksv.production.model.planModel.RollPlanOperation;
+import ua.com.novopacksv.production.model.rollModel.RollType;
 import ua.com.novopacksv.production.service.roll.RollTypeService;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,9 +47,30 @@ public class RollPlanBatchServiceImpl implements RollPlanBatchService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public Map<Long, List<RollPlanBatch>> getAll(LocalDate fromDate, LocalDate toDate) {
+        List<RollType> rollTypes = rollTypeService.findAll();
+        Map<Long, List<RollPlanBatch>> rollBatchesMap = rollTypes
+                .stream()
+                .collect(Collectors.toMap(RollType::getId, v -> getFromRange(v, fromDate, toDate)));
+        return rollBatchesMap;
+    }
+
     private Integer countRollPlanUsedAmount(Long rollTypeId, LocalDate date) {
         return productPlanOperationService.getAllByRollTypeId(rollTypeId, date, date).stream()
                 .mapToInt((planOperation) -> planOperation.getRollAmount()).sum();
+    }
+
+    private List<RollPlanBatch> getFromRange(RollType rollType, LocalDate fromDate, LocalDate toDate){
+        List<RollPlanBatch> rollPlanBatches = new ArrayList<>();
+        LocalDate date = LocalDate.from(fromDate);
+        do {
+            RollPlanBatch planBatch = getOne(rollType.getId(), date);
+            if (planBatch != null) {
+                rollPlanBatches.add(planBatch);
+            }
+        } while ((date = date.plusDays(1)).isBefore(toDate));
+        return rollPlanBatches;
     }
 
     private Integer countRollPlanManufacturedAmount(Long rollTypeId, LocalDate date){
