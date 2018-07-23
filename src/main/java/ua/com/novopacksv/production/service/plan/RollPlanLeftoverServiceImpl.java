@@ -36,53 +36,53 @@ public class RollPlanLeftoverServiceImpl implements RollPlanLeftoverService {
     private ProductPlanOperationService productPlanOperationService;
 
     @Override
-    public RollLeftOver getOneWithoutPlan(Long rollTypeId, LocalDate fromDate, LocalDate toDate) {
-        RollLeftOver tempRollLeftover = createTempRollLeftover(rollTypeId, fromDate, toDate);
+    public RollLeftOver getOneWithoutPlan(Long rollTypeId, LocalDate toDate) {
+        RollLeftOver tempRollLeftover = createTempRollLeftover(rollTypeId, toDate);
         return tempRollLeftover;
     }
 
     @Override
-    public RollLeftOver getOneTotal(Long rollTypeId, LocalDate fromDate, LocalDate toDate) {
-        RollLeftOver tempRollLeftover = createTempRollLeftover(rollTypeId, fromDate, toDate);
-        Integer amount = tempRollLeftover.getAmount() + countAmountOfPlan(rollTypeId, fromDate, toDate);
+    public RollLeftOver getOneTotal(Long rollTypeId, LocalDate toDate) {
+        RollLeftOver tempRollLeftover = createTempRollLeftover(rollTypeId, toDate);
+        Integer amount = tempRollLeftover.getAmount() + countAmountOfPlan(rollTypeId, toDate);
         tempRollLeftover.setAmount(amount);
         return tempRollLeftover;
     }
 
     @Override
-    public List<RollLeftOver> getAllWithoutPlan(LocalDate fromDate, LocalDate toDate) {
+    public List<RollLeftOver> getAllWithoutPlan(LocalDate toDate) {
         List<RollType> rollTypes = rollTypeService.findAll();
         return rollTypes.stream()
-                .map(rollType -> getOneWithoutPlan(rollType.getId(), fromDate, toDate))
+                .map(rollType -> getOneWithoutPlan(rollType.getId(), toDate))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<RollLeftOver> getAllTotal(LocalDate fromDate, LocalDate toDate) {
+    public List<RollLeftOver> getAllTotal(LocalDate toDate) {
         List<RollType> rollTypes = rollTypeService.findAll();
         return rollTypes.stream()
-                .map(rollType -> getOneTotal(rollType.getId(), fromDate, toDate))
+                .map(rollType -> getOneTotal(rollType.getId(), toDate))
                 .collect(Collectors.toList());
     }
 
-    private RollLeftOver createTempRollLeftover(Long rollTypeId, LocalDate fromDate, LocalDate toDate) {
+    private RollLeftOver createTempRollLeftover(Long rollTypeId, LocalDate toDate) {
         RollLeftOver rollLeftOver =
                 rollLeftOverService.findLastRollLeftOverByRollType(rollTypeService.findById(rollTypeId));
         RollLeftOver tempRollLeftover = new RollLeftOver();
         tempRollLeftover.setRollType(rollLeftOver.getRollType());
         tempRollLeftover.setDate(toDate);
-        tempRollLeftover.setAmount(rollLeftOver.getAmount() - countAmountWithoutPlan(rollTypeId, fromDate, toDate));
+        tempRollLeftover.setAmount(rollLeftOver.getAmount() - countAmountWithoutPlan(rollTypeId, toDate));
         return tempRollLeftover;
     }
 
-    private Integer countAmountWithoutPlan(Long rollTypeId, LocalDate fromDate, LocalDate toDate) {
+    private Integer countAmountWithoutPlan(Long rollTypeId, LocalDate toDate) {
         List<ProductPlanOperation> productPlanOperations =
-                productPlanOperationService.getAllByRollTypeId(rollTypeId, fromDate, toDate);
+                productPlanOperationService.getAllByRollTypeId(rollTypeId, LocalDate.now(), toDate);
         return productPlanOperations.stream().mapToInt(ProductPlanOperation::getRollAmount).sum();
     }
 
-    private Integer countAmountOfPlan(Long rollTypeId, LocalDate fromDate, LocalDate toDate) {
-        List<RollPlanOperation> rollPlanOperations = rollPlanOperationService.findAll(rollTypeId, fromDate, toDate);
+    private Integer countAmountOfPlan(Long rollTypeId, LocalDate toDate) {
+        List<RollPlanOperation> rollPlanOperations = rollPlanOperationService.findAll(rollTypeId, LocalDate.now(), toDate);
         return rollPlanOperations.stream().mapToInt(RollPlanOperation::getRollQuantity).sum();
     }
 }
