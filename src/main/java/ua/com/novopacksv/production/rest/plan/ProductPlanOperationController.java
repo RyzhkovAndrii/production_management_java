@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ua.com.novopacksv.production.converter.ModelConversionService;
 import ua.com.novopacksv.production.dto.plan.ProductPlanOperationRequest;
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "product-plan-operations", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO','ROLE_ECONOMIST', 'ROLE_MANAGER')")
 public class ProductPlanOperationController {
 
     private final ProductPlanOperationService productPlanOperationService;
@@ -62,6 +64,7 @@ public class ProductPlanOperationController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO')")
     public ResponseEntity<ProductPlanOperationResponse> save(@RequestBody ProductPlanOperationRequest request) {
         ProductPlanOperation productPlanOperation = conversionService.convert(request, ProductPlanOperation.class);
         productPlanOperationService.save(productPlanOperation);
@@ -71,6 +74,7 @@ public class ProductPlanOperationController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO')")
     public ResponseEntity<ProductPlanOperationResponse> update(@PathVariable Long id,
                                                                @RequestBody ProductPlanOperationRequest request) {
         ProductPlanOperation productPlanOperation = conversionService.convert(request, ProductPlanOperation.class);
@@ -82,6 +86,7 @@ public class ProductPlanOperationController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         productPlanOperationService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
