@@ -37,57 +37,53 @@ public class ProductPlanLeftoverServiceImpl implements ProductPlanLeftoverServic
     private ProductTypeService productTypeService;
 
     @Override
-    public ProductLeftOver getOneWithoutPlan(Long productTypeId, LocalDate fromDate, LocalDate toDate) {
-        ProductLeftOver tempLeftover = createTempLeftover(productTypeId, fromDate, toDate);
+    public ProductLeftOver getOneWithoutPlan(Long productTypeId, LocalDate date) {
+        ProductLeftOver tempLeftover = createTempLeftover(productTypeId, date);
         return tempLeftover;
     }
 
     @Override
-    public List<ProductLeftOver> getAllWithoutPlan(LocalDate fromDate, LocalDate toDate) {
+    public List<ProductLeftOver> getAllWithoutPlan(LocalDate date) {
         List<ProductType> productTypes = productTypeService.findAll();
         return productTypes.stream()
-                .map(productType -> getOneWithoutPlan(productType.getId(), fromDate, toDate))
+                .map(productType -> getOneWithoutPlan(productType.getId(), date))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public ProductLeftOver getOneTotal(Long productTypeId, LocalDate fromDate, LocalDate toDate) {
-        ProductLeftOver tempLeftOver = createTempLeftover(productTypeId, fromDate, toDate);
-        Integer amount = tempLeftOver.getAmount() + countAmountOfPlan(productTypeId, fromDate, toDate);
+    public ProductLeftOver getOneTotal(Long productTypeId, LocalDate date) {
+        ProductLeftOver tempLeftOver = createTempLeftover(productTypeId, date);
+        Integer amount = tempLeftOver.getAmount() + countAmountOfPlan(productTypeId, date);
         tempLeftOver.setAmount(amount);
         return tempLeftOver;
     }
 
     @Override
-    public List<ProductLeftOver> getAllTotal(LocalDate fromDate, LocalDate toDate) {
+    public List<ProductLeftOver> getAllTotal(LocalDate date) {
         List<ProductType> productTypes = productTypeService.findAll();
         return productTypes.stream()
-                .map(productType -> getOneTotal(productType.getId(), fromDate, toDate))
+                .map(productType -> getOneTotal(productType.getId(), date))
                 .collect(Collectors.toList());
     }
 
-    private Integer countAmountWithoutPlan(Long productTypeId, LocalDate fromDate, LocalDate toDate) {
+    private Integer countAmountWithoutPlan(Long productTypeId, LocalDate date) {
         List<OrderItem> orderItems;
-        if (toDate.isAfter(LocalDate.now())) {
-            orderItems = orderItemService.findAll(productTypeService.findById(productTypeId), fromDate, toDate);
-        } else {
-            orderItems = orderItemService.findAllNotDelivered(productTypeService.findById(productTypeId), toDate);
-        }
+            orderItems = orderItemService.findAllNotDelivered(productTypeService.findById(productTypeId), date);
         return orderItems.stream().mapToInt(OrderItem::getAmount).sum();
     }
 
-    private Integer countAmountOfPlan(Long productTypeId, LocalDate fromDate, LocalDate toDate) {
+    private Integer countAmountOfPlan(Long productTypeId, LocalDate toDate) {
         List<ProductPlanOperation> productPlanOperations =
-                productPlanOperationService.getAll(productTypeId, fromDate, toDate);
+                productPlanOperationService.getAll(productTypeId, LocalDate.now(), toDate);
         return productPlanOperations.stream().mapToInt(ProductPlanOperation::getProductAmount).sum();
     }
 
-    private ProductLeftOver createTempLeftover(Long productTypeId, LocalDate fromDate, LocalDate toDate) {
+    private ProductLeftOver createTempLeftover(Long productTypeId, LocalDate date) {
         ProductLeftOver productLeftOver = productLeftOverService.findByProductTypeId(productTypeId);
         ProductLeftOver tempLeftover = new ProductLeftOver();
         tempLeftover.setProductType(productLeftOver.getProductType());
-        tempLeftover.setLeftDate(toDate);
-        tempLeftover.setAmount(productLeftOver.getAmount() - countAmountWithoutPlan(productTypeId, fromDate, toDate));
+        tempLeftover.setLeftDate(date);
+        tempLeftover.setAmount(productLeftOver.getAmount() - countAmountWithoutPlan(productTypeId, date));
         return tempLeftover;
     }
 }
