@@ -17,7 +17,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 @RestController
-@RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping("/auth")
 @Validated
 @RequiredArgsConstructor
 public class AuthController {
@@ -30,20 +30,21 @@ public class AuthController {
 
     private final PasswordEncoder passwordEncoder;
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login", produces = MediaType.TEXT_PLAIN_VALUE,
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<String> login(@RequestParam(name = "username") String username,
                                         @RequestParam(name = "password") String password) {
         return new ResponseEntity<>(securityService.login(username, password), HttpStatus.OK);
     }
 
-    @GetMapping("/me")
+    @GetMapping(value = "/me", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<UserResponse> getLoggedInUser() {
         User user = securityService.getLoggedInUser();
         UserResponse response = conversionService.convert(user, UserResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/password")
+    @PostMapping(value = "/password", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ResponseEntity<Void> changePassword(
             @RequestParam(name = "password")
             @Valid
