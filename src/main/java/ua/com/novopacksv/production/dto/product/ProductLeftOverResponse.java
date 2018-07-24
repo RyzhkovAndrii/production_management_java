@@ -6,7 +6,7 @@ import ua.com.novopacksv.production.dto.BaseEntityResponse;
 
 @Getter
 @Setter
-public class ProductLeftOverResponse extends BaseEntityResponse {
+public class ProductLeftOverResponse {
 
     private String date;
 
