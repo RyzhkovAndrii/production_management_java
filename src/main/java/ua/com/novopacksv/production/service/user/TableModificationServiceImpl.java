@@ -30,8 +30,11 @@ public class TableModificationServiceImpl implements TableModificationService {
     @Override
     public TableModification update(TableType tableType) {
         TableModification entity = findOne(tableType);
-        entity.setUser(service.getLoggedInUser());
-        return tableModificationRepository.save(entity);
+        TableModification newEntity = new TableModification();
+        newEntity.setId(entity.getId());
+        newEntity.setUser(service.getLoggedInUser());
+        newEntity.setTableType(tableType);
+        return tableModificationRepository.save(newEntity);
     }
 
 }
