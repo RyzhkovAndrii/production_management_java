@@ -52,4 +52,13 @@
                              initiallyDeferred="true"
                              constraintName="const_roll_type"/>
     </changeSet>
+    <changeSet id="6" author="pryadilnikova@gmail.com">
+        <addForeignKeyConstraint baseTableName="roll_operation"
+                                 baseColumnNames="product_type_id"
+                                 constraintName="fk_roll_operation_product_type"
+                                 onUpdate="CASCADE"
+                                 onDelete="CASCADE"
+                                 referencedTableName="product_type"
+                                 referencedColumnNames="id"/>
+    </changeSet>
 </databaseChangeLog>

@@ -43,6 +43,9 @@
             <column name="roll_amount" type="int">
                 <constraints nullable="false"/>
             </column>
+            <column name="product_type_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
         </createTable>
     </changeSet>
     <changeSet id="3" author="pryadilnikova@gmail.com">
