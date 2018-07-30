@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Setter
 public class RollPlanOperationResponse extends BaseEntityResponse {
 
-    private LocalDate date;
+    private String date;
 
     private Long rollTypeId;
 
