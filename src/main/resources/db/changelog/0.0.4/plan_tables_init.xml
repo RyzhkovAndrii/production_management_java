@@ -44,4 +44,23 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="3" author="pryadilnikova@gmail.com">
+        <createTable tableName="machine_plan">
+            <column name="id" type="bigint">
+                   <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="machine_number" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time_start" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_type_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_amount" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @Table(name = "machine_plan")
 public class MachinePlan extends BaseEntity {
 
-    @Column(name = "machine_name", nullable = false)
+    @Column(name = "machine_number", nullable = false)
     private Integer machineNumber;
 
     @Column(name = "time_start", nullable = false)
