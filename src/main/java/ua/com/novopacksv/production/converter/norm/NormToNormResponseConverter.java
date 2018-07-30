@@ -20,6 +20,7 @@ public class NormToNormResponseConverter implements Converter<Norm, NormResponse
                 .map(BaseEntity::getId).collect(Collectors.toList());
         normResponse.setRollTypeIds(rollTypeIds);
         normResponse.setProductTypeId(source.getProductType().getId());
+        normResponse.setNormForDay(source.getNormForDay());
         return normResponse;
     }
 }

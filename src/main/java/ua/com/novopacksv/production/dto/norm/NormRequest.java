@@ -14,4 +14,6 @@ public class NormRequest {
     private Long productTypeId;
 
     private Integer norm;
+
+    private Integer normForDay;
 }
