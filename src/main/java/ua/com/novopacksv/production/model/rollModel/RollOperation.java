@@ -34,7 +34,7 @@ public class RollOperation extends BaseEntity {
     @Column(name = "roll_amount", nullable = false)
     private Integer rollAmount;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @PrimaryKeyJoinColumn
     @Nullable
     private ProductType productTypeForUseOperation;
