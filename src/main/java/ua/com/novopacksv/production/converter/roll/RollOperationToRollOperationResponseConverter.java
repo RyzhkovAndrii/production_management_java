@@ -27,6 +27,9 @@ public class RollOperationToRollOperationResponseConverter implements Converter<
         result.setManufacturedDate(manufacturedDate);
         result.setRollTypeId(source.getRollManufactured().getRollType().getId());
         result.setRollAmount(source.getRollAmount());
+        if(source.getProductTypeForUseOperation().getId() != null){
+            result.setProductTypeIdForUseOperation(source.getProductTypeForUseOperation().getId());
+        }
         return result;
     }
 

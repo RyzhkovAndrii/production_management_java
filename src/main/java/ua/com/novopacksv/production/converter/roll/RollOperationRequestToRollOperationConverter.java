@@ -10,6 +10,7 @@ import ua.com.novopacksv.production.model.rollModel.OperationType;
 import ua.com.novopacksv.production.model.rollModel.RollManufactured;
 import ua.com.novopacksv.production.model.rollModel.RollOperation;
 import ua.com.novopacksv.production.model.rollModel.RollType;
+import ua.com.novopacksv.production.service.product.ProductTypeService;
 import ua.com.novopacksv.production.service.roll.RollManufacturedService;
 import ua.com.novopacksv.production.service.roll.RollTypeService;
 
@@ -30,6 +31,10 @@ public class RollOperationRequestToRollOperationConverter implements Converter<R
     @Lazy
     private RollManufacturedService rollManufacturedService;
 
+    @Autowired
+    @Lazy
+    private ProductTypeService productTypeService;
+
     @Override
     public RollOperation convert(RollOperationRequest source) {
         LocalDate operationDate = conversionService.convert(source.getOperationDate(), LocalDate.class);
@@ -41,6 +46,9 @@ public class RollOperationRequestToRollOperationConverter implements Converter<R
         result.setRollManufactured(rollManufactured);
         result.setOperationType(OperationType.valueOf(source.getOperationType().toUpperCase()));
         result.setRollAmount(source.getRollAmount());
+        if(source.getProductTypeIdForUseOperation() != null){
+            result.setProductTypeForUseOperation(productTypeService.findById(source.getProductTypeIdForUseOperation()));
+        }
         return result;
     }
 
