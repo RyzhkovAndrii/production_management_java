@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import ua.com.novopacksv.production.model.productModel.ProductType;
 import ua.com.novopacksv.production.validator.ExistInDb;
-import ua.com.novopacksv.production.validator.LocalDateTimeFormat;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
@@ -20,7 +19,6 @@ public class MachinePlanRequest {
     private Integer machineNumber;
 
     @NotBlank(message = "field timeStart can't be empty!")
-    @LocalDateTimeFormat(message = "timeStart has incorrect format!")
     private String timeStart;
 
     @NotNull(message = "field can't be empty!")

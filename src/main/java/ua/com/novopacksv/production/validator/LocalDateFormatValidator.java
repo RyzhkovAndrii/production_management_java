@@ -3,6 +3,7 @@ package ua.com.novopacksv.production.validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Component;
+import ua.com.novopacksv.production.exception.LocalDateTimeFormatException;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -22,7 +23,7 @@ public class LocalDateFormatValidator implements ConstraintValidator<LocalDateFo
             conversionService.convert(date, LocalDate.class);
             return true;
         } catch (Exception ex) {
-            return false;
+            throw new LocalDateTimeFormatException("Date format is incorrect!");
         }
     }
 
