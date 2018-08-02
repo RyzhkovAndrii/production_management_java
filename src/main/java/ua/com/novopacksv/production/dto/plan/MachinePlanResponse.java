@@ -15,4 +15,6 @@ public class MachinePlanResponse extends BaseEntityResponse{
     private Long productTypeId;
 
     private Integer productAmount;
+
+    private String duration;
 }

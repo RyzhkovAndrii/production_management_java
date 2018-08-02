@@ -29,7 +29,7 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler({NegativeAmountException.class, NotUniqueFieldException.class, RangeException.class,
-            NotAvailableColorException.class, LocalDateTimeFormatException.class})
+            NotAvailableColorException.class, LocalDateTimeFormatException.class, IntervalTimeForPlanException.class})
     public ResponseEntity<ExceptionResponse> handleIncorrectResponseDataException(Exception ex) {
         String message = Optional.of(ex.getMessage()).orElse(ex.getClass().getSimpleName());
         ExceptionResponse response = new ExceptionResponse();
