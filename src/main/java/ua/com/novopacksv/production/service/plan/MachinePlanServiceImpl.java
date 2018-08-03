@@ -37,21 +37,18 @@ public class MachinePlanServiceImpl implements MachinePlanService {
 
     @Override
     public List<MachinePlan> findByMachineNumberAndDate(Integer machineNumber, LocalDate date) {
-        return machinePlanRepository.findByMachineNumberAndTimeStart_DateOrderByTimeStart(machineNumber, date);
+        return machinePlanRepository.findAllByMachineNumberAndTimeStartContains(machineNumber, date);
     }
 
     @Override
     public List<MachinePlan> findSort(Integer machineNumber, LocalDate date, String sortProperties) {
         Sort sort = new Sort(Sort.Direction.ASC, sortProperties);
-        return machinePlanRepository.findByMachineNumberAndTimeStart_Date(machineNumber, date, sort);
+        return machinePlanRepository.findAllByTimeStartContainsAndMachineNumber(date, machineNumber, sort);
     }
 
     //todo: 1. При корректировке оставляем текущий интервал, если сделующей по времени записи нет,
 // то расчёт по кол-ву, если есть - по времени.
-// 2. В конце суток план переносится на следующий день, если этот план ещё не существует.
-// Если существует, обрезаем до конца суток.
     //4. Поле сколько отправлено в производство продукции - только в какую сущность передавать?
-    //5. В контроллер сортировку по указанному полю воткнуть (не известно ещё, сортировку по чему надо, прописать как квери
 
     @Override
     public MachinePlan findById(Long id) throws ResourceNotFoundException {

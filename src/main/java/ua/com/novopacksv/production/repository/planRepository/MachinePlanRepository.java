@@ -11,8 +11,6 @@ import java.util.List;
 @Repository
 public interface MachinePlanRepository extends JpaRepository<MachinePlan, Long> {
 
-
-    List<MachinePlan> findByMachineNumberAndTimeStart_DateOrderByTimeStart(Integer machineNumber, LocalDate date);
-
-    List<MachinePlan> findByMachineNumberAndTimeStart_Date(Integer machineNumber, LocalDate date, Sort sort);
+    List<MachinePlan> findAllByMachineNumberAndTimeStartContains(Integer machineNumber, LocalDate date);
+    List<MachinePlan> findAllByTimeStartContainsAndMachineNumber(LocalDate date, Integer machineNumber, Sort sort);
 }
