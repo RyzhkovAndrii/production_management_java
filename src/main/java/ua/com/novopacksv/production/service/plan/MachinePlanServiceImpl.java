@@ -32,7 +32,7 @@ public class MachinePlanServiceImpl implements MachinePlanService {
 
     @Override
     public Double getDuration(MachinePlan machinePlan) {
-    return countDuration(machinePlan.getProductType(), machinePlan.getProductAmount());
+        return countDuration(machinePlan.getProductType(), machinePlan.getProductAmount());
     }
 
     @Override
@@ -46,9 +46,20 @@ public class MachinePlanServiceImpl implements MachinePlanService {
         return machinePlanRepository.findAllByTimeStartContainsAndMachineNumber(date, machineNumber, sort);
     }
 
-    //todo: 1. При корректировке оставляем текущий интервал, если сделующей по времени записи нет,
-// то расчёт по кол-ву, если есть - по времени.
-    //4. Поле сколько отправлено в производство продукции - только в какую сущность передавать?
+    @Override
+    public List<MachinePlan> findByProductForMachinePlan(Long productTypeId, LocalDate date) {
+        return machinePlanRepository.findAllByProductType_IdAndTimeStartContains(productTypeId, date);
+    }
+
+    @Override
+    public Integer countProductAmountForMachinePlan(Long productTypeId, LocalDate date) {
+        List<MachinePlan> plans = findByProductForMachinePlan(productTypeId, date);
+        if (!plans.isEmpty()) {
+            return plans.stream().mapToInt(MachinePlan::getProductAmount).sum();
+        } else {
+            return 0;
+        }
+    }
 
     @Override
     public MachinePlan findById(Long id) throws ResourceNotFoundException {
@@ -89,35 +100,39 @@ public class MachinePlanServiceImpl implements MachinePlanService {
         log.debug("Method delete(Long id): MachinePlane with id = {} was deleted", id);
     }
 
-    private Double countDuration(ProductType productType, Integer productAmount){
-     return (double) (productAmount / (normService.findOne(productType.getId()).getNormForDay() / 24));
-    }
-
-    private void ifTimeIsValid(MachinePlan machinePlan){
-        ifInDay(machinePlan);
-        List<MachinePlan> plans =
-                findByMachineNumberAndDate(machinePlan.getMachineNumber(), machinePlan.getTimeStart().toLocalDate());
-        if(!plans.isEmpty()) {
-            plans.stream().forEach((plan) -> ifInDuration(plan, machinePlan));
+    private Double countDuration(ProductType productType, Integer productAmount) {
+        try {
+            return (double) (productAmount / (normService.findOne(productType.getId()).getNormForDay() / 24));
+        } catch (Exception e) {
+            throw new ResourceNotFoundException("Norms for this product type was not found!");
         }
     }
 
-    private LocalDateTime findEndTime(MachinePlan machinePlan){
-        return machinePlan.getTimeStart().plusSeconds((long)(getDuration(machinePlan)*360));
+    private void ifTimeIsValid(MachinePlan machinePlan) {
+        ifInDay(machinePlan);
+        List<MachinePlan> plans =
+                findByMachineNumberAndDate(machinePlan.getMachineNumber(), machinePlan.getTimeStart().toLocalDate());
+        if (!plans.isEmpty()) {
+            plans.stream().forEach((plan) -> ifInInterval(plan, machinePlan));
+        }
     }
 
-    private boolean ifInDuration(MachinePlan machinePlanOne, MachinePlan machinePlan){
-       if(!machinePlanOne.getId().equals(machinePlan.getId())) {
-           if (machinePlanOne.getTimeStart().isAfter(findEndTime(machinePlan))
-                   || findEndTime(machinePlanOne).isBefore(machinePlan.getTimeStart())) {
-               return true;
-           } else throw new IntervalTimeForPlanException("Time interval is incorrect!");
-       }else return true;
+    private LocalDateTime findEndTime(MachinePlan machinePlan) {
+        return machinePlan.getTimeStart().plusSeconds((long) (getDuration(machinePlan) * 360));
     }
 
-    private boolean ifInDay(MachinePlan machinePlan){
-        if(findEndTime(machinePlan).toLocalDate().equals(machinePlan.getTimeStart().toLocalDate())){
+    private boolean ifInInterval(MachinePlan machinePlanOne, MachinePlan machinePlan) {
+        if (!machinePlanOne.getId().equals(machinePlan.getId())) {
+            if (machinePlanOne.getTimeStart().isAfter(findEndTime(machinePlan))
+                    || findEndTime(machinePlanOne).isBefore(machinePlan.getTimeStart())) {
+                return true;
+            } else throw new IntervalTimeForPlanException("Time interval is incorrect!");
+        } else return true;
+    }
+
+    private boolean ifInDay(MachinePlan machinePlan) {
+        if (findEndTime(machinePlan).toLocalDate().equals(machinePlan.getTimeStart().toLocalDate())) {
             return true;
-        }else throw new IntervalTimeForPlanException("End for plan is out of the date!");
+        } else throw new IntervalTimeForPlanException("End for plan is out of the date!");
     }
 }

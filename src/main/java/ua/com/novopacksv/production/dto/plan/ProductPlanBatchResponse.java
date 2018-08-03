@@ -14,4 +14,6 @@ public class ProductPlanBatchResponse {
     private Integer manufacturedAmount;
 
     private Integer soldAmount;
+
+    private Integer productToMachinePlane;
 }

@@ -14,4 +14,8 @@ public interface MachinePlanService extends BaseEntityService<MachinePlan> {
     List<MachinePlan> findByMachineNumberAndDate(Integer machineNumber, LocalDate date);
 
     List<MachinePlan> findSort(Integer machineNumber, LocalDate date, String sort);
+
+    List<MachinePlan> findByProductForMachinePlan(Long productTypeId, LocalDate date);
+
+    Integer countProductAmountForMachinePlan(Long productTypeId, LocalDate date);
 }

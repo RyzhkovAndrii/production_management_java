@@ -7,6 +7,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import ua.com.novopacksv.production.dto.plan.ProductPlanBatchResponse;
 import ua.com.novopacksv.production.model.planModel.ProductPlanBatch;
+import ua.com.novopacksv.production.service.plan.MachinePlanService;
 
 @Component
 public class ProductPlanBatchToPlanBatchResponseConverter implements Converter<ProductPlanBatch,
@@ -16,6 +17,10 @@ public class ProductPlanBatchToPlanBatchResponseConverter implements Converter<P
     @Lazy
     private ConversionService conversionService;
 
+    @Autowired
+    @Lazy
+    private MachinePlanService machinePlanService;
+
     @Override
     public ProductPlanBatchResponse convert(ProductPlanBatch source) {
         ProductPlanBatchResponse result = new ProductPlanBatchResponse();
@@ -24,6 +29,8 @@ public class ProductPlanBatchToPlanBatchResponseConverter implements Converter<P
         result.setManufacturedAmount(source.getManufacturedAmount());
         result.setSoldAmount(source.getUsedAmount());
         result.setProductTypeId(source.getProductType().getId());
+        result.setProductToMachinePlane(machinePlanService
+                .countProductAmountForMachinePlan(source.getProductType().getId(), source.getDate()));
         return result;
     }
 }
