@@ -37,18 +37,24 @@ public class MachinePlanServiceImpl implements MachinePlanService {
 
     @Override
     public List<MachinePlan> findByMachineNumberAndDate(Integer machineNumber, LocalDate date) {
-        return machinePlanRepository.findAllByMachineNumberAndTimeStartContains(machineNumber, date);
+        LocalDateTime startDay = date.atStartOfDay();
+        LocalDateTime endDay = date.atTime(23, 59);
+        return machinePlanRepository.findAllByMachineNumberAndTimeStartBetween(machineNumber, startDay, endDay);
     }
 
     @Override
     public List<MachinePlan> findSort(Integer machineNumber, LocalDate date, String sortProperties) {
         Sort sort = new Sort(Sort.Direction.ASC, sortProperties);
-        return machinePlanRepository.findAllByTimeStartContainsAndMachineNumber(date, machineNumber, sort);
+        LocalDateTime startDay = date.atStartOfDay();
+        LocalDateTime endDay = date.atTime(23, 59);
+        return machinePlanRepository.findAllByTimeStartBetweenAndMachineNumber(startDay, endDay, machineNumber, sort);
     }
 
     @Override
     public List<MachinePlan> findByProductForMachinePlan(Long productTypeId, LocalDate date) {
-        return machinePlanRepository.findAllByProductType_IdAndTimeStartContains(productTypeId, date);
+        LocalDateTime startDay = date.atStartOfDay();
+        LocalDateTime endDay = date.atTime(23, 59);
+        return machinePlanRepository.findAllByProductType_IdAndTimeStartBetween(productTypeId, startDay, endDay);
     }
 
     @Override

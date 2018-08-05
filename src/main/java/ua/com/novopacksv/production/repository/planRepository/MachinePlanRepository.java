@@ -6,14 +6,18 @@ import org.springframework.stereotype.Repository;
 import ua.com.novopacksv.production.model.planModel.MachinePlan;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
 public interface MachinePlanRepository extends JpaRepository<MachinePlan, Long> {
 
-    List<MachinePlan> findAllByMachineNumberAndTimeStartContains(Integer machineNumber, LocalDate date);
+    List<MachinePlan> findAllByMachineNumberAndTimeStartBetween(Integer machineNumber, LocalDateTime dateStart,
+                                                                LocalDateTime dateEnd);
 
-    List<MachinePlan> findAllByTimeStartContainsAndMachineNumber(LocalDate date, Integer machineNumber, Sort sort);
+    List<MachinePlan> findAllByTimeStartBetweenAndMachineNumber(LocalDateTime dateStart, LocalDateTime dateEnd,
+                                                                Integer machineNumber, Sort sort);
 
-    List<MachinePlan> findAllByProductType_IdAndTimeStartContains(Long productTypeId, LocalDate date);
+    List<MachinePlan> findAllByProductType_IdAndTimeStartBetween(Long productTypeId, LocalDateTime dateStart,
+                                                                 LocalDateTime dateEnd);
 }
