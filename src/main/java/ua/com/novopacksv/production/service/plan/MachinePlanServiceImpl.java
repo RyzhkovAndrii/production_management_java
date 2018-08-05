@@ -108,7 +108,7 @@ public class MachinePlanServiceImpl implements MachinePlanService {
 
     private Double countDuration(ProductType productType, Integer productAmount) {
         try {
-            return (double) (productAmount / (normService.findOne(productType.getId()).getNormForDay() / 24));
+            return  ((double) productAmount / (normService.findOne(productType.getId()).getNormForDay() / 24));
         } catch (Exception e) {
             throw new ResourceNotFoundException("Norms for this product type was not found!");
         }

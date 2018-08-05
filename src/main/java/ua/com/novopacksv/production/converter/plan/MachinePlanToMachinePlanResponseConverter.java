@@ -30,9 +30,7 @@ public class MachinePlanToMachinePlanResponseConverter implements Converter<Mach
         response.setTimeStart(timeStart);
         response.setProductTypeId(source.getProductType().getId());
         response.setProductAmount(source.getProductAmount());
-        Double durationDouble = new BigDecimal(machinePlanService.getDuration(source))
-                .setScale(1, BigDecimal.ROUND_UP).doubleValue();
-        String duration = String.valueOf(durationDouble);
+        String duration = String.valueOf(machinePlanService.getDuration(source));
         response.setDuration(duration);
         return response;
     }
