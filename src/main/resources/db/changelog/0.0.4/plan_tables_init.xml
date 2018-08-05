@@ -8,7 +8,7 @@
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     <changeSet id="1" author="pryadilnikova@gmail.com">
         <createTable tableName="product_plan_operation">
-            <column name="id" type="bigint">
+            <column name="id" type="bigint" autoIncrement="true" startWith="1" incrementBy="1">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="date" type="date">
@@ -30,7 +30,7 @@
     </changeSet>
     <changeSet id="2" author="pryadilnikova@gmail.com">
         <createTable tableName="roll_plan_operation">
-            <column name="id" type="bigint">
+            <column name="id" type="bigint" autoIncrement="true" startWith="1" incrementBy="1">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="date" type="date">
@@ -46,7 +46,7 @@
     </changeSet>
     <changeSet id="3" author="pryadilnikova@gmail.com">
         <createTable tableName="machine_plan">
-            <column name="id" type="bigint">
+            <column name="id" type="bigint" autoIncrement="true" startWith="1" incrementBy="1">
                    <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="machine_number" type="int">
