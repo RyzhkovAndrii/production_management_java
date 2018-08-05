@@ -25,6 +25,7 @@ public class MachinePlanToMachinePlanResponseConverter implements Converter<Mach
     @Override
     public MachinePlanResponse convert(MachinePlan source) {
         MachinePlanResponse response = new MachinePlanResponse();
+        response.setId(source.getId());
         response.setMachineNumber(source.getMachineNumber());
         String timeStart = conversionService.convert(source.getTimeStart(), String.class);
         response.setTimeStart(timeStart);
