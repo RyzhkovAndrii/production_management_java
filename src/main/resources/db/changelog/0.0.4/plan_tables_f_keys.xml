@@ -42,4 +42,12 @@
                                  referencedTableName="product_type"
                                  referencedColumnNames="id"/>
     </changeSet>
+    <changeSet id="5" author="pryadilnikova@gmail.com">
+        <addUniqueConstraint tableName="product_plan_operation"
+                             columnNames="date, product_type_id"
+                             deferrable="true"
+                             disabled="true"
+                             initiallyDeferred="true"
+                             constraintName="const_product_plan_operation"/>
+    </changeSet>
 </databaseChangeLog>
