@@ -36,6 +36,15 @@ public class ProductPlanOperationController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping(params = {"from", "to"})
+    public ResponseEntity<List<ProductPlanOperationResponse>> getAll(@RequestParam ("from") LocalDate fromDate,
+                                                                     @RequestParam ("to") LocalDate toDate){
+        List<ProductPlanOperation> productPlanOperations = productPlanOperationService.getAll(fromDate, toDate);
+        List<ProductPlanOperationResponse> responses =
+                conversionService.convert(productPlanOperations, ProductPlanOperationResponse.class);
+        return new ResponseEntity<>(responses, HttpStatus.OK);
+    }
+
     @GetMapping(params = {"roll_id", "from", "to"})
     public ResponseEntity<List<ProductPlanOperationResponse>> getAllByRoll(@RequestParam("roll_id") Long rollTypeId,
                                                                            @RequestParam("from") LocalDate fromDate,
