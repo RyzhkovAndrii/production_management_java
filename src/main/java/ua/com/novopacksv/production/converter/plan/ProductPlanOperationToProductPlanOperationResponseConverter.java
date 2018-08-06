@@ -19,6 +19,7 @@ public class ProductPlanOperationToProductPlanOperationResponseConverter impleme
     @Override
     public ProductPlanOperationResponse convert(ProductPlanOperation source) {
         ProductPlanOperationResponse result = new ProductPlanOperationResponse();
+        result.setId(source.getId());
         String date = conversionService.convert(source.getDate(), String.class);
         result.setDate(date);
         result.setProductTypeId(source.getProductType().getId());
