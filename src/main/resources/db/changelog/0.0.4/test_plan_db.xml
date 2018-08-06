@@ -24,4 +24,13 @@
             <column name="quantity" value="30"/>
         </insert>
     </changeSet>
+    <changeSet id="3" author="pryadilnikova@gmail.com">
+        <insert tableName="machine_plan">
+            <column name="id" value="1"/>
+            <column name="machine_number" value="1"/>
+            <column name="time_start" value="2018-08-27 08:32:45"/>
+            <column name="product_type_id" value="1"/>
+            <column name="product_amount" value="4800"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>
