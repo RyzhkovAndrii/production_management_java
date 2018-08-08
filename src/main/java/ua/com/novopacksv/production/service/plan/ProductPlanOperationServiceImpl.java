@@ -2,17 +2,11 @@ package ua.com.novopacksv.production.service.plan;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
-import ua.com.novopacksv.production.model.normModel.Norm;
 import ua.com.novopacksv.production.model.planModel.ProductPlanOperation;
 import ua.com.novopacksv.production.repository.planRepository.ProductPlanOperationRepository;
-import ua.com.novopacksv.production.service.norm.NormService;
-import ua.com.novopacksv.production.service.product.ProductTypeService;
-import ua.com.novopacksv.production.service.roll.RollTypeService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -24,7 +18,7 @@ import java.util.List;
 public class ProductPlanOperationServiceImpl implements ProductPlanOperationService {
 
     private final ProductPlanOperationRepository productPlanOperationRepository;
-    
+
     @Override
     public List<ProductPlanOperation> getAll(Long productTypeId, LocalDate fromDate, LocalDate toDate) {
         return productPlanOperationRepository.findByProductType_IdAndDateBetween(productTypeId, fromDate, toDate);
