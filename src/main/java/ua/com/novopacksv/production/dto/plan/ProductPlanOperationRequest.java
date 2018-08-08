@@ -36,4 +36,6 @@ public class ProductPlanOperationRequest {
     @NotNull(message = "field productAmount can't be empty!")
     @Positive(message = "value of productAmount can't be negative!")
     private Integer productAmount;
+
+    private Long machinePlanId;
 }

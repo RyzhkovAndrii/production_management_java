@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import ua.com.novopacksv.production.model.BaseEntity;
 import ua.com.novopacksv.production.model.productModel.ProductType;
 import ua.com.novopacksv.production.model.rollModel.RollType;
@@ -35,4 +37,9 @@ public class ProductPlanOperation extends BaseEntity {
 
     @Column(name = "product_amount", nullable = false)
     private Integer productAmount;
+
+    @OneToOne
+    @PrimaryKeyJoinColumn
+    @NotFound(action = NotFoundAction.IGNORE)
+    private MachinePlan machinePlan;
 }

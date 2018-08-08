@@ -7,6 +7,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import ua.com.novopacksv.production.dto.plan.ProductPlanOperationRequest;
 import ua.com.novopacksv.production.model.planModel.ProductPlanOperation;
+import ua.com.novopacksv.production.service.plan.MachinePlanService;
 import ua.com.novopacksv.production.service.product.ProductTypeService;
 import ua.com.novopacksv.production.service.roll.RollTypeService;
 
@@ -28,6 +29,10 @@ public class ProductPlanOperationRequestToProductPlanOperationConverter implemen
     @Lazy
     private RollTypeService rollTypeService;
 
+    @Autowired
+    @Lazy
+    private MachinePlanService machinePlanService;
+
     @Override
     public ProductPlanOperation convert(ProductPlanOperationRequest source) {
         ProductPlanOperation result = new ProductPlanOperation();
@@ -37,6 +42,9 @@ public class ProductPlanOperationRequestToProductPlanOperationConverter implemen
         result.setRollType(rollTypeService.findById(source.getRollTypeId()));
         result.setProductAmount(source.getProductAmount());
         result.setRollAmount(source.getRollAmount());
+        if (source.getMachinePlanId() != null){
+            result.setMachinePlan(machinePlanService.findById(source.getMachinePlanId()));
+        }
         return result;
     }
 }

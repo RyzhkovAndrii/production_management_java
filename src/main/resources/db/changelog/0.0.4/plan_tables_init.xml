@@ -29,25 +29,9 @@
         </createTable>
     </changeSet>
     <changeSet id="2" author="pryadilnikova@gmail.com">
-        <createTable tableName="roll_plan_operation">
-            <column name="id" type="bigint" autoIncrement="true" startWith="1" incrementBy="1">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="date" type="date">
-                <constraints nullable="false"/>
-            </column>
-            <column name="roll_type_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="quantity" type="int">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet id="3" author="pryadilnikova@gmail.com">
         <createTable tableName="machine_plan">
             <column name="id" type="bigint" autoIncrement="true" startWith="1" incrementBy="1">
-                   <constraints primaryKey="true" nullable="false"/>
+                <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="machine_number" type="int">
                 <constraints nullable="false"/>
@@ -63,6 +47,25 @@
             </column>
             <column name="is_important" type="boolean">
                 <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="3" author="pryadilnikova@gmail.com">
+        <createTable tableName="roll_plan_operation">
+            <column name="id" type="bigint" autoIncrement="true" startWith="1" incrementBy="1">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="roll_type_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quantity" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="machine_plan_id" type="bigint">
+                <constraints nullable="true"/>
             </column>
         </createTable>
     </changeSet>

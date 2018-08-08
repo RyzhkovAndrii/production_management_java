@@ -26,6 +26,9 @@ public class ProductPlanOperationToProductPlanOperationResponseConverter impleme
         result.setRollTypeId(source.getRollType().getId());
         result.setProductAmount(source.getProductAmount());
         result.setRollAmount(source.getRollAmount());
+        if (source.getMachinePlan() != null) {
+            result.setMachinePlanId(source.getMachinePlan().getId());
+        }
         return result;
     }
 }
