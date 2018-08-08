@@ -39,6 +39,13 @@ public class NormController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping(params = "productTypeId")
+    public ResponseEntity<NormResponse> findOne(@RequestParam ("productTypeId") Long productTypeId){
+        Norm norm = normService.findOne(productTypeId);
+        NormResponse response = conversionService.convert(norm, NormResponse.class);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping(params = {"id"})
     public ResponseEntity<NormForRollResponse> getNormWithRolls(@RequestParam ("id") Long id){
         Norm norm = normService.findById(id);
