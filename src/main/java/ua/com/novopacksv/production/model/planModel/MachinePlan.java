@@ -30,4 +30,7 @@ public class MachinePlan extends BaseEntity {
 
     @Column(name = "product_amount", nullable = false)
     private Integer productAmount;
+
+    @Column (name = "is_important", nullable = false)
+    private Boolean isImportant;
 }

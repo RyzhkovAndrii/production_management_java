@@ -35,6 +35,7 @@ public class MachinePlanRequestToMachinePlanConverter implements Converter<Machi
         }
         result.setProductType(productTypeService.findById(source.getProductTypeId()));
         result.setProductAmount(source.getProductAmount());
+        result.setIsImportant(source.getIsImportant());
         return result;
     }
 }

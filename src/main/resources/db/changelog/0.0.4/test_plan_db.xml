@@ -31,6 +31,7 @@
             <column name="time_start" value="2018-08-27 08:32:45"/>
             <column name="product_type_id" value="1"/>
             <column name="product_amount" value="4800"/>
+            <column name="is_important" value="false"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

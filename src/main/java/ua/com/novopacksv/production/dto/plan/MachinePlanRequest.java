@@ -29,4 +29,7 @@ public class MachinePlanRequest {
     @Positive(message = "value of productAmount can't be negative!")
     private Integer productAmount;
 
+    @NotNull(message = "field isImportant can't be null!")
+    private Boolean isImportant;
+
 }
