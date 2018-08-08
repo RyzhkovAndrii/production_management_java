@@ -88,7 +88,7 @@ public class ProductPlanOperationServiceImpl implements ProductPlanOperationServ
 
     private Integer getRollQuantity(Long productTypeId, Integer amount) {
         Norm norm = normService.findOne(productTypeId);
-        return (int) Math.floor(amount / norm.getNorm());
+        return (int) Math.ceil(amount / norm.getNorm());
     }
 
     private Integer getProductQuantity(Long productTypeId, Integer rollQuantity) {
