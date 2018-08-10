@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.IntervalTimeForPlanException;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.planModel.MachinePlan;
+import ua.com.novopacksv.production.model.planModel.MachinePlanItem;
 import ua.com.novopacksv.production.model.productModel.ProductType;
 import ua.com.novopacksv.production.repository.planRepository.MachinePlanRepository;
 import ua.com.novopacksv.production.service.norm.NormService;
@@ -32,7 +33,7 @@ public class MachinePlanServiceImpl implements MachinePlanService {
 
     @Override
     public Double getDuration(MachinePlan machinePlan) {
-        return countDuration(machinePlan.getProductType(), machinePlan.getProductAmount());
+        return countDuration(machinePlan.getProductType(), getProductAmount(machinePlan));
     }
 
     @Override
@@ -61,10 +62,18 @@ public class MachinePlanServiceImpl implements MachinePlanService {
     public Integer countProductAmountForMachinePlan(Long productTypeId, LocalDate date) {
         List<MachinePlan> plans = findByProductForMachinePlan(productTypeId, date);
         if (!plans.isEmpty()) {
-            return plans.stream().mapToInt(MachinePlan::getProductAmount).sum();
+            return plans.stream().mapToInt(this::getProductAmount).sum();
         } else {
             return 0;
         }
+    }
+
+    @Override
+    public Integer getProductAmount(MachinePlan machinePlan) {
+        return machinePlan.getMachinePlanItems()
+                .stream()
+                .mapToInt(MachinePlanItem::getProductAmount)
+                .sum();
     }
 
     @Override
@@ -108,7 +117,7 @@ public class MachinePlanServiceImpl implements MachinePlanService {
 
     private Double countDuration(ProductType productType, Integer productAmount) {
         try {
-            return  ((double) productAmount / (normService.findOne(productType.getId()).getNormForDay() / 24));
+            return ((double) productAmount / (normService.findOne(productType.getId()).getNormForDay() / 24));
         } catch (Exception e) {
             throw new ResourceNotFoundException("Norms for this product type was not found!");
         }
@@ -119,7 +128,7 @@ public class MachinePlanServiceImpl implements MachinePlanService {
         List<MachinePlan> plans =
                 findByMachineNumberAndDate(machinePlan.getMachineNumber(), machinePlan.getTimeStart().toLocalDate());
         if (!plans.isEmpty()) {
-            plans.stream().forEach((plan) -> ifInInterval(plan, machinePlan));
+            plans.forEach((plan) -> ifInInterval(plan, machinePlan));
         }
     }
 

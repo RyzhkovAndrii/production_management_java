@@ -29,9 +29,6 @@ public class MachinePlan extends BaseEntity {
     @PrimaryKeyJoinColumn
     private ProductType productType;
 
-    @Column(name = "product_amount", nullable = false)
-    private Integer productAmount;
-
     @OneToMany(mappedBy = "machinePlan")
     private List<MachinePlanItem> machinePlanItems;
 

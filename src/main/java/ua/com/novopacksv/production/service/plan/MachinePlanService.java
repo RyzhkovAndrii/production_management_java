@@ -4,7 +4,6 @@ import ua.com.novopacksv.production.model.planModel.MachinePlan;
 import ua.com.novopacksv.production.service.BaseEntityService;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 public interface MachinePlanService extends BaseEntityService<MachinePlan> {
@@ -18,4 +17,7 @@ public interface MachinePlanService extends BaseEntityService<MachinePlan> {
     List<MachinePlan> findByProductForMachinePlan(Long productTypeId, LocalDate date);
 
     Integer countProductAmountForMachinePlan(Long productTypeId, LocalDate date);
+
+    Integer getProductAmount(MachinePlan machinePlan);
+
 }

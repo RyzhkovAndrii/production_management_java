@@ -34,7 +34,6 @@ public class MachinePlanRequestToMachinePlanConverter implements Converter<Machi
             throw new LocalDateTimeFormatException("Date format is incorrect!");
         }
         result.setProductType(productTypeService.findById(source.getProductTypeId()));
-        result.setProductAmount(source.getProductAmount());
         return result;
     }
 }

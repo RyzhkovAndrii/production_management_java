@@ -58,9 +58,6 @@
             <column name="product_type_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
-            <column name="product_amount" type="int">
-                <constraints nullable="false"/>
-            </column>
         </createTable>
     </changeSet>
     <changeSet id="4" author="ryzhkov.andrii@gmail.com">

@@ -9,8 +9,6 @@ import ua.com.novopacksv.production.dto.plan.MachinePlanResponse;
 import ua.com.novopacksv.production.model.planModel.MachinePlan;
 import ua.com.novopacksv.production.service.plan.MachinePlanService;
 
-import java.math.BigDecimal;
-
 @Component
 public class MachinePlanToMachinePlanResponseConverter implements Converter<MachinePlan, MachinePlanResponse> {
 
@@ -24,15 +22,15 @@ public class MachinePlanToMachinePlanResponseConverter implements Converter<Mach
 
     @Override
     public MachinePlanResponse convert(MachinePlan source) {
+        String timeStart = conversionService.convert(source.getTimeStart(), String.class);
+        Integer productAmount = machinePlanService.getProductAmount(source);
         MachinePlanResponse response = new MachinePlanResponse();
         response.setId(source.getId());
         response.setMachineNumber(source.getMachineNumber());
-        String timeStart = conversionService.convert(source.getTimeStart(), String.class);
         response.setTimeStart(timeStart);
         response.setProductTypeId(source.getProductType().getId());
-        response.setProductAmount(source.getProductAmount());
-        String duration = String.valueOf(machinePlanService.getDuration(source));
-        response.setDuration(duration);
+        response.setProductAmount(productAmount);
+        response.setDuration(machinePlanService.getDuration(source));
         return response;
     }
 }
