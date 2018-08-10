@@ -13,6 +13,7 @@ import ua.com.novopacksv.production.dto.norm.NormResponse;
 import ua.com.novopacksv.production.model.normModel.Norm;
 import ua.com.novopacksv.production.service.norm.NormService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -62,7 +63,7 @@ public class NormController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST')")
-    public ResponseEntity<NormResponse> save(@RequestBody NormRequest request) {
+    public ResponseEntity<NormResponse> save(@Valid @RequestBody NormRequest request) {
         Norm norm = conversionService.convert(request, Norm.class);
         normService.save(norm);
         NormResponse response = conversionService.convert(norm, NormResponse.class);
@@ -71,7 +72,7 @@ public class NormController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST')")
-    public ResponseEntity<NormResponse> update(@PathVariable Long id, @RequestBody NormRequest request) {
+    public ResponseEntity<NormResponse> update(@PathVariable Long id, @Valid @RequestBody NormRequest request) {
         Norm norm = conversionService.convert(request, Norm.class);
         norm.setId(id);
         normService.update(norm);

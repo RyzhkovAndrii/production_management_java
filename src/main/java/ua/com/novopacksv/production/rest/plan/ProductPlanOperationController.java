@@ -12,6 +12,7 @@ import ua.com.novopacksv.production.dto.plan.ProductPlanOperationResponse;
 import ua.com.novopacksv.production.model.planModel.ProductPlanOperation;
 import ua.com.novopacksv.production.service.plan.ProductPlanOperationService;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -74,7 +75,7 @@ public class ProductPlanOperationController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO')")
-    public ResponseEntity<ProductPlanOperationResponse> save(@RequestBody ProductPlanOperationRequest request) {
+    public ResponseEntity<ProductPlanOperationResponse> save(@Valid @RequestBody ProductPlanOperationRequest request) {
         ProductPlanOperation productPlanOperation = conversionService.convert(request, ProductPlanOperation.class);
         productPlanOperationService.save(productPlanOperation);
         ProductPlanOperationResponse response = conversionService.convert(productPlanOperation,
@@ -85,7 +86,7 @@ public class ProductPlanOperationController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO')")
     public ResponseEntity<ProductPlanOperationResponse> update(@PathVariable Long id,
-                                                               @RequestBody ProductPlanOperationRequest request) {
+                                                               @Valid @RequestBody ProductPlanOperationRequest request) {
         ProductPlanOperation productPlanOperation = conversionService.convert(request, ProductPlanOperation.class);
         productPlanOperation.setId(id);
         productPlanOperationService.update(productPlanOperation);

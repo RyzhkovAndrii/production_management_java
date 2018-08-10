@@ -12,6 +12,7 @@ import ua.com.novopacksv.production.dto.plan.RollPlanOperationResponse;
 import ua.com.novopacksv.production.model.planModel.RollPlanOperation;
 import ua.com.novopacksv.production.service.plan.RollPlanOperationService;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class RollPlanOperationController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO')")
-    public ResponseEntity<RollPlanOperationResponse> save(@RequestBody RollPlanOperationRequest request) {
+    public ResponseEntity<RollPlanOperationResponse> save(@Valid @RequestBody RollPlanOperationRequest request) {
         RollPlanOperation rollPlanOperation = conversionService.convert(request, RollPlanOperation.class);
         rollPlanOperationService.save(rollPlanOperation);
         RollPlanOperationResponse response =
@@ -63,7 +64,7 @@ public class RollPlanOperationController {
 
     @PutMapping
     @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO')")
-    public ResponseEntity<RollPlanOperationResponse> update(@PathVariable Long id,
+    public ResponseEntity<RollPlanOperationResponse> update(@Valid @PathVariable Long id,
                                                             @RequestBody RollPlanOperationRequest request) {
         RollPlanOperation rollPlanOperation = conversionService.convert(request, RollPlanOperation.class);
         rollPlanOperation.setId(id);
