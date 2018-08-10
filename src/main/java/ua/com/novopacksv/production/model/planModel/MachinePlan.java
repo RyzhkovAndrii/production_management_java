@@ -9,6 +9,7 @@ import ua.com.novopacksv.production.model.productModel.ProductType;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -30,4 +31,8 @@ public class MachinePlan extends BaseEntity {
 
     @Column(name = "product_amount", nullable = false)
     private Integer productAmount;
+
+    @OneToMany(mappedBy = "machinePlan")
+    private List<MachinePlanItem> machinePlanItems;
+
 }

@@ -63,4 +63,23 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="4" author="ryzhkov.andrii@gmail.com">
+        <createTable tableName="machine_plan_item">
+            <column name="id" type="bigint" autoIncrement="true" startWith="1" incrementBy="1">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="roll_type_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="roll_amount" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_amount" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="machine_plan_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
