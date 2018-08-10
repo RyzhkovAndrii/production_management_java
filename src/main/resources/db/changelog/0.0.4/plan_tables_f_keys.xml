@@ -60,4 +60,12 @@
                                  referencedTableName="machine_plan"
                                  referencedColumnNames="id"/>
     </changeSet>
+    <changeSet id="7" author="ryzhkov.andrii@gmail.com">
+        <addUniqueConstraint tableName="machine_plan_item"
+                             columnNames="roll_type_id, machine_plan_id"
+                             deferrable="true"
+                             disabled="true"
+                             initiallyDeferred="true"
+                             constraintName="unique_machine_plan_item_roll_type_machine_plan"/>
+    </changeSet>
 </databaseChangeLog>

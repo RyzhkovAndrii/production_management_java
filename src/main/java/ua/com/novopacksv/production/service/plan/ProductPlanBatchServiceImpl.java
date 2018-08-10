@@ -2,7 +2,6 @@ package ua.com.novopacksv.production.service.plan;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -87,7 +86,6 @@ public class ProductPlanBatchServiceImpl implements ProductPlanBatchService {
         }
     }
 
-    @Nullable
     private ProductPlanBatch getOne(ProductType productType, LocalDate date) {
         Integer manufacturedAmount = countProductPlanManufacturedAmount(productType.getId(), date);
         Integer usedAmount = countProductPlanUsedAmount(productType.getId(), date);
