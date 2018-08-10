@@ -14,6 +14,7 @@ import ua.com.novopacksv.production.model.planModel.MachinePlanItem;
 import ua.com.novopacksv.production.service.plan.MachinePlanItemService;
 import ua.com.novopacksv.production.service.plan.MachinePlanService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -38,7 +39,7 @@ public class MachinePlanItemOfPlanItemController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO')")
-    public ResponseEntity<MachinePlanItemResponse> save(@RequestBody MachinePlanItemRequest request,
+    public ResponseEntity<MachinePlanItemResponse> save(@Valid @RequestBody MachinePlanItemRequest request,
                                                         @PathVariable("machinePlanId") Long machinePlanId) {
         MachinePlanItem machinePlanItem = conversionService.convert(request, MachinePlanItem.class);
         machinePlanItem.setMachinePlan(machinePlanService.findById(machinePlanId));

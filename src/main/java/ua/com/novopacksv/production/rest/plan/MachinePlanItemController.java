@@ -12,6 +12,8 @@ import ua.com.novopacksv.production.dto.plan.MachinePlanItemResponse;
 import ua.com.novopacksv.production.model.planModel.MachinePlanItem;
 import ua.com.novopacksv.production.service.plan.MachinePlanItemService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(value = "machine-plan-items", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RequiredArgsConstructor
@@ -32,7 +34,7 @@ public class MachinePlanItemController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO')")
     public ResponseEntity<MachinePlanItemResponse> update(@PathVariable Long id,
-                                                          @RequestBody MachinePlanItemRequest request) {
+                                                          @Valid @RequestBody MachinePlanItemRequest request) {
         MachinePlanItem machinePlan = conversionService.convert(request, MachinePlanItem.class);
         machinePlan.setId(id);
         machinePlan = machinePlanItemService.update(machinePlan);
