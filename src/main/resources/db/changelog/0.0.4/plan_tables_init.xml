@@ -58,6 +58,9 @@
             <column name="product_type_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
+            <column name="is_important" type="boolean">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
     <changeSet id="4" author="ryzhkov.andrii@gmail.com">

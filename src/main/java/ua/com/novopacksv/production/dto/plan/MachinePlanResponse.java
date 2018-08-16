@@ -17,4 +17,7 @@ public class MachinePlanResponse extends BaseEntityResponse{
     private Integer productAmount;
 
     private Double duration;
+
+    private Boolean isImportant;
+
 }

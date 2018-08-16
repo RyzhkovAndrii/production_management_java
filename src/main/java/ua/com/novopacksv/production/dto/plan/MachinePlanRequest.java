@@ -20,8 +20,11 @@ public class MachinePlanRequest {
     @NotBlank(message = "field timeStart can't be empty!")
     private String timeStart;
 
-    @NotNull(message = "field can't be empty!")
+    @NotNull(message = "field productTypeId can't be empty!")
     @ExistInDb(value = ProductType.class, message = "ProductType with this id does not exist!")
     private Long productTypeId;
+
+    @NotNull(message = "field isImportant can't be empty!")
+    private Boolean isImportant;
 
 }

@@ -31,6 +31,7 @@ public class MachinePlanToMachinePlanResponseConverter implements Converter<Mach
         response.setProductTypeId(source.getProductType().getId());
         response.setProductAmount(productAmount);
         response.setDuration(machinePlanService.getDuration(source));
+        response.setIsImportant(source.getIsImportant());
         return response;
     }
 }

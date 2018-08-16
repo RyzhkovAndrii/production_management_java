@@ -27,6 +27,7 @@ public class MachinePlanRequestToMachinePlanConverter implements Converter<Machi
     public MachinePlan convert(MachinePlanRequest source) throws LocalDateTimeFormatException{
         MachinePlan result = new MachinePlan();
         result.setMachineNumber(source.getMachineNumber());
+        result.setIsImportant(source.getIsImportant());
         try {
             LocalDateTime timeStart = conversionService.convert(source.getTimeStart(), LocalDateTime.class);
             result.setTimeStart(timeStart);

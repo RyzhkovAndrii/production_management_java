@@ -32,4 +32,7 @@ public class MachinePlan extends BaseEntity {
     @OneToMany(mappedBy = "machinePlan")
     private List<MachinePlanItem> machinePlanItems;
 
+    @Column(name = "is_important", nullable = false)
+    private Boolean isImportant;
+
 }
