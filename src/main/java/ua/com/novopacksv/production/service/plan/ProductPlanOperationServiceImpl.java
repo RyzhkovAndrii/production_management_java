@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
-import ua.com.novopacksv.production.model.normModel.Norm;
 import ua.com.novopacksv.production.model.planModel.MachinePlan;
 import ua.com.novopacksv.production.model.planModel.MachinePlanItem;
 import ua.com.novopacksv.production.model.planModel.ProductPlanOperation;
@@ -13,7 +12,6 @@ import ua.com.novopacksv.production.model.productModel.ProductType;
 import ua.com.novopacksv.production.model.rollModel.RollType;
 import ua.com.novopacksv.production.repository.planRepository.MachinePlanRepository;
 import ua.com.novopacksv.production.repository.planRepository.ProductPlanOperationRepository;
-import ua.com.novopacksv.production.service.norm.NormService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -30,8 +28,6 @@ public class ProductPlanOperationServiceImpl implements ProductPlanOperationServ
     private static final LocalTime DAY_END_TIME = LocalTime.of(7, 59, 59);
 
     private final ProductPlanOperationRepository productPlanOperationRepository;
-
-    private final NormService normService;
 
     private final MachinePlanRepository machinePlanRepository;
 
@@ -69,15 +65,11 @@ public class ProductPlanOperationServiceImpl implements ProductPlanOperationServ
 
     @Override
     public ProductPlanOperation save(ProductPlanOperation productPlanOperation) {
-        return productPlanOperationRepository.save(setAmountByNorm(productPlanOperation));
+        return productPlanOperationRepository.save(productPlanOperation);
     }
 
     @Override
     public ProductPlanOperation update(ProductPlanOperation productPlanOperation) throws ResourceNotFoundException {
-        ProductPlanOperation planOperationOld = findById(productPlanOperation.getId());
-        if (!planOperationOld.getProductAmount().equals(productPlanOperation.getProductAmount())) {
-            productPlanOperation = setAmountByNorm(productPlanOperation);
-        }
         return productPlanOperationRepository.save(productPlanOperation);
     }
 
@@ -103,22 +95,4 @@ public class ProductPlanOperationServiceImpl implements ProductPlanOperationServ
                 .sum();
     }
 
-    private Integer getRollQuantity(Long productTypeId, Integer amount) { // todo rename amount
-        Norm norm = normService.findOne(productTypeId);
-        return (int) Math.floor(amount / norm.getNorm());
-    }
-
-    private Integer getProductQuantity(Long productTypeId, Integer rollQuantity) { // todo rename amount
-        Norm norm = normService.findOne(productTypeId);
-        return norm.getNorm() * rollQuantity;
-    }
-
-    private ProductPlanOperation setAmountByNorm(ProductPlanOperation productPlanOperation) {
-        Integer rollQuantity = getRollQuantity(productPlanOperation.getProductType().getId(),
-                productPlanOperation.getProductAmount());
-        productPlanOperation.setRollAmount(rollQuantity);
-        productPlanOperation.setProductAmount(getProductQuantity(productPlanOperation.getProductType().getId(),
-                rollQuantity));
-        return productPlanOperation;
-    }
 }

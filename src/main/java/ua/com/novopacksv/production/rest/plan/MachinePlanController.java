@@ -12,6 +12,7 @@ import ua.com.novopacksv.production.dto.plan.MachinePlanResponse;
 import ua.com.novopacksv.production.model.planModel.MachinePlan;
 import ua.com.novopacksv.production.service.plan.MachinePlanService;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class MachinePlanController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO')")
-    public ResponseEntity<MachinePlanResponse> save(@RequestBody MachinePlanRequest request) {
+    public ResponseEntity<MachinePlanResponse> save(@Valid @RequestBody MachinePlanRequest request) {
         MachinePlan machinePlan = conversionService.convert(request, MachinePlan.class);
         machinePlanService.save(machinePlan);
         MachinePlanResponse response = conversionService.convert(machinePlan, MachinePlanResponse.class);
@@ -60,7 +61,7 @@ public class MachinePlanController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO')")
     public ResponseEntity<MachinePlanResponse> update(@PathVariable Long id,
-                                                      @RequestBody MachinePlanRequest request) {
+                                                      @Valid @RequestBody MachinePlanRequest request) {
         MachinePlan machinePlan = conversionService.convert(request, MachinePlan.class);
         machinePlan.setId(id);
         machinePlanService.update(machinePlan);
