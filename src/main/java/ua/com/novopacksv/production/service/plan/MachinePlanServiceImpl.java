@@ -17,6 +17,7 @@ import ua.com.novopacksv.production.service.norm.NormService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -24,6 +25,9 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class MachinePlanServiceImpl implements MachinePlanService {
+
+    private static final LocalTime DAY_START_TIME = LocalTime.of(8, 0, 0);
+    private static final LocalTime DAY_END_TIME = LocalTime.of(7, 59, 59);
 
     private final MachinePlanRepository machinePlanRepository;
 
@@ -38,39 +42,37 @@ public class MachinePlanServiceImpl implements MachinePlanService {
 
     @Override
     public List<MachinePlan> findByMachineNumberAndDate(Integer machineNumber, LocalDate date) {
-        LocalDateTime startDay = date.atStartOfDay();
-        LocalDateTime endDay = date.atTime(23, 59);
+        LocalDateTime startDay = date.atTime(DAY_START_TIME);
+        LocalDateTime endDay = date.plusDays(1).atTime(DAY_END_TIME);
         return machinePlanRepository.findAllByMachineNumberAndTimeStartBetween(machineNumber, startDay, endDay);
     }
 
     @Override
     public List<MachinePlan> findSort(Integer machineNumber, LocalDate date, String sortProperties) {
         Sort sort = new Sort(Sort.Direction.ASC, sortProperties);
-        LocalDateTime startDay = date.atStartOfDay();
-        LocalDateTime endDay = date.atTime(23, 59);
+        LocalDateTime startDay = date.atTime(DAY_START_TIME);
+        LocalDateTime endDay = date.plusDays(1).atTime(DAY_END_TIME);
         return machinePlanRepository.findAllByTimeStartBetweenAndMachineNumber(startDay, endDay, machineNumber, sort);
     }
 
     @Override
     public List<MachinePlan> findByProductForMachinePlan(Long productTypeId, LocalDate date) {
-        LocalDateTime startDay = date.atStartOfDay();
-        LocalDateTime endDay = date.atTime(23, 59);
+        LocalDateTime startDay = date.atTime(DAY_START_TIME);
+        LocalDateTime endDay = date.plusDays(1).atTime(DAY_END_TIME);
         return machinePlanRepository.findAllByProductType_IdAndTimeStartBetween(productTypeId, startDay, endDay);
     }
 
     @Override
     public Integer countProductAmountForMachinePlan(Long productTypeId, LocalDate date) {
         List<MachinePlan> plans = findByProductForMachinePlan(productTypeId, date);
-        if (!plans.isEmpty()) {
-            return plans.stream().mapToInt(this::getProductAmount).sum();
-        } else {
-            return 0;
-        }
+        return !plans.isEmpty() ? plans.stream().mapToInt(this::getProductAmount).sum() : 0;
     }
 
     @Override
     public Integer getProductAmount(MachinePlan machinePlan) {
-        return machinePlan.getMachinePlanItems()
+        return machinePlan.getMachinePlanItems() == null
+                ? 0
+                : machinePlan.getMachinePlanItems()
                 .stream()
                 .mapToInt(MachinePlanItem::getProductAmount)
                 .sum();
@@ -145,9 +147,9 @@ public class MachinePlanServiceImpl implements MachinePlanService {
         } else return true;
     }
 
-    private boolean ifInDay(MachinePlan machinePlan) {
-        if (findEndTime(machinePlan).toLocalDate().equals(machinePlan.getTimeStart().toLocalDate())) {
-            return true;
-        } else throw new IntervalTimeForPlanException("End for plan is out of the date!");
+    private void ifInDay(MachinePlan machinePlan) {
+        if (!findEndTime(machinePlan).toLocalDate().equals(machinePlan.getTimeStart().toLocalDate())) {
+            throw new IntervalTimeForPlanException("End for plan is out of the date!");
+        }
     }
 }
