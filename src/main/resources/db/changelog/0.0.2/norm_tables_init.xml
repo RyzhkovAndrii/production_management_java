@@ -8,7 +8,7 @@
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     <changeSet id="1" author="pryadilnikova@gmail.com">
         <createTable tableName="norm">
-            <column name="id" type="bigint">
+            <column name="id" type="bigint" autoIncrement="true" startWith="1" incrementBy="1">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="norm" type="int">
