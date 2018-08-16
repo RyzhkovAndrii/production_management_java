@@ -8,37 +8,32 @@
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     <changeSet id="1" author="pryadilnikova@gmail.com">
         <insert tableName="norm">
-            <column name="id" value="1"/>
             <column name="norm" value="7400"/>
-            <column name="norm_for_day" value="7500"/>
+            <column name="norm_for_day" value="88800"/>
         </insert>
     </changeSet>
     <changeSet id="2" author="pryadilnikova@gmail.com">
         <insert tableName="norm">
-            <column name="id" value="2"/>
             <column name="norm" value="6800"/>
-            <column name="norm_for_day" value="7000"/>
+            <column name="norm_for_day" value="108800"/>
         </insert>
     </changeSet>
     <changeSet id="3" author="pryadilnikova@gmail.com">
         <insert tableName="norm">
-            <column name="id" value="3"/>
             <column name="norm" value="7400"/>
-            <column name="norm_for_day" value="8000"/>
+            <column name="norm_for_day" value="88800"/>
         </insert>
     </changeSet>
     <changeSet id="4" author="pryadilnikova@gmail.com">
         <insert tableName="norm">
-            <column name="id" value="4"/>
             <column name="norm" value="6800"/>
-            <column name="norm_for_day" value="7000"/>
+            <column name="norm_for_day" value="88800"/>
         </insert>
     </changeSet>
     <changeSet id="5" author="pryadilnikova@gmail.com">
         <insert tableName="norm">
-            <column name="id" value="17"/>
             <column name="norm" value="7000"/>
-            <column name="norm_for_day" value="7500"/>
+            <column name="norm_for_day" value="88800"/>
         </insert>
     </changeSet>
     <!--<changeSet id="6" author="pryadilnikova@gmail.com">-->
