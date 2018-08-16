@@ -17,4 +17,7 @@ public class ProductPlanOperationResponse extends BaseEntityResponse {
     private Integer rollAmount;
 
     private Integer productAmount;
+
+    private Integer rollToMachinePlane;
+
 }
