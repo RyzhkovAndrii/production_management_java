@@ -9,7 +9,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ua.com.novopacksv.production.model.planModel.ProductPlanBatch;
 import ua.com.novopacksv.production.model.productModel.ProductType;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -22,7 +21,6 @@ import java.util.stream.Stream;
 @SpringBootTest
 public class ProductPlanBatchServiceImplTest {
 
-    private ProductPlanBatchService productPlanBatchService;
     private ProductType productType = new ProductType();
     LocalDate fromDate = LocalDate.now();
     LocalDate toDate = LocalDate.now().plusDays(1);
@@ -50,7 +48,7 @@ public class ProductPlanBatchServiceImplTest {
 
     private ProductPlanBatch getOne(ProductType productType, LocalDate date) {
         date = toDate;
-               ProductPlanBatch productPlanBatch = new ProductPlanBatch();
+        ProductPlanBatch productPlanBatch = new ProductPlanBatch();
         productPlanBatch.setDate(date);
         productPlanBatch.setProductType(productType);
         productPlanBatch.setManufacturedAmount(1200);
