@@ -154,6 +154,7 @@ public class ProductPlanOperationServiceImpl implements ProductPlanOperationServ
 
     /**
      * Method deletes ProductPlanOperation by it's id
+     *
      * @param id - ProductPlanOperation's id
      * @throws ResourceNotFoundException if ProductPlanOperation with pointed id does not exist
      */
@@ -165,9 +166,10 @@ public class ProductPlanOperationServiceImpl implements ProductPlanOperationServ
 
     /**
      * Method counts a sum of rollAmounts from MachinePlans for pointed parameters:
+     *
      * @param productType - ProductType
-     * @param rollType - RollType
-     * @param date - date on which a sum is finding, here we consider that day is from 8 a.m. to 8 a.m. on the next day
+     * @param rollType    - RollType
+     * @param date        - date on which a sum is finding, here we consider that day is from 8 a.m. to 8 a.m. on the next day
      * @return integer, sum of rollAmounts
      */
     @Override
@@ -176,7 +178,7 @@ public class ProductPlanOperationServiceImpl implements ProductPlanOperationServ
         LocalDateTime endDay = date.plusDays(1).atTime(DAY_END_TIME);
         List<MachinePlan> machinePlans =
                 machinePlanRepository.findAllByProductType_IdAndTimeStartBetween(productType.getId(), startDay, endDay);
-        Integer sum =  machinePlans
+        Integer sum = machinePlans
                 .stream()
                 .mapToInt(plan -> plan
                         .getMachinePlanItems()
@@ -186,7 +188,7 @@ public class ProductPlanOperationServiceImpl implements ProductPlanOperationServ
                         .sum())
                 .sum();
         log.debug("Method getRollToMachinePlanAmount(ProductType productType, RollType rollType, LocalDate date):" +
-                "Sum from MachinePlans for ProductType = {}, for RollType = {} on date = {} is {}", productType,
+                        "Sum from MachinePlans for ProductType = {}, for RollType = {} on date = {} is {}", productType,
                 rollType, date, sum);
         return sum;
     }
