@@ -113,33 +113,63 @@ public class MachinePlanServiceImpl implements MachinePlanService {
     /**
      * Method finds all MachinePlans for one ProductType on one working day from 8*00 a.m. of pointed date to 8*00
      * of the next date
+     *
      * @param productTypeId - ProductType's id
-     * @param date - - working day
+     * @param date          - working day
      * @return List of MachinePlans for one ProductType
      */
     @Override
     public List<MachinePlan> findByProductForMachinePlan(Long productTypeId, LocalDate date) {
         LocalDateTime startDay = date.atTime(DAY_START_TIME);
         LocalDateTime endDay = date.plusDays(1).atTime(DAY_END_TIME);
+        log.debug("Method findByProductForMachinePlan(Long productTypeId, LocalDate date): List<MachinePlan> " +
+                "for ProductType with id = {} on date {} is finding", productTypeId, date);
         return machinePlanRepository.findAllByProductType_IdAndTimeStartBetween(productTypeId, startDay, endDay);
     }
 
+    /**
+     * Method counts sum of productAmounts from all MachinePlans for one ProductType on one date
+     *
+     * @param productTypeId - ProductType's id
+     * @param date          - pointed date
+     * @return sum of productAmounts
+     */
     @Override
     public Integer countProductAmountForMachinePlan(Long productTypeId, LocalDate date) {
         List<MachinePlan> plans = findByProductForMachinePlan(productTypeId, date);
-        return !plans.isEmpty() ? plans.stream().mapToInt(this::getProductAmount).sum() : 0;
+        Integer sum = !plans.isEmpty() ? plans.stream().mapToInt(this::getProductAmount).sum() : 0;
+        log.debug("Method countProductAmountForMachinePlan(Long productTypeId, LocalDate date): Sum of productAmounts " +
+                "is {} for ProductType with id = {} on date {}", sum, productTypeId, date);
+        return sum;
     }
 
+    /**
+     * Method counts productAmount from MachinePlanItems for a MachinePlan
+     *
+     * @param machinePlan - MachinePlan
+     * @return sum of productAmounts from MachinePlanItems but if MachinePlanItems are absent or not determined (null)
+     * return zero
+     */
     @Override
     public Integer getProductAmount(MachinePlan machinePlan) {
-        return machinePlan.getMachinePlanItems() == null
+        Integer amount = machinePlan.getMachinePlanItems() == null || machinePlan.getMachinePlanItems().isEmpty()
                 ? 0
                 : machinePlan.getMachinePlanItems()
                 .stream()
                 .mapToInt(MachinePlanItem::getProductAmount)
                 .sum();
+        log.debug("Method getProductAmount(MachinePlan machinePlan): Product amount is {} for MachinePlan {}", amount,
+                machinePlan);
+        return amount;
     }
 
+    /**
+     * Method finds MachinePlan by id from db
+     *
+     * @param id - MachinePlan's id
+     * @return MachinePlan from db
+     * @throws ResourceNotFoundException if MachinePlan with this id does not exist in db
+     */
     @Override
     public MachinePlan findById(Long id) throws ResourceNotFoundException {
         MachinePlan machinePlan = machinePlanRepository.findById(id).orElseThrow(() -> {
@@ -151,58 +181,129 @@ public class MachinePlanServiceImpl implements MachinePlanService {
         return machinePlan;
     }
 
+    /**
+     * Method finds all existed MachinePlans from db
+     *
+     * @return List of MachinePlans
+     */
     @Override
     public List<MachinePlan> findAll() {
         log.debug("Method findAll(): List<MachinePlan> is finding");
         return machinePlanRepository.findAll();
     }
 
+    /**
+     * Method tests if new MachinePlan is in day's interval and saves it in db
+     *
+     * @param machinePlan - new MachinePlan
+     * @return new saved MachinePlan
+     * @throws IntervalTimeForPlanException if this MachinePlan is not in valid interval of time
+     */
     @Override
-    public MachinePlan save(MachinePlan machinePlan) {
+    public MachinePlan save(MachinePlan machinePlan) throws IntervalTimeForPlanException {
         ifTimeIsValid(machinePlan);
-        log.debug("Method save(MachinePlan machinePlan): MachinePlan {} was saved", machinePlan);
-        return machinePlanRepository.save(machinePlan);
+        MachinePlan machinePlanSaved = machinePlanRepository.save(machinePlan);
+        log.debug("Method save(MachinePlan machinePlan): MachinePlan {} was saved", machinePlanSaved);
+        return machinePlanSaved;
     }
 
+    /**
+     * Method tests if this MachinePlan exist in db and if it is in day's interval and saves it in db
+     *
+     * @param machinePlan - MachinePlan for update
+     * @return updated MachinePlan
+     * @throws ResourceNotFoundException    if this MachinePlan does not exist in db
+     * @throws IntervalTimeForPlanException if this MachinePlan is not in valid interval of time
+     */
     @Override
-    public MachinePlan update(MachinePlan machinePlan) throws ResourceNotFoundException {
+    public MachinePlan update(MachinePlan machinePlan) throws ResourceNotFoundException, IntervalTimeForPlanException {
         findById(machinePlan.getId());
-        machinePlanRepository.save(machinePlan);
-        MachinePlan machinePlanUpdated = findById(machinePlan.getId());
+        ifTimeIsValid(machinePlan);
+        MachinePlan machinePlanUpdated = machinePlanRepository.save(machinePlan);
         log.debug("Method update(MachinePlan machinePlan): MachinePlan {} was updated", machinePlanUpdated);
         return machinePlanUpdated;
     }
 
+    /**
+     * Method tests if this MachinePlan exist in db and deletes it by id
+     *
+     * @param id - MachinePlan's id
+     * @throws ResourceNotFoundException if this MachinePlan does not exist in db
+     */
     @Override
     public void delete(Long id) throws ResourceNotFoundException {
         machinePlanRepository.delete(findById(id));
         log.debug("Method delete(Long id): MachinePlane with id = {} was deleted", id);
     }
 
-    private void ifTimeIsValid(MachinePlan machinePlan) {
+    /**
+     * Method tests if MachinePlan is in interval of one working day that is from 8*00 a.m. of pointed in
+     * MachinePlan's date to 8*00 a.m. of the next date
+     *
+     * @param machinePlan - MachinePlan
+     * @throws IntervalTimeForPlanException if MachinePlan is out of interval
+     */
+    private void ifTimeIsValid(MachinePlan machinePlan) throws IntervalTimeForPlanException {
         ifInDay(machinePlan);
         List<MachinePlan> plans =
                 findByMachineNumberAndDate(machinePlan.getMachineNumber(), machinePlan.getTimeStart().toLocalDate());
         if (!plans.isEmpty()) {
             plans.forEach((plan) -> ifInInterval(plan, machinePlan));
         }
+        log.debug("Method ifTimeIsValid(MachinePlan machinePlan): MachinePlan {} was determined as valid");
     }
 
+    /**
+     * Method counts an end of working time for a MachinePlan
+     *
+     * @param machinePlan - MachinePlan
+     * @return date and time of the end of planning work
+     */
     private LocalDateTime findEndTime(MachinePlan machinePlan) {
-        return machinePlan.getTimeStart().plusSeconds((long) (getDuration(machinePlan) * 360));
+        LocalDateTime endTime = machinePlan.getTimeStart().plusSeconds((long) (getDuration(machinePlan) * 360));
+        log.debug("Method findEndTime(MachinePlan machinePlan): The end of work for MachinePlan {} is {}",
+                machinePlan, endTime);
+        return endTime;
     }
 
-    private boolean ifInInterval(MachinePlan machinePlanOne, MachinePlan machinePlan) {
+    /**
+     * Method determines if one MachinePlan does not cover the other one by time interval
+     *
+     * @param machinePlanOne - one MachinePlan
+     * @param machinePlan    - other MachinePlan
+     * @return true if two MachinePlans don't cover one  other's by time interval or if this two are the same one
+     * @throws IntervalTimeForPlanException if interval of working time for two MachinePlans covers one other's
+     */
+    private boolean ifInInterval(MachinePlan machinePlanOne, MachinePlan machinePlan) throws IntervalTimeForPlanException {
         if (!machinePlanOne.getId().equals(machinePlan.getId())) {
             if (machinePlanOne.getTimeStart().isAfter(findEndTime(machinePlan))
                     || findEndTime(machinePlanOne).isBefore(machinePlan.getTimeStart())) {
+                log.debug("Method ifInInterval(MachinePlan machinePlanOne, MachinePlan machinePlan): MachinePlan {}" +
+                        "and MachinePlan {} has a correct time interval", machinePlanOne, machinePlan);
                 return true;
-            } else throw new IntervalTimeForPlanException("Time interval is incorrect!");
-        } else return true;
+            } else {
+                log.error("Method ifInInterval(MachinePlan machinePlanOne, MachinePlan machinePlan): MachinePlan {}" +
+                        "and MachinePlan {} has no a correct time interval", machinePlanOne, machinePlan);
+                throw new IntervalTimeForPlanException("Time interval is incorrect!");
+            }
+        } else {
+            log.debug("Method ifInInterval(MachinePlan machinePlanOne, MachinePlan machinePlan): MachinePlan {}" +
+                    "equals to MachinePlan {}", machinePlanOne, machinePlan);
+            return true;
+        }
     }
 
-    private void ifInDay(MachinePlan machinePlan) {
+    /**
+     * Method tests if end of work of MachinePlan is in working day from 8*00 a.m. of the date to 8*00 a.m. of the
+     * next date
+     *
+     * @param machinePlan - MachinePlan
+     * @throws IntervalTimeForPlanException if the end of working time is over the working day
+     */
+    private void ifInDay(MachinePlan machinePlan) throws IntervalTimeForPlanException { //TODO docs don't describe the function of a method
         if (!findEndTime(machinePlan).toLocalDate().equals(machinePlan.getTimeStart().toLocalDate())) {
+            log.error("Method ifInDay(MachinePlan machinePlan): Working time for MachinePlan {} is out of working " +
+                    "day!", machinePlan);
             throw new IntervalTimeForPlanException("End for plan is out of the date!");
         }
     }
