@@ -47,7 +47,7 @@ public class RollOperationRequestToRollOperationConverter implements Converter<R
         result.setOperationType(OperationType.valueOf(source.getOperationType().toUpperCase()));
         result.setRollAmount(source.getRollAmount());
         if(source.getProductTypeIdForUseOperation() != null){
-            result.setProductTypeForUseOperation(productTypeService.findById(source.getProductTypeIdForUseOperation()));
+            result.setProductType(productTypeService.findById(source.getProductTypeIdForUseOperation()));
         }
         return result;
     }

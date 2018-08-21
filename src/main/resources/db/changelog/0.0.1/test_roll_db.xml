@@ -145,4 +145,17 @@
             <column name="color_code" value="#ffff00"/>
         </insert>
     </changeSet>
+    <changeSet id="19" author="pryadilnikova@gmail.com">
+        <insert tableName="roll_left_over">
+            <column name="date" value="2018-04-11"/>
+            <column name="roll_type_id" value="4"/>
+            <column name="amount" value="10"/>
+        </insert>
+    </changeSet>
+    <changeSet id="20" author="pryadilnikova@gmail.com">
+        <insert tableName="roll_check">
+            <column name="roll_type_id" value="4"/>
+            <column name="roll_left_over_check_status" value="NOT_CONFIRMED"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>

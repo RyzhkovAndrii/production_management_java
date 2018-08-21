@@ -37,5 +37,5 @@ public class RollOperation extends BaseEntity {
     @ManyToOne
     @PrimaryKeyJoinColumn
     @Nullable
-    private ProductType productTypeForUseOperation;
+    private ProductType productType;
 }

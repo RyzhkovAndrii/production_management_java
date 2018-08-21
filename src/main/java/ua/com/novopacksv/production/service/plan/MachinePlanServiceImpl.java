@@ -20,41 +20,103 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+/**
+ * Class implements interface {@link MachinePlanService} and contains methods for work with MachinePlan: CRUD and find by
+ * pointed parameters
+ */
 @Service
 @Transactional
 @RequiredArgsConstructor
 @Slf4j
 public class MachinePlanServiceImpl implements MachinePlanService {
 
+    /**
+     * Time value of the starting a working shift as a beginning of a day
+     */
     private static final LocalTime DAY_START_TIME = LocalTime.of(8, 0, 0);
+
+    /**
+     * Time value of the end of a last day's working shift as an end of a day
+     */
     private static final LocalTime DAY_END_TIME = LocalTime.of(7, 59, 59);
 
+    /**
+     * An object of repository's layer for work with MachinePlan from db
+     */
     private final MachinePlanRepository machinePlanRepository;
 
+    /**
+     * An object of service's layer for work with Norm
+     */
     @Autowired
     @Lazy
     private NormService normService;
 
+    /**
+     * Method gets a duration in hours for producing of the product's amount of one MachinePlan
+     *
+     * @param machinePlan - MachinePlan
+     * @return double, a quantity of hours that is needed for producing products
+     * @throws ResourceNotFoundException if Norm for this ProductType does not exist in db
+     */
     @Override
-    public Double getDuration(MachinePlan machinePlan) {
-        return countDuration(machinePlan.getProductType(), getProductAmount(machinePlan));
+    public Double getDuration(MachinePlan machinePlan) throws ResourceNotFoundException {
+        try {
+            Double duration = ((double) getProductAmount(machinePlan) /
+                    (normService.findOne(machinePlan.getProductType().getId()).getNormForDay() / 24));
+            log.debug("Method getDuration(MachinePlan machinePlan): Duration is {} hours for MachinePlan {}", duration,
+                    machinePlan);
+            return duration;
+        } catch (Exception e) {
+            log.error("Method getDuration(MachinePlan machinePlan): Duration was not found for MachinePlan {}",
+                    machinePlan);
+            throw new ResourceNotFoundException("Norms for this product type was not found!");
+        }
     }
 
+    /**
+     * Method finds all MachinePlans for one machine by it's number on one working day from 8*00 a.m. of
+     * pointed date to 8*00 of the next date
+     *
+     * @param machineNumber - number of machine
+     * @param date          - working day
+     * @return List of MachinePlans for one machine on one working day
+     */
     @Override
     public List<MachinePlan> findByMachineNumberAndDate(Integer machineNumber, LocalDate date) {
         LocalDateTime startDay = date.atTime(DAY_START_TIME);
         LocalDateTime endDay = date.plusDays(1).atTime(DAY_END_TIME);
+        log.debug("Method findByMachineNumberAndDate(Integer machineNumber, LocalDate date): List<MachinePlan> for " +
+                "machine #{} on day {} is finding", machineNumber, date);
         return machinePlanRepository.findAllByMachineNumberAndTimeStartBetween(machineNumber, startDay, endDay);
     }
 
+    /**
+     * Method finds and sorts by parameter all MachinePlans for one machine by it's number on one working day
+     * from 8*00 a.m. of pointed date to 8*00 of the next date
+     *
+     * @param machineNumber  - number of machine
+     * @param date           - working day
+     * @param sortProperties - a parameter of sorting
+     * @return List of sorted MachinePlans for one machine on one working day
+     */
     @Override
     public List<MachinePlan> findSort(Integer machineNumber, LocalDate date, String sortProperties) {
         Sort sort = new Sort(Sort.Direction.ASC, sortProperties);
         LocalDateTime startDay = date.atTime(DAY_START_TIME);
         LocalDateTime endDay = date.plusDays(1).atTime(DAY_END_TIME);
+        log.debug("Method findSort(Integer machineNumber, LocalDate date, String sortProperties): List<MachinePlan> " +
+                "for machine #{} on day {} sorted by {} is finding", machineNumber, date, sortProperties);
         return machinePlanRepository.findAllByTimeStartBetweenAndMachineNumber(startDay, endDay, machineNumber, sort);
     }
 
+    /**
+     * Method finds all MachinePlans for one ProductType on one working day from 8*00 a.m. of pointed date to 8*00
+     * of the next date
+     * @param productTypeId - ProductType's id
+     * @param date - - working day
+     * @return List of MachinePlans for one ProductType
+     */
     @Override
     public List<MachinePlan> findByProductForMachinePlan(Long productTypeId, LocalDate date) {
         LocalDateTime startDay = date.atTime(DAY_START_TIME);
@@ -115,14 +177,6 @@ public class MachinePlanServiceImpl implements MachinePlanService {
     public void delete(Long id) throws ResourceNotFoundException {
         machinePlanRepository.delete(findById(id));
         log.debug("Method delete(Long id): MachinePlane with id = {} was deleted", id);
-    }
-
-    private Double countDuration(ProductType productType, Integer productAmount) {
-        try {
-            return ((double) productAmount / (normService.findOne(productType.getId()).getNormForDay() / 24));
-        } catch (Exception e) {
-            throw new ResourceNotFoundException("Norms for this product type was not found!");
-        }
     }
 
     private void ifTimeIsValid(MachinePlan machinePlan) {
