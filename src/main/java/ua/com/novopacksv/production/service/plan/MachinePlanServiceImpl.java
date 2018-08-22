@@ -300,8 +300,10 @@ public class MachinePlanServiceImpl implements MachinePlanService {
      * @param machinePlan - MachinePlan
      * @throws IntervalTimeForPlanException if the end of working time is over the working day
      */
-    private void ifInDay(MachinePlan machinePlan) throws IntervalTimeForPlanException { //TODO docs don't describe the function of a method
-        if (!findEndTime(machinePlan).toLocalDate().equals(machinePlan.getTimeStart().toLocalDate())) {
+    private void ifInDay(MachinePlan machinePlan) throws IntervalTimeForPlanException {
+        LocalDateTime startDay = machinePlan.getTimeStart().toLocalDate().atTime(DAY_START_TIME);
+        LocalDateTime endDay = machinePlan.getTimeStart().toLocalDate().plusDays(1).atTime(DAY_END_TIME);
+        if (findEndTime(machinePlan).toLocalDate().isBefore(machinePlan.getTimeStart().toLocalDate())) {
             log.error("Method ifInDay(MachinePlan machinePlan): Working time for MachinePlan {} is out of working " +
                     "day!", machinePlan);
             throw new IntervalTimeForPlanException("End for plan is out of the date!");
