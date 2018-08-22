@@ -245,11 +245,9 @@ public class MachinePlanServiceImpl implements MachinePlanService {
      */
     private void ifTimeIsValid(MachinePlan machinePlan) throws IntervalTimeForPlanException {
         ifInDay(machinePlan);
-        List<MachinePlan> plans =
-                findByMachineNumberAndDate(machinePlan.getMachineNumber(), machinePlan.getTimeStart().toLocalDate());
-        if (!plans.isEmpty()) {
-            plans.forEach((plan) -> ifInInterval(plan, machinePlan));
-        }
+        findByMachineNumberAndDate(machinePlan.getMachineNumber(), machinePlan.getTimeStart()
+                .toLocalDate())
+                .forEach((plan) -> ifInInterval(plan, machinePlan));
         log.debug("Method ifTimeIsValid(MachinePlan machinePlan): MachinePlan {} was determined as valid");
     }
 

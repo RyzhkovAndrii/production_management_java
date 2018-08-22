@@ -64,8 +64,8 @@ public class RollPlanOperationController {
 
     @PutMapping
     @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO')")
-    public ResponseEntity<RollPlanOperationResponse> update(@Valid @PathVariable Long id,
-                                                            @RequestBody RollPlanOperationRequest request) {
+    public ResponseEntity<RollPlanOperationResponse> update(@PathVariable Long id,
+                                                            @Valid @RequestBody RollPlanOperationRequest request) {
         RollPlanOperation rollPlanOperation = conversionService.convert(request, RollPlanOperation.class);
         rollPlanOperation.setId(id);
         rollPlanOperationService.update(rollPlanOperation);
