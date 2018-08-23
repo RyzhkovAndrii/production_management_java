@@ -238,7 +238,8 @@ public class MachinePlanServiceImpl implements MachinePlanService {
 
     /**
      * Method tests if MachinePlan is in interval of one working day that is from 8*00 a.m. of pointed in
-     * MachinePlan's date to 8*00 a.m. of the next date
+     * MachinePlan's date to 8*00 a.m. of the next date and if the working interval does not cover working interval
+     * of other MachinePlans for this machine on this day
      *
      * @param machinePlan - MachinePlan
      * @throws IntervalTimeForPlanException if MachinePlan is out of interval
