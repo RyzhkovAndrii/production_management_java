@@ -82,9 +82,11 @@ public class OrderItemServiceImpl implements OrderItemService {
      *
      * @param orderItem - OrderItem for update
      * @return saved OrderItem
+     * @throws ResourceNotFoundException if OrderItem with this id does not exist in db
      */
     @Override
-    public OrderItem update(OrderItem orderItem) {
+    public OrderItem update(OrderItem orderItem) throws ResourceNotFoundException {
+        findById(orderItem.getId());
         OrderItem orderItemSaved = save(orderItem);
         log.debug("Method update(OrderItem orderItem): OrderItem was updated: {}", orderItemSaved);
         return orderItemSaved;
@@ -94,9 +96,10 @@ public class OrderItemServiceImpl implements OrderItemService {
      * Method delete OrderItem by id
      *
      * @param id - OrderItem's id
+     * @throws ResourceNotFoundException if OrderItem with this id does not exist in db
      */
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws ResourceNotFoundException {
         orderItemRepository.delete(findById(id));
         log.debug("Method delete(Long id): OrderItem with id = {} was deleted", id);
     }

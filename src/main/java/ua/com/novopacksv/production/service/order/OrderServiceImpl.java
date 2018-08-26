@@ -89,9 +89,11 @@ public class OrderServiceImpl implements OrderService {
      *
      * @param order - Order for update
      * @return updated Order
+     * @throws ResourceNotFoundException if Order with this id does not exist in db
      */
     @Override
-    public Order update(Order order) {
+    public Order update(Order order) throws ResourceNotFoundException {
+        findById(order.getId());
         Order orderUpdated = save(order);
         log.debug("Method update(Order order): Order {} was updated", orderUpdated);
         return orderUpdated;
@@ -101,9 +103,10 @@ public class OrderServiceImpl implements OrderService {
      * Method deletes Order by id
      *
      * @param id - Order's id
+     * @throws ResourceNotFoundException if Order with this id does not exist in db
      */
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws ResourceNotFoundException {
         tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
         orderRepository.delete(findById(id));
         log.debug("Method delete(Long id): Order with id = {} was deleted", id);
