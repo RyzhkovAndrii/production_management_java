@@ -7,16 +7,16 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.model.orderModel.OrderItem;
+import ua.com.novopacksv.production.model.planModel.MachinePlan;
+import ua.com.novopacksv.production.model.planModel.MachinePlanItem;
 import ua.com.novopacksv.production.model.planModel.ProductPlanBatch;
 import ua.com.novopacksv.production.model.planModel.ProductPlanOperation;
 import ua.com.novopacksv.production.model.productModel.ProductType;
 import ua.com.novopacksv.production.service.order.OrderItemServiceImpl;
 import ua.com.novopacksv.production.service.product.ProductTypeService;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -52,6 +52,20 @@ public class ProductPlanBatchServiceImpl implements ProductPlanBatchService {
     @Autowired
     @Lazy
     private OrderItemServiceImpl orderItemService;
+
+    /**
+     * An object of service's layer for work with MachinePlan
+     */
+    @Autowired
+    @Lazy
+    private MachinePlanService machinePlanService;
+
+    /**
+     * An object of service's layer for work with MachinePlanItem
+     */
+    @Autowired
+    @Lazy
+    private MachinePlanItemService machinePlanItemService;
 
     /**
      * Method creates new ProductPlanBatch for ProductType with pointed id on some date    NOT USED!!!!
@@ -110,6 +124,30 @@ public class ProductPlanBatchServiceImpl implements ProductPlanBatchService {
         log.debug("Method getAll(LocalDate fromDate, LocalDate toDate): Map<Long, List<ProductPlanBatch>> was created" +
                 " for period from {} to {}", fromDate, toDate);
         return batchesMap;
+    }
+
+    /**
+     * Method set product and roll amounts of product plans equals for machine plans for product type ID on some date
+     *
+     * @param productTypeId - ProductType ID
+     * @param date          - pointed date
+     */
+    @Override
+    public void equalizePlanToMachinePlan(Long productTypeId, LocalDate date) {
+        List<ProductPlanOperation> planOperations = productPlanOperationService.getAll(productTypeId, date, date);
+        List<MachinePlan> plans = machinePlanService.findByProductForMachinePlan(productTypeId, date);
+        planOperations.forEach(operation -> {
+            Integer rollAmount = 0;
+            Integer productAmount = 0;
+            for (MachinePlan plan : plans) {
+                MachinePlanItem item = machinePlanItemService.findOne(plan, operation.getRollType());
+                rollAmount += item.getRollAmount();
+                productAmount += item.getProductAmount();
+            }
+            operation.setRollAmount(rollAmount);
+            operation.setProductAmount(productAmount);
+            productPlanOperationService.update(operation);
+        });
     }
 
     /**

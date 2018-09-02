@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.NotUniqueFieldException;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
+import ua.com.novopacksv.production.model.planModel.MachinePlan;
 import ua.com.novopacksv.production.model.planModel.MachinePlanItem;
+import ua.com.novopacksv.production.model.rollModel.RollType;
 import ua.com.novopacksv.production.repository.planRepository.MachinePlanItemRepository;
 
 import java.util.List;
@@ -94,6 +96,31 @@ public class MachinePlanItemServiceImpl implements MachinePlanItemService {
     public void delete(Long id) throws ResourceNotFoundException {
         machinePlanItemRepository.delete(findById(id));
         log.debug("Method delete(Long id): MachinePlanItem with id = {} was deleted", id);
+    }
+
+    /**
+     * Method finds MachinePlanItem by machine plan and roll type
+     *
+     * @param machinePlan - MachinePlan
+     * @param rollType - RollType
+     * @return MachinePlanItem
+     * @throws ResourceNotFoundException if MachinePlanItem for machine plan with this roll type not exist in db
+     */
+    @Override
+    public MachinePlanItem findOne(MachinePlan machinePlan, RollType rollType) {
+        return machinePlanItemRepository.findByRollTypeAndMachinePlan(rollType, machinePlan)
+                .map(item -> {
+                    log.debug("Method findOne(MachinePlan machinePlan, RollType rollType): MachinePlanItem with machinePlan" +
+                            " ID = {} and rollType ID = {} was found: {}", machinePlan.getId(), rollType.getId(), item);
+                    return item;
+                })
+                .orElseThrow(() -> {
+                    log.error("Method findOne(MachinePlan machinePlan, RollType rollType): MachinePlanItem with machinePlan" +
+                            " ID = {} and rollType ID = {} was not found", machinePlan.getId(), rollType.getId());
+                    String message = String.format("MachinePlanItem with machinePlan ID = %d and rollType ID = %d" +
+                            " was not found", machinePlan.getId(), rollType.getId());
+                    return new ResourceNotFoundException(message);
+                });
     }
 
     /**

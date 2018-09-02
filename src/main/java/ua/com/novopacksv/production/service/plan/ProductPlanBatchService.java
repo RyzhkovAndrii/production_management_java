@@ -13,4 +13,6 @@ public interface ProductPlanBatchService {
     List<ProductPlanBatch> getAll(LocalDate date);
 
     Map<Long, List<ProductPlanBatch>> getAll(LocalDate fromDate, LocalDate toDate);
+
+    void equalizePlanToMachinePlan(Long productTypeId, LocalDate date);
 }
