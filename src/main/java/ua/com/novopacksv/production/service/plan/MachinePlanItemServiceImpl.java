@@ -80,7 +80,8 @@ public class MachinePlanItemServiceImpl implements MachinePlanItemService {
      */
     @Override
     public MachinePlanItem update(MachinePlanItem item) throws ResourceNotFoundException {
-        findById(item.getId());
+        MachinePlanItem oldItem = findById(item.getId());
+        item.setMachinePlan(oldItem.getMachinePlan());
         MachinePlanItem itemSaved = save(item);
         log.debug("Method update(MachinePlanItem item): MachinePlanItem {} was updated", itemSaved);
         return itemSaved;
