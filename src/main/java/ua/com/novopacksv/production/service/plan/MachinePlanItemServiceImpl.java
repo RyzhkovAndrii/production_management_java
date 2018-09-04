@@ -110,7 +110,7 @@ public class MachinePlanItemServiceImpl implements MachinePlanItemService {
      * @throws ResourceNotFoundException if MachinePlanItem for machine plan with this roll type not exist in db
      */
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = true, noRollbackFor = ResourceNotFoundException.class)
     public MachinePlanItem findOne(MachinePlan machinePlan, RollType rollType) {
         return machinePlanItemRepository.findByRollTypeAndMachinePlan(rollType, machinePlan)
                 .map(item -> {

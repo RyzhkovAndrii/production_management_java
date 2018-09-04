@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.orderModel.OrderItem;
 import ua.com.novopacksv.production.model.planModel.MachinePlan;
 import ua.com.novopacksv.production.model.planModel.MachinePlanItem;
@@ -140,9 +141,13 @@ public class ProductPlanBatchServiceImpl implements ProductPlanBatchService {
             Integer rollAmount = 0;
             Integer productAmount = 0;
             for (MachinePlan plan : plans) {
-                MachinePlanItem item = machinePlanItemService.findOne(plan, operation.getRollType());
-                rollAmount += item.getRollAmount();
-                productAmount += item.getProductAmount();
+                try {
+                    MachinePlanItem item = machinePlanItemService.findOne(plan, operation.getRollType());
+                    rollAmount += item.getRollAmount();
+                    productAmount += item.getProductAmount();
+                } catch (ResourceNotFoundException e) {
+                    // nothing to do
+                }
             }
             operation.setRollAmount(rollAmount);
             operation.setProductAmount(productAmount);
