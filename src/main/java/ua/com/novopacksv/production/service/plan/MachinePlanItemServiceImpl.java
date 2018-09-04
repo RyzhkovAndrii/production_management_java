@@ -36,6 +36,7 @@ public class MachinePlanItemServiceImpl implements MachinePlanItemService {
      * @throws ResourceNotFoundException if MachinePlanItem with this id does not exist in db
      */
     @Override
+    @Transactional(readOnly = true)
     public MachinePlanItem findById(Long id) throws ResourceNotFoundException {
         MachinePlanItem machinePlanItem = machinePlanItemRepository.findById(id).orElseThrow(() -> {
             String message = String.format("MachinePlanItem with id = %d was not found", id);
@@ -52,6 +53,7 @@ public class MachinePlanItemServiceImpl implements MachinePlanItemService {
      * @return List of MachinePlanItems
      */
     @Override
+    @Transactional(readOnly = true)
     public List<MachinePlanItem> findAll() {
         log.debug("Method findAll(): List<MachinePlanItem> is finding");
         return machinePlanItemRepository.findAll();
@@ -103,11 +105,12 @@ public class MachinePlanItemServiceImpl implements MachinePlanItemService {
      * Method finds MachinePlanItem by machine plan and roll type
      *
      * @param machinePlan - MachinePlan
-     * @param rollType - RollType
+     * @param rollType    - RollType
      * @return MachinePlanItem
      * @throws ResourceNotFoundException if MachinePlanItem for machine plan with this roll type not exist in db
      */
     @Override
+    @Transactional(readOnly = true)
     public MachinePlanItem findOne(MachinePlan machinePlan, RollType rollType) {
         return machinePlanItemRepository.findByRollTypeAndMachinePlan(rollType, machinePlan)
                 .map(item -> {

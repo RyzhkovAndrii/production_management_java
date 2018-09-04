@@ -11,7 +11,6 @@ import ua.com.novopacksv.production.exception.IntervalTimeForPlanException;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.planModel.MachinePlan;
 import ua.com.novopacksv.production.model.planModel.MachinePlanItem;
-import ua.com.novopacksv.production.model.productModel.ProductType;
 import ua.com.novopacksv.production.repository.planRepository.MachinePlanRepository;
 import ua.com.novopacksv.production.service.norm.NormService;
 
@@ -60,6 +59,7 @@ public class MachinePlanServiceImpl implements MachinePlanService {
      * @throws ResourceNotFoundException if Norm for this ProductType does not exist in db
      */
     @Override
+    @Transactional(readOnly = true)
     public Double getDuration(MachinePlan machinePlan) throws ResourceNotFoundException {
         try {
             Double duration = ((double) getProductAmount(machinePlan) /
@@ -83,6 +83,7 @@ public class MachinePlanServiceImpl implements MachinePlanService {
      * @return List of MachinePlans for one machine on one working day
      */
     @Override
+    @Transactional(readOnly = true)
     public List<MachinePlan> findByMachineNumberAndDate(Integer machineNumber, LocalDate date) {
         LocalDateTime startDay = date.atTime(DAY_START_TIME);
         LocalDateTime endDay = date.plusDays(1).atTime(DAY_END_TIME);
@@ -101,6 +102,7 @@ public class MachinePlanServiceImpl implements MachinePlanService {
      * @return List of sorted MachinePlans for one machine on one working day
      */
     @Override
+    @Transactional(readOnly = true)
     public List<MachinePlan> findSort(Integer machineNumber, LocalDate date, String sortProperties) {
         Sort sort = new Sort(Sort.Direction.ASC, sortProperties);
         LocalDateTime startDay = date.atTime(DAY_START_TIME);
@@ -119,6 +121,7 @@ public class MachinePlanServiceImpl implements MachinePlanService {
      * @return List of MachinePlans for one ProductType
      */
     @Override
+    @Transactional(readOnly = true)
     public List<MachinePlan> findByProductForMachinePlan(Long productTypeId, LocalDate date) {
         LocalDateTime startDay = date.atTime(DAY_START_TIME);
         LocalDateTime endDay = date.plusDays(1).atTime(DAY_END_TIME);
@@ -135,6 +138,7 @@ public class MachinePlanServiceImpl implements MachinePlanService {
      * @return sum of productAmounts
      */
     @Override
+    @Transactional(readOnly = true)
     public Integer countProductAmountForMachinePlan(Long productTypeId, LocalDate date) {
         List<MachinePlan> plans = findByProductForMachinePlan(productTypeId, date);
         Integer sum = !plans.isEmpty() ? plans.stream().mapToInt(this::getProductAmount).sum() : 0;
@@ -151,6 +155,7 @@ public class MachinePlanServiceImpl implements MachinePlanService {
      * return zero
      */
     @Override
+    @Transactional(readOnly = true)
     public Integer getProductAmount(MachinePlan machinePlan) {
         Integer amount = machinePlan.getMachinePlanItems() == null || machinePlan.getMachinePlanItems().isEmpty()
                 ? 0
@@ -171,6 +176,7 @@ public class MachinePlanServiceImpl implements MachinePlanService {
      * @throws ResourceNotFoundException if MachinePlan with this id does not exist in db
      */
     @Override
+    @Transactional(readOnly = true)
     public MachinePlan findById(Long id) throws ResourceNotFoundException {
         MachinePlan machinePlan = machinePlanRepository.findById(id).orElseThrow(() -> {
             String message = String.format("MachinePlan with id = %d was not found", id);
@@ -187,6 +193,7 @@ public class MachinePlanServiceImpl implements MachinePlanService {
      * @return List of MachinePlans
      */
     @Override
+    @Transactional(readOnly = true)
     public List<MachinePlan> findAll() {
         log.debug("Method findAll(): List<MachinePlan> is finding");
         return machinePlanRepository.findAll();
