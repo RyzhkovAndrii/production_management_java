@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Base64;
 import java.util.Date;
@@ -70,12 +69,12 @@ public class JwtTokenService {
         return null;
     }
     
-    public boolean checkToken(String token) throws ServletException {
+    public boolean checkToken(String token) {
         try {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            throw new BadCredentialsException("Expired or invalid access token");
+            throw new BadCredentialsException("Expired or invalid token");
         }
     }
 

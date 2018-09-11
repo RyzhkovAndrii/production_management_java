@@ -3,6 +3,7 @@ package ua.com.novopacksv.production.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,8 +14,6 @@ import org.springframework.util.StringUtils;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.userModel.User;
 import ua.com.novopacksv.production.service.user.UserService;
-
-import javax.servlet.ServletException;
 
 @Service
 @RequiredArgsConstructor
@@ -46,25 +45,23 @@ public class SecurityService {
     }
 
     public TokenResponse refreshToken(String refresh) {
+        if (refresh == null) {
+            throw new BadCredentialsException("Expired or invalid token");
+        }
+        jwtTokenService.checkToken(refresh);
+        String username = jwtTokenService.getUsername(refresh);
+        if (!StringUtils.hasText(username)) {
+            throw new BadCredentialsException("Expired or invalid token");
+        }
         try {
-            if (refresh == null) {
-                throw new AuthenticationServiceException("Expired or invalid refresh token");
-            }
-            jwtTokenService.checkToken(refresh);
-            String username = jwtTokenService.getUsername(refresh);
-            if (!StringUtils.hasText(username)) {
-                throw new AuthenticationServiceException("Expired or invalid refresh token");
-            }
             userService.findByUsername(username);
-            TokenResponse token = new TokenResponse();
-            token.setAccessToken(jwtTokenService.createAccessToken(username));
-            token.setRefreshToken(jwtTokenService.createRefreshToken(username));
-            return token;
         } catch (ResourceNotFoundException e) {
             throw new UsernameNotFoundException("User does not exist");
-        } catch (ServletException e) {
-            throw new AuthenticationServiceException("Expired or invalid refresh token");
         }
+        TokenResponse token = new TokenResponse();
+        token.setAccessToken(jwtTokenService.createAccessToken(username));
+        token.setRefreshToken(jwtTokenService.createRefreshToken(username));
+        return token;
     }
 
     public User getLoggedInUser() {
