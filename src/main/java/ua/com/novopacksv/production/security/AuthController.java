@@ -31,9 +31,14 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestParam(name = "username") String username,
-                                        @RequestParam(name = "password") String password) {
+    public ResponseEntity<TokenResponse> login(@RequestParam(name = "username") String username,
+                                               @RequestParam(name = "password") String password) {
         return new ResponseEntity<>(securityService.login(username, password), HttpStatus.OK);
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenResponse> refresh(@RequestParam(name = "refreshToken") String refresh) {
+        return new ResponseEntity<>(securityService.refreshToken(refresh), HttpStatus.OK);
     }
 
     @GetMapping("/me")

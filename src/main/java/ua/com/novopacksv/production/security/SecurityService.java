@@ -14,6 +14,8 @@ import ua.com.novopacksv.production.exception.ResourceNotFoundException;
 import ua.com.novopacksv.production.model.userModel.User;
 import ua.com.novopacksv.production.service.user.UserService;
 
+import javax.servlet.ServletException;
+
 @Service
 @RequiredArgsConstructor
 public class SecurityService {
@@ -24,7 +26,7 @@ public class SecurityService {
 
     private final UserService userService;
 
-    public String login(String username, String password) {
+    public TokenResponse login(String username, String password) {
         if (!StringUtils.hasText(username)) {
             throw new UsernameNotFoundException("User is not specified");
         }
@@ -32,11 +34,36 @@ public class SecurityService {
             userService.findByUsername(username);
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
             authenticationManager.authenticate(authToken);
-            return jwtTokenService.createToken(username);
+            TokenResponse token = new TokenResponse();
+            token.setAccessToken(jwtTokenService.createAccessToken(username));
+            token.setRefreshToken(jwtTokenService.createRefreshToken(username));
+            return token;
         } catch (ResourceNotFoundException e) {
             throw new UsernameNotFoundException("User does not exist");
         } catch (AuthenticationException e) {
             throw new AuthenticationServiceException("Password is incorrect");
+        }
+    }
+
+    public TokenResponse refreshToken(String refresh) {
+        try {
+            if (refresh == null) {
+                throw new AuthenticationServiceException("Expired or invalid refresh token");
+            }
+            jwtTokenService.checkToken(refresh);
+            String username = jwtTokenService.getUsername(refresh);
+            if (!StringUtils.hasText(username)) {
+                throw new AuthenticationServiceException("Expired or invalid refresh token");
+            }
+            userService.findByUsername(username);
+            TokenResponse token = new TokenResponse();
+            token.setAccessToken(jwtTokenService.createAccessToken(username));
+            token.setRefreshToken(jwtTokenService.createRefreshToken(username));
+            return token;
+        } catch (ResourceNotFoundException e) {
+            throw new UsernameNotFoundException("User does not exist");
+        } catch (ServletException e) {
+            throw new AuthenticationServiceException("Expired or invalid refresh token");
         }
     }
 

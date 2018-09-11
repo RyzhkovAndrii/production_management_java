@@ -25,8 +25,11 @@ public class JwtTokenService {
     @Value("${spring.security.authentication.jwt.secret}")
     private String secretKey;
 
-    @Value("${spring.security.authentication.jwt.validity}")
-    private long validityInMilliseconds;
+    @Value("${spring.security.authentication.jwt.validity.access}")
+    private long accessTokenValidityTime;
+
+    @Value("${spring.security.authentication.jwt.validity.refresh}")
+    private long refreshTokenValidityTime;
 
     @Autowired
     @Lazy
@@ -37,16 +40,12 @@ public class JwtTokenService {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
     }
 
-    public String createToken(String username) {
-        Claims claims = Jwts.claims().setSubject(username);
-        Date now = new Date();
-        Date validity = new Date(now.getTime() + validityInMilliseconds);
-        return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(validity)
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .compact();
+    public String createAccessToken(String username) {
+        return createToken(username, accessTokenValidityTime);
+    }
+
+    public String createRefreshToken(String username) {
+        return createToken(username, refreshTokenValidityTime);
     }
 
     public String getUsername(String token) {
@@ -63,21 +62,33 @@ public class JwtTokenService {
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
 
-    public String getToken(HttpServletRequest req) {
+    public String getAccessToken(HttpServletRequest req) {
         String bearerToken = req.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7, bearerToken.length());
         }
         return null;
     }
-
+    
     public boolean checkToken(String token) throws ServletException {
         try {
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            throw new BadCredentialsException("Expired or invalid JWT token");
+            throw new BadCredentialsException("Expired or invalid access token");
         }
+    }
+
+    private String createToken(String username, long validityTime) {
+        Claims claims = Jwts.claims().setSubject(username);
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + validityTime);
+        return Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(now)
+                .setExpiration(validity)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
+                .compact();
     }
 
 }

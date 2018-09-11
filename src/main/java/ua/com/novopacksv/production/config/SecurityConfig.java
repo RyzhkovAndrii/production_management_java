@@ -20,7 +20,7 @@ import ua.com.novopacksv.production.security.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
-//@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -35,9 +35,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint());
         http.addFilterAfter(new JwtTokenFilter(jwtTokenService), ExceptionTranslationFilter.class);
+        http.cors();
         http.authorizeRequests()
                 .antMatchers("/auth/login").permitAll()
-                .anyRequest().permitAll();
+                .antMatchers("/auth/refresh").permitAll()
+                .anyRequest().authenticated();
     }
 
     @Bean
