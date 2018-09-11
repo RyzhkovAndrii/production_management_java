@@ -79,7 +79,7 @@
     <changeSet id="10" author="ryzhkov.andrii@gmail.com">
         <insert tableName="users_roles">
             <column name="user_id" value="3"/>
-            <column name="role" value="ROLE_ACCOUTER"/>
+            <column name="role" value="ROLE_ACCOUNTER"/>
         </insert>
     </changeSet>
     <changeSet id="11" author="ryzhkov.andrii@gmail.com">
