@@ -24,5 +24,4 @@ public class ModelConversionServiceSpringImpl implements ModelConversionService 
                 .map(element -> convert(element, type))
                 .collect(Collectors.toList());
     }
-
 }

@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface RollPlanLeftoverService {
 
-    RollLeftOver getOneWithoutPlan(Long rollTypeId, LocalDate fromDate, LocalDate toDate);
+    RollLeftOver getOneWithoutPlan(Long rollTypeId, LocalDate toDate);
 
-    RollLeftOver getOneTotal(Long rollTypeId, LocalDate fromDate, LocalDate toDate);
+    RollLeftOver getOneTotal(Long rollTypeId, LocalDate toDate);
 
-    List<RollLeftOver> getAllWithoutPlan(LocalDate fromDate, LocalDate toDate);
+    List<RollLeftOver> getAllWithoutPlan(LocalDate toDate);
 
-    List<RollLeftOver> getAllTotal(LocalDate fromDate, LocalDate toDate);
+    List<RollLeftOver> getAllTotal(LocalDate toDate);
 }

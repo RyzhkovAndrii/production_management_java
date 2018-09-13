@@ -15,7 +15,7 @@ import ua.com.novopacksv.production.service.order.OrderService;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/orders/{orderId}/order-items", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "${spring.rest.api-url-prefix}/orders/{orderId}/order-items", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_CMO', 'ROLE_ECONOMIST')")
 @RequiredArgsConstructor
 public class OrderItemsOfOrderController {

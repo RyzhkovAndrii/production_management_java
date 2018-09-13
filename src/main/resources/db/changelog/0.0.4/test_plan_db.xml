@@ -1,15 +1,11 @@
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
-   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
-   http://www.liquibase.org/xml/ns/dbchangelog
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
     <changeSet id="1" author="pryadilnikova@gmail.com">
         <insert tableName="product_plan_operation">
-            <column name="id" value="1"/>
-            <column name="date" value="2018-07-10"/>
+            <column name="date" value="2018-08-31"/>
             <column name="product_type_id" value="1"/>
             <column name="roll_type_id" value="1"/>
             <column name="roll_amount" value="2"/>
@@ -17,11 +13,87 @@
         </insert>
     </changeSet>
     <changeSet id="2" author="pryadilnikova@gmail.com">
+        <insert tableName="product_plan_operation">
+            <column name="date" value="2018-08-31"/>
+            <column name="product_type_id" value="1"/>
+            <column name="roll_type_id" value="4"/>
+            <column name="roll_amount" value="1"/>
+            <column name="product_amount" value="7400"/>
+        </insert>
+    </changeSet>
+    <changeSet id="3" author="pryadilnikova@gmail.com">
+        <insert tableName="product_plan_operation">
+            <column name="date" value="2018-08-31"/>
+            <column name="product_type_id" value="2"/>
+            <column name="roll_type_id" value="3"/>
+            <column name="roll_amount" value="1"/>
+            <column name="product_amount" value="6800"/>
+        </insert>
+    </changeSet>
+    <changeSet id="4" author="pryadilnikova@gmail.com">
+        <insert tableName="product_plan_operation">
+            <column name="date" value="2018-08-31"/>
+            <column name="product_type_id" value="3"/>
+            <column name="roll_type_id" value="2"/>
+            <column name="roll_amount" value="3"/>
+            <column name="product_amount" value="22200"/>
+        </insert>
+    </changeSet>
+    <changeSet id="5" author="pryadilnikova@gmail.com">
+        <insert tableName="product_plan_operation">
+            <column name="date" value="2018-08-31"/>
+            <column name="product_type_id" value="3"/>
+            <column name="roll_type_id" value="3"/>
+            <column name="roll_amount" value="1"/>
+            <column name="product_amount" value="7400"/>
+        </insert>
+    </changeSet>
+    <changeSet id="6" author="pryadilnikova@gmail.com">
         <insert tableName="roll_plan_operation">
             <column name="id" value="1"/>
-            <column name="date" value="2018-07-10"/>
+            <column name="date" value="2018-08-31"/>
             <column name="roll_type_id" value="1"/>
             <column name="quantity" value="30"/>
+        </insert>
+    </changeSet>
+    <changeSet id="7" author="pryadilnikova@gmail.com">
+        <insert tableName="machine_plan">
+            <column name="machine_number" value="1"/>
+            <column name="time_start" value="2018-08-31 08:32:45"/>
+            <column name="product_type_id" value="1"/>
+            <column name="is_important" value="false"/>
+        </insert>
+    </changeSet>
+    <changeSet id="8" author="pryadilnikova@gmail.com">
+        <insert tableName="machine_plan">
+            <column name="machine_number" value="3"/>
+            <column name="time_start" value="2018-08-31 23:45:00"/>
+            <column name="product_type_id" value="2"/>
+            <column name="is_important" value="true"/>
+        </insert>
+    </changeSet>
+    <changeSet id="9" author="ryzhkov.andrii@gmail.com">
+        <insert tableName="machine_plan_item">
+            <column name="roll_type_id" value="1"/>
+            <column name="roll_amount" value="1"/>
+            <column name="product_amount" value="7400"/>
+            <column name="machine_plan_id" value="1"/>
+        </insert>
+    </changeSet>
+    <changeSet id="10" author="ryzhkov.andrii@gmail.com">
+        <insert tableName="machine_plan_item">
+            <column name="roll_type_id" value="4"/>
+            <column name="roll_amount" value="1"/>
+            <column name="product_amount" value="7400"/>
+            <column name="machine_plan_id" value="1"/>
+        </insert>
+    </changeSet>
+    <changeSet id="11" author="ryzhkov.andrii@gmail.com">
+        <insert tableName="machine_plan_item">
+            <column name="roll_type_id" value="3"/>
+            <column name="roll_amount" value="2"/>
+            <column name="product_amount" value="13600"/>
+            <column name="machine_plan_id" value="2"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

@@ -13,10 +13,11 @@ import ua.com.novopacksv.production.dto.norm.NormResponse;
 import ua.com.novopacksv.production.model.normModel.Norm;
 import ua.com.novopacksv.production.service.norm.NormService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/norms", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "${spring.rest.api-url-prefix}/norms", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST')")
 @RequiredArgsConstructor
 public class NormController {
@@ -39,6 +40,13 @@ public class NormController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @GetMapping(params = "productTypeId")
+    public ResponseEntity<NormResponse> findOne(@RequestParam ("productTypeId") Long productTypeId){
+        Norm norm = normService.findOne(productTypeId);
+        NormResponse response = conversionService.convert(norm, NormResponse.class);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @GetMapping(params = {"id"})
     public ResponseEntity<NormForRollResponse> getNormWithRolls(@RequestParam ("id") Long id){
         Norm norm = normService.findById(id);
@@ -55,7 +63,7 @@ public class NormController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST')")
-    public ResponseEntity<NormResponse> save(@RequestBody NormRequest request) {
+    public ResponseEntity<NormResponse> save(@Valid @RequestBody NormRequest request) {
         Norm norm = conversionService.convert(request, Norm.class);
         normService.save(norm);
         NormResponse response = conversionService.convert(norm, NormResponse.class);
@@ -64,7 +72,7 @@ public class NormController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST')")
-    public ResponseEntity<NormResponse> update(@PathVariable Long id, @RequestBody NormRequest request) {
+    public ResponseEntity<NormResponse> update(@PathVariable Long id, @Valid @RequestBody NormRequest request) {
         Norm norm = conversionService.convert(request, Norm.class);
         norm.setId(id);
         normService.update(norm);

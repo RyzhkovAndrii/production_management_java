@@ -32,4 +32,7 @@ public class Norm extends BaseEntity {
 
     @Column(name = "norm", nullable = false)
     private Integer norm;
+
+    @Column(name = "norm_for_day", nullable = false)
+    private Integer normForDay;
 }

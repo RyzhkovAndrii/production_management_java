@@ -33,6 +33,7 @@ public class NormRequestToNormConverter implements Converter<NormRequest, Norm> 
                 source.getRollTypeIds().stream().map((id) -> rollTypeService.findById(id)).collect(Collectors.toList());
         norm.setRollTypes(rollTypes);
         norm.setProductType(productTypeService.findById(source.getProductTypeId()));
+        norm.setNormForDay(source.getNormForDay());
         return norm;
     }
 }

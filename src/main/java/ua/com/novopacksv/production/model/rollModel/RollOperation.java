@@ -4,7 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import org.springframework.lang.Nullable;
 import ua.com.novopacksv.production.model.BaseEntity;
+import ua.com.novopacksv.production.model.productModel.ProductType;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -31,4 +33,9 @@ public class RollOperation extends BaseEntity {
 
     @Column(name = "roll_amount", nullable = false)
     private Integer rollAmount;
+
+    @ManyToOne
+    @PrimaryKeyJoinColumn
+    @Nullable
+    private ProductType productType;
 }

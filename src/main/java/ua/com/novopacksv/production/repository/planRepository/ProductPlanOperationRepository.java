@@ -13,4 +13,6 @@ public interface ProductPlanOperationRepository extends JpaRepository<ProductPla
     List <ProductPlanOperation> findByProductType_IdAndDateBetween(Long productTypeId,LocalDate fromDate, LocalDate date);
 
     List<ProductPlanOperation> findAllByRollType_IdAndDateBetween(Long rollTypeId, LocalDate fromDate, LocalDate toDate);
+
+    List<ProductPlanOperation> findAllByDateBetween(LocalDate fromDate, LocalDate toDate);
 }

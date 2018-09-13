@@ -14,6 +14,7 @@ public class NormToNormForRollResponseConverter implements Converter<Norm, NormF
         response.setProductTypeId(source.getProductType().getId());
         response.setRollTypes(source.getRollTypes());
         response.setNorm(source.getNorm());
+        response.setNormForDay(source.getNormForDay());
         return response;
     }
 }

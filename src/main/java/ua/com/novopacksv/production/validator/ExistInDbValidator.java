@@ -22,7 +22,7 @@ public class ExistInDbValidator implements ConstraintValidator<ExistInDb, Long> 
 
     @Override
     public boolean isValid(Long id, ConstraintValidatorContext constraintValidatorContext) {
-        return entityManager.find(clazz, id) != null;
+        return id == null || entityManager.find(clazz, id) != null;
     }
 
 }

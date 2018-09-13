@@ -33,4 +33,39 @@
                                  referencedTableName="roll_type"
                                  referencedColumnNames="id"/>
     </changeSet>
+    <changeSet id="4" author="pryadilnikova@gmail.com">
+        <addForeignKeyConstraint baseTableName="machine_plan"
+                                 baseColumnNames="product_type_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 constraintName="fk_machine_plan_product_type"
+                                 referencedTableName="product_type"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="5" author="ryzhkov.andrii@gmail.com">
+        <addForeignKeyConstraint baseTableName="machine_plan_item"
+                                 baseColumnNames="roll_type_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 constraintName="fk_machine_plan_item_roll_type"
+                                 referencedTableName="roll_type"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="6" author="ryzhkov.andrii@gmail.com">
+        <addForeignKeyConstraint baseTableName="machine_plan_item"
+                                 baseColumnNames="machine_plan_id"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 constraintName="fk_machine_plan_item_machine_plan"
+                                 referencedTableName="machine_plan"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+    <changeSet id="7" author="ryzhkov.andrii@gmail.com">
+        <addUniqueConstraint tableName="machine_plan_item"
+                             columnNames="roll_type_id, machine_plan_id"
+                             deferrable="true"
+                             disabled="true"
+                             initiallyDeferred="true"
+                             constraintName="unique_machine_plan_item_roll_type_machine_plan"/>
+    </changeSet>
 </databaseChangeLog>

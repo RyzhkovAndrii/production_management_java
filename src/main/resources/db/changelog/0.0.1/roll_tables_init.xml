@@ -43,6 +43,10 @@
             <column name="roll_amount" type="int">
                 <constraints nullable="false"/>
             </column>
+            <column name="product_type_id" type="bigint">
+                <constraints checkConstraint="CHECK(operation_type = 'USE' AND product_type_id = NOT NULL)"
+                             nullable="true"/>
+            </column>
         </createTable>
     </changeSet>
     <changeSet id="3" author="pryadilnikova@gmail.com">
@@ -96,8 +100,6 @@
         </addColumn>
         <addNotNullConstraint tableName="roll_type"
                               columnName="length"
-                              columnDataType="double"
-        />
+                              columnDataType="double"/>
     </changeSet>
-
 </databaseChangeLog>

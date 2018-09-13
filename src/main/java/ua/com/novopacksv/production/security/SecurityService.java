@@ -3,6 +3,7 @@ package ua.com.novopacksv.production.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,7 +25,7 @@ public class SecurityService {
 
     private final UserService userService;
 
-    public String login(String username, String password) {
+    public TokenResponse login(String username, String password) {
         if (!StringUtils.hasText(username)) {
             throw new UsernameNotFoundException("User is not specified");
         }
@@ -32,12 +33,35 @@ public class SecurityService {
             userService.findByUsername(username);
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
             authenticationManager.authenticate(authToken);
-            return jwtTokenService.createToken(username);
+            TokenResponse token = new TokenResponse();
+            token.setAccessToken(jwtTokenService.createAccessToken(username));
+            token.setRefreshToken(jwtTokenService.createRefreshToken(username));
+            return token;
         } catch (ResourceNotFoundException e) {
             throw new UsernameNotFoundException("User does not exist");
         } catch (AuthenticationException e) {
             throw new AuthenticationServiceException("Password is incorrect");
         }
+    }
+
+    public TokenResponse refreshToken(String refresh) {
+        if (refresh == null) {
+            throw new BadCredentialsException("Expired or invalid token");
+        }
+        jwtTokenService.checkToken(refresh);
+        String username = jwtTokenService.getUsername(refresh);
+        if (!StringUtils.hasText(username)) {
+            throw new BadCredentialsException("Expired or invalid token");
+        }
+        try {
+            userService.findByUsername(username);
+        } catch (ResourceNotFoundException e) {
+            throw new UsernameNotFoundException("User does not exist");
+        }
+        TokenResponse token = new TokenResponse();
+        token.setAccessToken(jwtTokenService.createAccessToken(username));
+        token.setRefreshToken(jwtTokenService.createRefreshToken(username));
+        return token;
     }
 
     public User getLoggedInUser() {

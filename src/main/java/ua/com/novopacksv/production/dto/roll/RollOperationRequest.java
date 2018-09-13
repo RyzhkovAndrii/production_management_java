@@ -2,6 +2,7 @@ package ua.com.novopacksv.production.dto.roll;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 import ua.com.novopacksv.production.model.rollModel.OperationType;
 import ua.com.novopacksv.production.model.rollModel.RollType;
 import ua.com.novopacksv.production.validator.EnumValue;
@@ -38,5 +39,8 @@ public class RollOperationRequest {
     @NotNull(message = "roll amount is a required field!")
     @Positive(message = "roll amount must be greater then 0!")
     private Integer rollAmount;
+
+    @Nullable
+    private Long productTypeIdForUseOperation;
 
 }

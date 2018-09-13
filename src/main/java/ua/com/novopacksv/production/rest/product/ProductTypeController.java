@@ -12,10 +12,11 @@ import ua.com.novopacksv.production.dto.product.ProductTypeResponse;
 import ua.com.novopacksv.production.model.productModel.ProductType;
 import ua.com.novopacksv.production.service.product.ProductTypeService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/product-types", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "${spring.rest.api-url-prefix}/product-types", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CMO', 'ROLE_CTO'," +
         " 'ROLE_ACOUNTER', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER')")
 @RequiredArgsConstructor
@@ -48,7 +49,7 @@ public class ProductTypeController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CTO')")
-    public ResponseEntity<ProductTypeResponse> save(@RequestBody ProductTypeRequest request) {
+    public ResponseEntity<ProductTypeResponse> save(@Valid @RequestBody ProductTypeRequest request) {
         ProductType productType = conversionService.convert(request, ProductType.class);
         productType = productTypeService.save(productType);
         ProductTypeResponse response = conversionService.convert(productType, ProductTypeResponse.class);
@@ -57,7 +58,7 @@ public class ProductTypeController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CTO')")
-    public ResponseEntity<ProductTypeResponse> update(@PathVariable Long id, @RequestBody ProductTypeRequest request) {
+    public ResponseEntity<ProductTypeResponse> update(@PathVariable Long id, @Valid @RequestBody ProductTypeRequest request) {
         ProductType productType = conversionService.convert(request, ProductType.class);
         productType.setId(id);
         productType = productTypeService.update(productType);

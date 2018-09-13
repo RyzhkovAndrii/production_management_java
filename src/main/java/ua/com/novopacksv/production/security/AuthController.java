@@ -17,7 +17,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping(value = "${spring.rest.api-url-prefix}/auth", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @Validated
 @RequiredArgsConstructor
 public class AuthController {
@@ -30,21 +30,25 @@ public class AuthController {
 
     private final PasswordEncoder passwordEncoder;
 
-    @PostMapping(value = "/login", produces = MediaType.TEXT_PLAIN_VALUE,
-            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public ResponseEntity<String> login(@RequestParam(name = "username") String username,
-                                        @RequestParam(name = "password") String password) {
+    @PostMapping("/login")
+    public ResponseEntity<TokenResponse> login(@RequestParam(name = "username") String username,
+                                               @RequestParam(name = "password") String password) {
         return new ResponseEntity<>(securityService.login(username, password), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/me", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenResponse> refresh(@RequestParam(name = "refreshToken") String refresh) {
+        return new ResponseEntity<>(securityService.refreshToken(refresh), HttpStatus.OK);
+    }
+
+    @GetMapping("/me")
     public ResponseEntity<UserResponse> getLoggedInUser() {
         User user = securityService.getLoggedInUser();
         UserResponse response = conversionService.convert(user, UserResponse.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/password", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    @PostMapping("/password")
     public ResponseEntity<Void> changePassword(
             @RequestParam(name = "password")
             @Valid

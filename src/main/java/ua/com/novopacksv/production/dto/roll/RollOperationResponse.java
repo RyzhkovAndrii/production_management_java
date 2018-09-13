@@ -18,4 +18,6 @@ public class RollOperationResponse extends BaseEntityResponse {
 
     private Integer rollAmount;
 
+    private Long productTypeIdForUseOperation;
+
 }

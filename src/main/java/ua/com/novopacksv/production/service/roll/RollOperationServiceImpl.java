@@ -179,7 +179,7 @@ public class RollOperationServiceImpl implements RollOperationService {
      */
     @Override
     public RollOperation update(RollOperation rollOperation) throws NegativeAmountException {
-        RollOperation oldRollOperation = rollOperationRepository.getOne(rollOperation.getId()); //todo why getOne ???
+        RollOperation oldRollOperation = findById(rollOperation.getId());
         checkOperationUpdateAllowed(rollOperation);
         RollLeftOver rollLeftOver = rollLeftOverService
                 .findLastRollLeftOverByRollType(rollOperation.getRollManufactured().getRollType());

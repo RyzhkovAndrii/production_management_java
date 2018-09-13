@@ -15,4 +15,6 @@ public class NormResponse {
     private Long productTypeId;
 
     private Integer norm;
+
+    private Integer normForDay;
 }
