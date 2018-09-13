@@ -15,7 +15,7 @@ import ua.com.novopacksv.production.service.plan.MachinePlanItemService;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "machine-plan-items", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "${spring.rest.api-url-prefix}/machine-plan-items", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RequiredArgsConstructor
 @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO','ROLE_ECONOMIST')")
 public class MachinePlanItemController {

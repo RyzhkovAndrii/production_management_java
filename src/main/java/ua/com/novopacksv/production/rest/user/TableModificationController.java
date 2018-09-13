@@ -15,7 +15,7 @@ import ua.com.novopacksv.production.model.userModel.TableType;
 import ua.com.novopacksv.production.service.user.TableModificationService;
 
 @RestController
-@RequestMapping(value = "/modifications", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "${spring.rest.api-url-prefix}/modifications", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RequiredArgsConstructor
 public class TableModificationController {
 

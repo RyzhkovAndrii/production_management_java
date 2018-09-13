@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "roll-plan-batches", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "${spring.rest.api-url-prefix}/roll-plan-batches", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RequiredArgsConstructor
 @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO','ROLE_ECONOMIST')")
 public class RollPlanBatchController {

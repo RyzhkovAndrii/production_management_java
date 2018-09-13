@@ -17,7 +17,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 @RestController
-@RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+@RequestMapping(value = "${spring.rest.api-url-prefix}/auth", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @Validated
 @RequiredArgsConstructor
 public class AuthController {
