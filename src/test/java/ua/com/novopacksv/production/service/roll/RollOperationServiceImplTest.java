@@ -57,16 +57,16 @@ public class RollOperationServiceImplTest {
     @WithMockUser("cmo")
     public void findAllByRollTypeAndManufacturedDateBetween() {
         operationsExpected.add(rollOperation1);
-        Assert.assertEquals(operationsExpected, rollOperationService
-                .findAllByRollTypeAndManufacturedDateBetween(rollType, LocalDate.now().minusDays(18), LocalDate.now()));
+        Assert.assertTrue(rollOperationService.findAllByRollTypeAndManufacturedDateBetween(rollType,
+                LocalDate.now().minusDays(18), LocalDate.now()).containsAll(operationsExpected));
     }
 
     @Test
     @WithMockUser("cmo")
     public void findAllByRollTypeIdAndManufacturedPeriod() {
         operationsExpected.add(rollOperation1);
-        Assert.assertEquals(operationsExpected, rollOperationService
-                .findAllByRollTypeIdAndManufacturedPeriod(rollType.getId(), LocalDate.now().minusDays(18), LocalDate.now()));
+        Assert.assertTrue(rollOperationService.findAllByRollTypeIdAndManufacturedPeriod(rollType.getId(),
+                LocalDate.now().minusDays(18), LocalDate.now()).containsAll(operationsExpected));
     }
 
     @Test
@@ -86,9 +86,9 @@ public class RollOperationServiceImplTest {
     @Test
     @WithMockUser("cmo")
     public void save() {
-        RollOperation rollOperation2 = new RollOperation(LocalDate.now(),
-                new RollManufactured(LocalDate.now().minusDays(15), rollType, true), OperationType.MANUFACTURE,
-                254, null);
+        RollManufactured rollManufactured = new RollManufactured(LocalDate.now().minusDays(16), rollType, true);
+        RollOperation rollOperation2 = new RollOperation(LocalDate.now(), rollManufactured,
+                OperationType.MANUFACTURE,254, null);
         Assert.assertEquals(rollOperation2, rollOperationService.save(rollOperation2));
     }
 
