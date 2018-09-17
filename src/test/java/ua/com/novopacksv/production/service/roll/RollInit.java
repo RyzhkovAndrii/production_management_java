@@ -34,7 +34,7 @@ public class RollInit {
     }
 
     public RollManufactured rollManufacturedInit14Days(RollType rollType){
-        return new RollManufactured(LocalDate.now().minusDays(14), rollType, true);
+        return new RollManufactured(LocalDate.now().minusDays(14), rollType, false);
     }
 
     public RollManufactured rollManufacturedInit15Days(RollType rollType){
