@@ -1,6 +1,7 @@
 package ua.com.novopacksv.production.scheduling;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.task.TaskExecutor;
@@ -9,7 +10,10 @@ import org.springframework.scheduling.support.CronSequenceGenerator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ClassUtils;
-import ua.com.novopacksv.production.scheduling.task.*;
+import ua.com.novopacksv.production.scheduling.task.ResetProductChecksTask;
+import ua.com.novopacksv.production.scheduling.task.ResetRollChecksTask;
+import ua.com.novopacksv.production.scheduling.task.RollReadyToUseTask;
+import ua.com.novopacksv.production.scheduling.task.Task;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
@@ -21,6 +25,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class TaskServiceImpl {
 
     private final TaskDetailsRepository taskDetailsRepository;
@@ -42,7 +47,7 @@ public class TaskServiceImpl {
         try {
             taskDetailsRepository.saveAll(taskDetailsForNewTasks());
         } catch (Exception e) {
-            // todo logger
+            log.error("Method initAllNewTasks(): TaskDetails were not saved!");
         }
     }
 
@@ -51,7 +56,7 @@ public class TaskServiceImpl {
         try {
             getAllWhichMustExecute().forEach((task) -> taskExecutor.execute(() -> executeTask(task)));
         } catch (Exception e) {
-            // todo logger
+            log.error("Method executeAllTasks(): TaskDetails were not executed!");
         }
     }
 
