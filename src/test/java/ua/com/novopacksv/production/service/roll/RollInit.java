@@ -1,16 +1,13 @@
 package ua.com.novopacksv.production.service.roll;
 
-import ua.com.novopacksv.production.model.rollModel.OperationType;
-import ua.com.novopacksv.production.model.rollModel.RollManufactured;
-import ua.com.novopacksv.production.model.rollModel.RollOperation;
-import ua.com.novopacksv.production.model.rollModel.RollType;
+import ua.com.novopacksv.production.model.rollModel.*;
 
 import java.time.LocalDate;
 
 public class RollInit {
 
     public RollType rollTypeInit(){
-        return new RollType("", 2.7, 50.0, 52.0, 360.0, "#ffffff");
+        return new RollType("", 2.7, 50.0, 52.0, 860.0, "#ffffff");
     }
 
     public RollType rollTypeInit2(){
@@ -39,6 +36,10 @@ public class RollInit {
 
     public RollManufactured rollManufacturedInit15Days(RollType rollType){
         return new RollManufactured(LocalDate.now().minusDays(15), rollType, true);
+    }
+
+    public RollLeftOver rollLeftOverInit(RollType rollType){
+        return new RollLeftOver(LocalDate.now(), rollType, 10);
     }
 
 }
