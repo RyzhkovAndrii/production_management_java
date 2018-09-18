@@ -42,4 +42,7 @@ public class RollInit {
         return new RollLeftOver(LocalDate.now(), rollType, 10);
     }
 
+    public RollCheck rollCheckInit(RollType rollType){
+        return new RollCheck(rollType, CheckStatus.NOT_CONFIRMED);
+    }
 }
