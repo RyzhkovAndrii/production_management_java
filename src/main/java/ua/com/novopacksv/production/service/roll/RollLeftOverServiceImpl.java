@@ -2,14 +2,19 @@ package ua.com.novopacksv.production.service.roll;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
+import ua.com.novopacksv.production.model.planModel.ProductPlanOperation;
+import ua.com.novopacksv.production.model.planModel.RollPlanOperation;
 import ua.com.novopacksv.production.model.rollModel.RollLeftOver;
 import ua.com.novopacksv.production.model.rollModel.RollOperation;
 import ua.com.novopacksv.production.model.rollModel.RollType;
 import ua.com.novopacksv.production.repository.rollRepository.RollLeftOverRepository;
+import ua.com.novopacksv.production.service.plan.ProductPlanOperationService;
+import ua.com.novopacksv.production.service.plan.RollPlanOperationService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -37,6 +42,12 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
      * An object that give methods for convert from one format to another (here it is date)
      */
     private final ConversionService conversionService;
+
+    @Autowired
+    private RollPlanOperationService rollPlanOperationService;
+
+    @Autowired
+    private ProductPlanOperationService productPlanOperationService;
 
     /**
      * The method returns roll's leftovers on pointed date
@@ -201,14 +212,17 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
      * @return roll's leftover on pointed date
      */
     private RollLeftOver getLeftOverOnDate(RollLeftOver rollLeftOver, LocalDate date) {
-        Integer lastAmount = rollLeftOver.getAmount();
-        List<RollOperation> rollOperations = rollOperationService.findAllByRollTypeAndManufacturedDateBetween(
-                rollLeftOver.getRollType(), date.plusDays(1), rollLeftOver.getDate());
-        for (RollOperation rollOperation : rollOperations) {
-            lastAmount += rollOperationService.isItManufactureOperation(rollOperation)
-                    ? -rollOperation.getRollAmount()
-                    : rollOperation.getRollAmount();
+        Integer lastAmount;
+        if(date.isBefore(LocalDate.now())){
+            lastAmount = getRollLeftOverForPast(rollLeftOver, date);
+        }else{
+            if(date.equals(LocalDate.now())){
+                lastAmount = rollLeftOver.getAmount();
+            }else {
+                lastAmount = getRollLeftOverAmountForFuture(rollLeftOver, date);
+            }
         }
+
         RollLeftOver rollLeftOverTemp = new RollLeftOver();
         rollLeftOverTemp.setDate(date);
         rollLeftOverTemp.setRollType(rollLeftOver.getRollType());
@@ -231,5 +245,31 @@ public class RollLeftOverServiceImpl implements RollLeftOverService {
         log.debug("Method changeRollLeftOverAmount(RollLeftOver rollLeftOver, Integer positiveOrNegativeChanges): " +
                         "RollLeftOver {} was changed by value {}",
                 rollLeftOver, positiveOrNegativeChanges);
+    }
+
+    private Integer getRollLeftOverForPast(RollLeftOver rollLeftOver, LocalDate date){
+        Integer lastAmount = rollLeftOver.getAmount();
+        List<RollOperation> rollOperations = rollOperationService.findAllByRollTypeAndManufacturedDateBetween(
+                rollLeftOver.getRollType(), date.plusDays(1), rollLeftOver.getDate());
+        for (RollOperation rollOperation : rollOperations) {
+            lastAmount += rollOperationService.isItManufactureOperation(rollOperation)
+                    ? -rollOperation.getRollAmount()
+                    : rollOperation.getRollAmount();
+        }
+        return lastAmount;
+    }
+    private Integer getRollLeftOverAmountForFuture(RollLeftOver rollLeftOver, LocalDate date){
+        List<RollPlanOperation> rollPlanOperations =
+                rollPlanOperationService.findAll(rollLeftOver.getRollType().getId(), LocalDate.now(), date);
+        Integer lastAmount = rollLeftOver.getAmount();
+        for (RollPlanOperation rollPlanOperation : rollPlanOperations){
+            lastAmount += rollPlanOperation.getRollQuantity();
+        }
+        List<ProductPlanOperation> productPlanOperations =
+        productPlanOperationService.getAllByRollTypeId(rollLeftOver.getRollType().getId(), LocalDate.now(), date);
+        for (ProductPlanOperation productPlanOperation : productPlanOperations){
+            lastAmount -= productPlanOperation.getRollAmount();
+        }
+        return lastAmount;
     }
 }

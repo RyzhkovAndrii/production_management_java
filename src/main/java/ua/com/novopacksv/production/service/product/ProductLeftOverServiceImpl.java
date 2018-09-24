@@ -209,7 +209,7 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
         productLeftOverTemp.setLeftDate(date);
         productLeftOverTemp.setProductType(productLeftOver.getProductType());
         productLeftOverTemp.setAmount(amountOfLeftOverOnDate(date, productLeftOver));
-        log.debug("Method gatLeftOverOnDate(LocalDate date, ProductLeftOver productLeftOver): leftover on date {} " +
+        log.debug("Method getLeftOverOnDate(LocalDate date, ProductLeftOver productLeftOver): leftover on date {} " +
                 "was found: {}", date, productLeftOverTemp);
         return productLeftOverTemp;
     }
@@ -250,10 +250,14 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
      */
     private Integer amountOfLeftOverOnDate(LocalDate date, ProductLeftOver productLeftOver) {
         log.debug("Method amountOfLeftOverOnDate(LocalDate date, ProductLeftOver productLeftOver) in process");
-        if (date.isBefore(LocalDate.now()) || date.isEqual(LocalDate.now())) {
+        if (date.isBefore(LocalDate.now())) {
             return countAmountOfLeftOverForPast(date, productLeftOver);
         } else {
-            return countAmountOfLeftOverForFuture(date, productLeftOver);
+            if (date.equals(LocalDate.now())) {
+                return productLeftOver.getAmount();
+            } else {
+                return countAmountOfLeftOverForFuture(date, productLeftOver);
+            }
         }
     }
 
