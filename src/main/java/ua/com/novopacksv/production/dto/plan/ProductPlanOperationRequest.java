@@ -5,9 +5,9 @@ import lombok.Setter;
 import ua.com.novopacksv.production.model.productModel.ProductType;
 import ua.com.novopacksv.production.model.rollModel.RollType;
 import ua.com.novopacksv.production.validator.ExistInDb;
+import ua.com.novopacksv.production.validator.FutureOrPresent;
 import ua.com.novopacksv.production.validator.LocalDateFormat;
 
-import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
@@ -18,7 +18,7 @@ public class ProductPlanOperationRequest {
 
     @NotBlank(message = "field operation date can't be empty!")
     @LocalDateFormat(message = "incorrect operation date format!")
-    @Future(message = "Date should be in future!")
+    @FutureOrPresent(message = "Date should be in future!")
     private String date;
 
     @NotNull(message = "field productTypeId can't be empty!")
