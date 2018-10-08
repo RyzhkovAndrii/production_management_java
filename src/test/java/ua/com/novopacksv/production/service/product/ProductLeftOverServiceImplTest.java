@@ -16,8 +16,6 @@ import ua.com.novopacksv.production.model.productModel.ProductLeftOver;
 import ua.com.novopacksv.production.model.productModel.ProductOperation;
 import ua.com.novopacksv.production.model.productModel.ProductType;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 
 @RunWith(SpringRunner.class)
@@ -25,8 +23,6 @@ import java.time.LocalDate;
 @Transactional
 public class ProductLeftOverServiceImplTest {
 
-    @PersistenceContext
-    private EntityManager entityManager;
     @Autowired
     private ProductLeftOverServiceImpl productLeftOverService;
     @Autowired
