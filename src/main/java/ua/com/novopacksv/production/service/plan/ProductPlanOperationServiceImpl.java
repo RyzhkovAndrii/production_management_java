@@ -146,8 +146,9 @@ public class ProductPlanOperationServiceImpl implements ProductPlanOperationServ
      */
     @Override
     public ProductPlanOperation update(ProductPlanOperation productPlanOperation) throws ResourceNotFoundException {
+        findById(productPlanOperation.getId());
         ProductPlanOperation productPlanOperationSaved =
-                productPlanOperationRepository.save(findById(productPlanOperation.getId()));
+                productPlanOperationRepository.save(productPlanOperation);
         log.debug("Method update(ProductPlanOperation productPlanOperation): ProductPlanOperation {} was updated");
         return productPlanOperationSaved;
     }
