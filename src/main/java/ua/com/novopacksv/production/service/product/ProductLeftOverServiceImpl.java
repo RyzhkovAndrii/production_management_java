@@ -313,7 +313,7 @@ public class ProductLeftOverServiceImpl implements ProductLeftOverService {
      * @param productType - new product type
      * @return new saved product's leftover
      */
-    private ProductLeftOver createNewLeftOver(ProductType productType) {
+    private ProductLeftOver createNewLeftOver(ProductType productType) { //TODO test if exist leftover for this product
         ProductLeftOver productLeftOver = new ProductLeftOver();
         productLeftOver.setProductType(productType);
         productLeftOver.setAmount(0);
