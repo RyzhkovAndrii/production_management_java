@@ -230,7 +230,7 @@ public class ProductPlanBatchServiceImpl implements ProductPlanBatchService {
                 fromDate, toDate);
         return Stream
                 .iterate(fromDate, date -> date.plusDays(1))
-                .limit(ChronoUnit.DAYS.between(fromDate, toDate))
+                .limit(ChronoUnit.DAYS.between(fromDate, toDate.plusDays(1)))
                 .map(date -> getOne(productType, date))
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
