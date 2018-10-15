@@ -40,6 +40,13 @@ public class ProductTypeController {
         return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 
+    @GetMapping(params = {"rollTypeId"})
+    public ResponseEntity<List<ProductTypeResponse>> getProductTypesByRollTypeIdInNorms(@RequestParam("rollTypeId") Long rollTypeId) {
+        List<ProductType> productTypes = productTypeService.getByRollTypeIdInNorms(rollTypeId);
+        List<ProductTypeResponse> responses = conversionService.convert(productTypes, ProductTypeResponse.class);
+        return new ResponseEntity<>(responses, HttpStatus.OK);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ProductTypeResponse> getById(@PathVariable Long id) {
         ProductType productType = productTypeService.findById(id);

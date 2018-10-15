@@ -103,6 +103,18 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     }
 
     /**
+     * @param rollTypeId - {@link ua.com.novopacksv.production.model.rollModel.RollType} id property
+     * @return {@link List<ProductType>} list of products that can be made of
+     * {@link ua.com.novopacksv.production.model.rollModel.RollType}
+     */
+    @Override
+    public List<ProductType> getByRollTypeIdInNorms(Long rollTypeId) {
+        List<ProductType> productTypes = productTypeRepository.getByRollTypeIdInNorms(rollTypeId);
+        log.debug("Method getByRollTypeIdInNorms(Long rollTypeId): rollTypeId:{},\nresult: {}", rollTypeId, productTypes);
+        return productTypes;
+    }
+
+    /**
      * Method saves a product type, creates and save product check and leftover for this type
      *
      * @param productType - product type for save
@@ -129,15 +141,15 @@ public class ProductTypeServiceImpl implements ProductTypeService {
     @Override
     public ProductType update(ProductType productType) throws ResourceNotFoundException {
         ProductType oldProductType = findById(productType.getId());
-        if(isProductTypeInNorm(productType)) {
-            if(!productType.getColorCode().equals(oldProductType.getColorCode())){
+        if (isProductTypeInNorm(productType)) {
+            if (!productType.getColorCode().equals(oldProductType.getColorCode())) {
                 throw new NotAvailableColorException("Color can't be changed");
             }
         }
-            tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
-            productTypeRepository.save(productType);
-            log.debug("Method update(ProductType productType): product type {} was updated", productType);
-            return productType;
+        tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
+        productTypeRepository.save(productType);
+        log.debug("Method update(ProductType productType): product type {} was updated", productType);
+        return productType;
     }
 
     /**
@@ -154,7 +166,7 @@ public class ProductTypeServiceImpl implements ProductTypeService {
         log.debug("Method delete(Long id): product type {} with id = {} was deleted", productType, id);
     }
 
-    private Boolean isProductTypeInNorm(ProductType productType){
+    private Boolean isProductTypeInNorm(ProductType productType) {
         return normService.findFirstByProductTypeId(productType.getId()) != null;
     }
 }

@@ -8,4 +8,6 @@ import java.util.List;
 public interface ProductTypeService extends BaseEntityService<ProductType> {
 
     List<ProductType> findAll(String productTypeName);
+
+    List<ProductType> getByRollTypeIdInNorms(Long rollTypeId);
 }
