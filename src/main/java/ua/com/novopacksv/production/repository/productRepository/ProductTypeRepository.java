@@ -15,7 +15,7 @@ public interface ProductTypeRepository extends JpaRepository<ProductType, Long> 
             "join NORM n " +
             "on pt.ID=n.ID " +
             "join NORM_ROLL_TYPE nrt " +
-            "on nrt.ROLL_TYPE_ID=?1", nativeQuery = true)
+            "on nrt.NORM_ID=pt.ID and nrt.ROLL_TYPE_ID=?1", nativeQuery = true)
     List<ProductType> getByRollTypeIdInNorms(Long rollTypeId);
 
     ProductType findByNameAndWeightAndColorCode(String name, Double weight, String colorCode);
