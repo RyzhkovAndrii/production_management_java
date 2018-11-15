@@ -124,10 +124,10 @@ public class RollTypeServiceImpl implements RollTypeService {
     @Override
     public RollType save(RollType rollType) {
         checkWeightRange(rollType);
-        tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
         RollType entityRollType = rollTypeRepository.save(rollType);
         rollLeftOverService.createNewLeftOverAndSave(entityRollType);
         rollCheckService.createNewRollCheckAndSave(entityRollType);
+        tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
         log.debug("Method save(RollType rollType): Roll type {} was saved", rollType);
         return entityRollType;
     }
@@ -168,9 +168,9 @@ public class RollTypeServiceImpl implements RollTypeService {
     @Override
     public void delete(Long id) throws ResourceNotFoundException {
         RollType rollType = findById(id);
-        tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
         rollTypeRepository.delete(findById(id));
         normService.deleteNormsWithoutRolls();
+        tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
         log.debug("Method delete(Long id): Roll type {} with id {} was deleted",rollType, id);
     }
 

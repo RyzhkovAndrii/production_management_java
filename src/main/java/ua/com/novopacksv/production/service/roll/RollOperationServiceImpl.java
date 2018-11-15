@@ -165,6 +165,7 @@ public class RollOperationServiceImpl implements RollOperationService {
         RollLeftOver rollLeftOver = rollLeftOverService
                 .findLastRollLeftOverByRollType(rollManufactured.getRollType());
         rollLeftOverService.changeRollLeftOverAmount(rollLeftOver, changingAmount);
+        tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
         log.debug("Method save(RollOperation rollOperation): Roll operation {} is saving", rollOperation);
         return rollOperationRepository.save(rollOperation);
     }
@@ -185,6 +186,7 @@ public class RollOperationServiceImpl implements RollOperationService {
                 .findLastRollLeftOverByRollType(rollOperation.getRollManufactured().getRollType());
         Integer differenceAmount = oldRollOperation.getRollAmount() - rollOperation.getRollAmount();
         rollLeftOverService.changeRollLeftOverAmount(rollLeftOver, differenceAmount);
+        tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
         log.debug("Method update(RollOperation rollOperation): Roll operation {} is updating", rollOperation);
         return rollOperationRepository.save(rollOperation);
     }
@@ -204,6 +206,7 @@ public class RollOperationServiceImpl implements RollOperationService {
                 .findLastRollLeftOverByRollType(rollOperation.getRollManufactured().getRollType());
         rollLeftOverService.changeRollLeftOverAmount(rollLeftOver, -getOperationAmountWithSign(rollOperation));
         rollOperationRepository.deleteById(id);
+        tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
         log.debug("Method delete(Long id): Operation {} with id {} was deleted", rollOperation, id);
     }
 
