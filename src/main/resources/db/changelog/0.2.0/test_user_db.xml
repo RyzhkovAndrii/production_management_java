@@ -16,8 +16,8 @@
    </changeSet>
     <changeSet id="2" author="ryzhkov.andrii@gmail.com">
        <insert tableName="users">
-           <column name="username" value="accounter"/>
-           <column name="password" value="$2a$12$Pb65FuVAFR3H2Oxik1Hove7JjcUqU0ERL4h.NHColmgaiJvTrxlvK"/>
+           <column name="username" value="accountant"/>
+           <column name="password" value="$2a$12$6xOiejJQKe7e1IXxdqzxhOd6BELgW3VqJFvswusx6JLKZaL5WFYYu"/>
            <column name="first_name" value="Учетчик"/>
            <column name="last_name" value="Считалович"/>
        </insert>
@@ -79,7 +79,7 @@
     <changeSet id="10" author="ryzhkov.andrii@gmail.com">
         <insert tableName="users_roles">
             <column name="user_id" value="3"/>
-            <column name="role" value="ROLE_ACCOUNTER"/>
+            <column name="role" value="ROLE_ACCOUNTANT"/>
         </insert>
     </changeSet>
     <changeSet id="11" author="ryzhkov.andrii@gmail.com">

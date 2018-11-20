@@ -19,7 +19,7 @@ import java.util.List;
 @RequestMapping(value = "${spring.rest.api-url-prefix}/product-checks", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RequiredArgsConstructor
 @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CMO', 'ROLE_CTO'," +
-        " 'ROLE_ACOUNTER', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER')")
+        " 'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER')")
 public class ProductCheckController {
 
     private final ProductCheckService productCheckService;
@@ -42,7 +42,7 @@ public class ProductCheckController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ACOUNTER', 'ROLE_STOREKEEPER')")
+    @PreAuthorize("hasAnyRole('ROLE_ACCOUNTANT', 'ROLE_STOREKEEPER')")
     public ResponseEntity<ProductCheckResponse> update(@PathVariable Long id,
                                                        @RequestBody @Valid ProductCheckRequest request) {
         ProductCheck productCheck = conversionService.convert(request, ProductCheck.class);
