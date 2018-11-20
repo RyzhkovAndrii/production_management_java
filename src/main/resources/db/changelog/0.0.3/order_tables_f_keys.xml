@@ -37,7 +37,7 @@
         <addUniqueConstraint tableName="order_items"
                              columnNames="order_id, product_type_id"
                              deferrable="true"
-                             disabled="true"
+                             disabled="false"
                              initiallyDeferred="true"
                              constraintName="unique_order_item_order_product_type"/>
     </changeSet>

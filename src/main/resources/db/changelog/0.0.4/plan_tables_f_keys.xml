@@ -64,7 +64,7 @@
         <addUniqueConstraint tableName="machine_plan_item"
                              columnNames="roll_type_id, machine_plan_id"
                              deferrable="true"
-                             disabled="true"
+                             disabled="false"
                              initiallyDeferred="true"
                              constraintName="unique_machine_plan_item_roll_type_machine_plan"/>
     </changeSet>

@@ -38,7 +38,7 @@
                 tableName="product_type"
                 columnNames="name, weight, color_code"
                 deferrable="true"
-                disabled="true"
+                disabled="false"
                 initiallyDeferred="true"
                 constraintName="const_product_type"/>
     </changeSet>

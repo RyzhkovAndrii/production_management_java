@@ -48,7 +48,7 @@
         <addUniqueConstraint tableName="roll_type"
                              columnNames="note,thickness, min_weight, max_weight, color_code"
                              deferrable="true"
-                             disabled="true"
+                             disabled="false"
                              initiallyDeferred="true"
                              constraintName="const_roll_type"/>
     </changeSet>
