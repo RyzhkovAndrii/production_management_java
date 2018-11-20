@@ -50,7 +50,6 @@
     </changeSet>
     <changeSet id="6" author="pryadilnikova@gmail.com">
         <insert tableName="roll_plan_operation">
-            <column name="id" value="1"/>
             <column name="date" value="2018-08-31"/>
             <column name="roll_type_id" value="1"/>
             <column name="quantity" value="30"/>

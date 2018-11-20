@@ -17,7 +17,7 @@
     <changeSet id="2" author="ryzhkov.andrii@gmail.com">
        <insert tableName="users">
            <column name="username" value="accountant"/>
-           <column name="password" value="$2a$12$6xOiejJQKe7e1IXxdqzxhOd6BELgW3VqJFvswusx6JLKZaL5WFYYu"/>
+           <column name="password" value="$2a$12$S2cvOSCygA7jlKKMbrstbeV7b7R98YFs3K.JAir80Lvjplxmo6NMe"/>
            <column name="first_name" value="Учетчик"/>
            <column name="last_name" value="Считалович"/>
        </insert>
