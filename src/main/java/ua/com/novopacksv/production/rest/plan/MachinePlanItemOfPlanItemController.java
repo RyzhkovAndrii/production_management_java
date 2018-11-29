@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "${spring.rest.api-url-prefix}/machine-plans/{machinePlanId}/machine-plan-items", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO','ROLE_ECONOMIST')")
+@PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO','ROLE_ECONOMIST', 'ROLE_FULL_ACCESS')")
 public class MachinePlanItemOfPlanItemController {
 
     private final MachinePlanItemService machinePlanItemService;
@@ -38,7 +38,7 @@ public class MachinePlanItemOfPlanItemController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO')")
+    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<MachinePlanItemResponse> save(@Valid @RequestBody MachinePlanItemRequest request,
                                                         @PathVariable("machinePlanId") Long machinePlanId) {
         MachinePlanItem machinePlanItem = conversionService.convert(request, MachinePlanItem.class);

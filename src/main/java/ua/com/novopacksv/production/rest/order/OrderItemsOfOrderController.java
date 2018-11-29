@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "${spring.rest.api-url-prefix}/orders/{orderId}/order-items", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-@PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_CMO', 'ROLE_ECONOMIST')")
+@PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_CMO', 'ROLE_ECONOMIST', 'ROLE_FULL_ACCESS')")
 @RequiredArgsConstructor
 public class OrderItemsOfOrderController {
 

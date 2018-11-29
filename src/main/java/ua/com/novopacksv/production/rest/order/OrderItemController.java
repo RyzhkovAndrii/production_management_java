@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "${spring.rest.api-url-prefix}/order-items", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-@PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_CMO', 'ROLE_ECONOMIST')")
+@PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_CMO', 'ROLE_ECONOMIST', 'ROLE_FULL_ACCESS')")
 @RequiredArgsConstructor
 public class OrderItemController {
 
@@ -40,7 +40,7 @@ public class OrderItemController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<OrderItemResponse> save(@Valid @RequestBody OrderItemRequest request) {
         OrderItem orderItem = conversionService.convert(request, OrderItem.class);
         orderItem = orderItemService.save(orderItem);
@@ -49,7 +49,7 @@ public class OrderItemController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<OrderItemResponse> update(@PathVariable Long id, @Valid @RequestBody OrderItemRequest request) {
         OrderItem orderItem = conversionService.convert(request, OrderItem.class);
         orderItem.setId(id);
@@ -59,7 +59,7 @@ public class OrderItemController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         orderItemService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

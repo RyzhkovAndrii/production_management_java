@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "${spring.rest.api-url-prefix}/roll-types", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO'," +
-        " 'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER')")
+        " 'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER', 'ROLE_FULL_ACCESS')")
 @RequiredArgsConstructor
 public class RollTypeController {
 
@@ -55,7 +55,7 @@ public class RollTypeController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CTO')")
+    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CTO', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<RollTypeResponse> save(@RequestBody @Valid RollTypeRequest request) {
         RollType rollType = conversionService.convert(request, RollType.class);
         rollType = rollTypeService.save(rollType);
@@ -64,7 +64,7 @@ public class RollTypeController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CTO')")
+    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CTO', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<RollTypeResponse> update(@PathVariable Long id, @RequestBody @Valid RollTypeRequest request) {
         RollType rollType = conversionService.convert(request, RollType.class);
         rollType.setId(id);
@@ -74,7 +74,7 @@ public class RollTypeController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CTO')")
+    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CTO', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         rollTypeService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

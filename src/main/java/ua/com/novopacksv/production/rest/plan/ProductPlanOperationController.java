@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "${spring.rest.api-url-prefix}/product-plan-operations", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO','ROLE_ECONOMIST', 'ROLE_MANAGER')")
+@PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO','ROLE_ECONOMIST', 'ROLE_MANAGER', 'ROLE_FULL_ACCESS')")
 public class ProductPlanOperationController {
 
     private final ProductPlanOperationService productPlanOperationService;
@@ -74,7 +74,7 @@ public class ProductPlanOperationController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO')")
+    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<ProductPlanOperationResponse> save(@Valid @RequestBody ProductPlanOperationRequest request) {
         ProductPlanOperation productPlanOperation = conversionService.convert(request, ProductPlanOperation.class);
         productPlanOperationService.save(productPlanOperation);
@@ -84,7 +84,7 @@ public class ProductPlanOperationController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO')")
+    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<ProductPlanOperationResponse> update(@PathVariable Long id,
                                                                @Valid @RequestBody ProductPlanOperationRequest request) {
         ProductPlanOperation productPlanOperation = conversionService.convert(request, ProductPlanOperation.class);
@@ -96,7 +96,7 @@ public class ProductPlanOperationController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO')")
+    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         productPlanOperationService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

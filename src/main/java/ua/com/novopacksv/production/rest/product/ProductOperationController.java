@@ -20,7 +20,7 @@ import java.util.List;
 @RequestMapping(value = "${spring.rest.api-url-prefix}/product-operations", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RequiredArgsConstructor
 @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CMO', 'ROLE_CTO'," +
-        " 'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER')")
+        " 'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER', 'ROLE_FULL_ACCESS')")
 public class ProductOperationController {
 
     private final ProductOperationService productOperationService;
@@ -54,7 +54,7 @@ public class ProductOperationController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<ProductOperationResponse> save(@Valid @RequestBody ProductOperationRequest request) {
         ProductOperation productOperation = conversionService.convert(request, ProductOperation.class);
         productOperation = productOperationService.save(productOperation);
@@ -63,7 +63,7 @@ public class ProductOperationController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<ProductOperationResponse> update(@PathVariable Long id,
                                                            @Valid @RequestBody ProductOperationRequest request) {
         ProductOperation productOperation = conversionService.convert(request, ProductOperation.class);
@@ -74,7 +74,7 @@ public class ProductOperationController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         productOperationService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

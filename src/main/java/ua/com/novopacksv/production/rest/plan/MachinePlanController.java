@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "${spring.rest.api-url-prefix}/machine-plans", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO','ROLE_ECONOMIST')")
+@PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO','ROLE_ECONOMIST', 'ROLE_FULL_ACCESS')")
 public class MachinePlanController {
 
     private final MachinePlanService machinePlanService;
@@ -50,7 +50,7 @@ public class MachinePlanController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO')")
+    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<MachinePlanResponse> save(@Valid @RequestBody MachinePlanRequest request) {
         MachinePlan machinePlan = conversionService.convert(request, MachinePlan.class);
         machinePlanService.save(machinePlan);
@@ -59,7 +59,7 @@ public class MachinePlanController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO')")
+    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<MachinePlanResponse> update(@PathVariable Long id,
                                                       @Valid @RequestBody MachinePlanRequest request) {
         MachinePlan machinePlan = conversionService.convert(request, MachinePlan.class);
@@ -70,7 +70,7 @@ public class MachinePlanController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO')")
+    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         machinePlanService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

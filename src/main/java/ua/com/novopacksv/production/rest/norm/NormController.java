@@ -18,7 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "${spring.rest.api-url-prefix}/norms", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-@PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_MANAGER')")
+@PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_MANAGER', 'ROLE_FULL_ACCESS')")
 @RequiredArgsConstructor
 public class NormController {
 
@@ -62,7 +62,7 @@ public class NormController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST')")
+    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<NormResponse> save(@Valid @RequestBody NormRequest request) {
         Norm norm = conversionService.convert(request, Norm.class);
         normService.save(norm);
@@ -71,7 +71,7 @@ public class NormController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST')")
+    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<NormResponse> update(@PathVariable Long id, @Valid @RequestBody NormRequest request) {
         Norm norm = conversionService.convert(request, Norm.class);
         norm.setId(id);
@@ -81,7 +81,7 @@ public class NormController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST')")
+    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<NormResponse> delete(@PathVariable Long id) {
         normService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

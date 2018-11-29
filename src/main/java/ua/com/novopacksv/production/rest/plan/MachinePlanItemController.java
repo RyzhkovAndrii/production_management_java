@@ -17,7 +17,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(value = "${spring.rest.api-url-prefix}/machine-plan-items", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO','ROLE_ECONOMIST')")
+@PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO','ROLE_ECONOMIST', 'ROLE_FULL_ACCESS')")
 public class MachinePlanItemController {
 
     private final MachinePlanItemService machinePlanItemService;
@@ -32,7 +32,7 @@ public class MachinePlanItemController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO')")
+    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<MachinePlanItemResponse> update(@PathVariable Long id,
                                                           @Valid @RequestBody MachinePlanItemRequest request) {
         MachinePlanItem machinePlan = conversionService.convert(request, MachinePlanItem.class);
@@ -43,7 +43,7 @@ public class MachinePlanItemController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO')")
+    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         machinePlanItemService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

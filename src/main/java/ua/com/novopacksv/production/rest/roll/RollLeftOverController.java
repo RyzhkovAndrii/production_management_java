@@ -21,7 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "${spring.rest.api-url-prefix}/roll-leftovers", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO'," +
-        " 'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER')")
+        " 'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER', 'ROLE_FULL_ACCESS')")
 @RequiredArgsConstructor
 public class RollLeftOverController {
 

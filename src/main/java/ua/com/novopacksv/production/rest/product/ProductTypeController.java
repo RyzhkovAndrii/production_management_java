@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "${spring.rest.api-url-prefix}/product-types", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CMO', 'ROLE_CTO'," +
-        " 'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER')")
+        " 'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER', 'ROLE_FULL_ACCESS')")
 @RequiredArgsConstructor
 public class ProductTypeController {
 
@@ -55,7 +55,7 @@ public class ProductTypeController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CTO')")
+    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CTO', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<ProductTypeResponse> save(@Valid @RequestBody ProductTypeRequest request) {
         ProductType productType = conversionService.convert(request, ProductType.class);
         productType = productTypeService.save(productType);
@@ -64,7 +64,7 @@ public class ProductTypeController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CTO')")
+    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CTO', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<ProductTypeResponse> update(@PathVariable Long id, @Valid @RequestBody ProductTypeRequest request) {
         ProductType productType = conversionService.convert(request, ProductType.class);
         productType.setId(id);
@@ -74,7 +74,7 @@ public class ProductTypeController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CTO')")
+    @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_MANAGER', 'ROLE_CTO', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         productTypeService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

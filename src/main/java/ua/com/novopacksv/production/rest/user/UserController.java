@@ -25,7 +25,7 @@ public class UserController {
     private final ModelConversionService conversionService;
 
     @GetMapping
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<List<UserResponse>> getAll() {
         List<User> users = userService.findAll();
         List<UserResponse> response = conversionService.convert(users, UserResponse.class);
@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<UserResponse> save(@Valid @RequestBody UserRequest request) {
         User user = conversionService.convert(request, User.class);
         user = userService.save(user);
@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<UserResponse> update(@PathVariable Long id, @Valid @RequestBody UserRequest request) {
         User user = conversionService.convert(request, User.class);
         user.setId(id);
@@ -59,7 +59,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         userService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

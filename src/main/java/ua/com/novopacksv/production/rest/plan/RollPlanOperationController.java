@@ -19,7 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "${spring.rest.api-url-prefix}/roll-plan-operations", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO','ROLE_ECONOMIST')")
+@PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO','ROLE_ECONOMIST', 'ROLE_FULL_ACCESS')")
 public class RollPlanOperationController {
 
     private final RollPlanOperationService rollPlanOperationService;
@@ -53,7 +53,7 @@ public class RollPlanOperationController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO')")
+    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<RollPlanOperationResponse> save(@Valid @RequestBody RollPlanOperationRequest request) {
         RollPlanOperation rollPlanOperation = conversionService.convert(request, RollPlanOperation.class);
         rollPlanOperationService.save(rollPlanOperation);
@@ -63,7 +63,7 @@ public class RollPlanOperationController {
     }
 
     @PutMapping
-    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO')")
+    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<RollPlanOperationResponse> update(@PathVariable Long id,
                                                             @Valid @RequestBody RollPlanOperationRequest request) {
         RollPlanOperation rollPlanOperation = conversionService.convert(request, RollPlanOperation.class);
@@ -75,7 +75,7 @@ public class RollPlanOperationController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO')")
+    @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         rollPlanOperationService.delete(id);
         return new ResponseEntity<Void>(HttpStatus.OK);

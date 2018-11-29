@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "${spring.rest.api-url-prefix}/clients", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-@PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_CMO', 'ROLE_ECONOMIST')")
+@PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_CMO', 'ROLE_ECONOMIST', 'ROLE_FULL_ACCESS')")
 @RequiredArgsConstructor
 public class ClientController {
 
@@ -40,7 +40,7 @@ public class ClientController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<ClientResponse> save(@Valid @RequestBody ClientRequest request) {
         Client client = conversionService.convert(request, Client.class);
         client = clientService.save(client);
@@ -49,7 +49,7 @@ public class ClientController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<ClientResponse> update(@PathVariable Long id, @Valid @RequestBody ClientRequest request) {
         Client client = conversionService.convert(request, Client.class);
         client.setId(id);
@@ -59,7 +59,7 @@ public class ClientController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_MANAGER')")
+    @PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         clientService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "${spring.rest.api-url-prefix}/roll-checks", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @PreAuthorize("hasAnyRole('ROLE_TECHNOLOGIST', 'ROLE_CMO', 'ROLE_CTO'," +
-        " 'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER')")
+        " 'ROLE_ACCOUNTANT', 'ROLE_ECONOMIST', 'ROLE_STOREKEEPER', 'ROLE_FULL_ACCESS')")
 @RequiredArgsConstructor
 public class RollCheckController {
 
@@ -41,7 +41,7 @@ public class RollCheckController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_ACCOUNTANT', 'ROLE_STOREKEEPER')")
+    @PreAuthorize("hasAnyRole('ROLE_ACCOUNTANT', 'ROLE_STOREKEEPER', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<RollCheckResponse> update(@PathVariable Long id, @RequestBody @Valid RollCheckRequest request) {
         RollCheck rollCheck = conversionService.convert(request, RollCheck.class);
         rollCheck.setId(id);
