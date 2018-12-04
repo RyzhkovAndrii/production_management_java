@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ua.com.novopacksv.production.converter.ModelConversionService;
 import ua.com.novopacksv.production.dto.roll.RollOperationRequest;
 import ua.com.novopacksv.production.dto.roll.RollOperationResponse;
+import ua.com.novopacksv.production.dto.roll.RollOperationResponseWithProduct;
 import ua.com.novopacksv.production.model.rollModel.RollOperation;
 import ua.com.novopacksv.production.service.roll.RollOperationService;
 
@@ -53,13 +54,13 @@ public class RollOperationController {
     }
 
     @GetMapping(params = {"roll_type_id", "from_manuf", "to_manuf"})
-    public ResponseEntity<List<RollOperationResponse>> getAllByRollTypeIdAndManufacturedPeriod(
+    public ResponseEntity<List<RollOperationResponseWithProduct>> getAllByRollTypeIdAndManufacturedPeriod(
             @RequestParam("roll_type_id") Long rollTypeId,
             @RequestParam("from_manuf") LocalDate from,
             @RequestParam("to_manuf") LocalDate to) {
         List<RollOperation> rollOperations = rollOperationService
                 .findAllByRollTypeIdAndManufacturedPeriod(rollTypeId, from, to);
-        List<RollOperationResponse> response = conversionService.convert(rollOperations, RollOperationResponse.class);
+        List<RollOperationResponseWithProduct> response = conversionService.convert(rollOperations, RollOperationResponseWithProduct.class);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
