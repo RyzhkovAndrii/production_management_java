@@ -19,6 +19,7 @@ public class RollPlanOperationToRollPlanOperationResponseConverter implements Co
     public RollPlanOperationResponse convert(RollPlanOperation source) {
         RollPlanOperationResponse response = new RollPlanOperationResponse();
         String date = conversionService.convert(source.getDate(), String.class);
+        response.setId(source.getId());
         response.setDate(date);
         response.setRollTypeId(source.getRollType().getId());
         response.setRollAmount(source.getRollQuantity());
