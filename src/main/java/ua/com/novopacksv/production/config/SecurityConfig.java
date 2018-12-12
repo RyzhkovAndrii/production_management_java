@@ -45,12 +45,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.exceptionHandling().authenticationEntryPoint(new RestAuthenticationEntryPoint());
         http.addFilterAfter(new JwtTokenFilter(jwtTokenService), ExceptionTranslationFilter.class);
-//        http.cors();
         http.authorizeRequests()
                 .antMatchers(apiUrl + "/auth/login").permitAll()
                 .antMatchers(apiUrl + "/auth/refresh").permitAll()
+                .antMatchers("/h2-console/*").permitAll()
                 .anyRequest().authenticated();
         http.cors();
+        http.headers().frameOptions().disable();
     }
 
     @Bean
