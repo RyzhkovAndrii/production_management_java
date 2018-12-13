@@ -62,7 +62,7 @@ public class RollPlanOperationController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @PutMapping
+    @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO', 'ROLE_FULL_ACCESS')")
     public ResponseEntity<RollPlanOperationResponse> update(@PathVariable Long id,
                                                             @Valid @RequestBody RollPlanOperationRequest request) {
