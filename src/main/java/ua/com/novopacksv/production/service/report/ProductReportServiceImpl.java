@@ -35,7 +35,7 @@ public class ProductReportServiceImpl implements ProductReportService {
                 .findAll()
                 .stream()
                 .map(type -> getReport(type, from, to))
-//                .filter(this::isReportNotEmpty) // todo does filter need ???
+                .filter(this::isReportNotEmpty)
                 .collect(Collectors.toList());
     }
 
