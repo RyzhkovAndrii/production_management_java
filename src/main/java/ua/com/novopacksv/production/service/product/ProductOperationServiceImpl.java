@@ -13,6 +13,7 @@ import ua.com.novopacksv.production.model.productModel.ProductLeftOver;
 import ua.com.novopacksv.production.model.productModel.ProductOperation;
 import ua.com.novopacksv.production.model.productModel.ProductOperationType;
 import ua.com.novopacksv.production.model.productModel.ProductType;
+import ua.com.novopacksv.production.model.rollModel.OperationType;
 import ua.com.novopacksv.production.model.userModel.TableType;
 import ua.com.novopacksv.production.repository.productRepository.ProductOperationRepository;
 import ua.com.novopacksv.production.service.user.TableModificationService;
@@ -109,7 +110,10 @@ public class ProductOperationServiceImpl implements ProductOperationService {
     @Override
     public ProductOperation update(ProductOperation productOperation) throws ResourceNotFoundException {
         ProductOperation productOperationOld = findById(productOperation.getId());
-        changingLeftOver(productOperation, productOperation.getAmount() - productOperationOld.getAmount());
+        int changingAmount = ProductOperationType.MANUFACTURED.equals(productOperation.getProductOperationType()) ?
+                productOperation.getAmount() - productOperationOld.getAmount() :
+                productOperationOld.getAmount() - productOperation.getAmount();
+        changingLeftOver(productOperation, changingAmount);
         tableModificationService.update(TABLE_TYPE_FOR_UPDATE);
         log.debug("Method update(ProductOperation productOperation): product operation {} is updating", productOperation);
         return productOperationRepository.save(productOperation);
@@ -179,7 +183,7 @@ public class ProductOperationServiceImpl implements ProductOperationService {
         ProductLeftOver productLeftOver =
                 productLeftOverService.findByProductTypeId(productOperation.getProductType().getId());
         Integer leftOverAmount = productLeftOver.getAmount();
-        if ((leftOverAmount + changingAmount) > 0 || (leftOverAmount + changingAmount) == 0) {
+        if ((leftOverAmount + changingAmount) >= 0) {
             productLeftOver.setAmount(leftOverAmount + changingAmount);
             productLeftOverService.update(productLeftOver);
             log.debug("Method changingLeftOver(ProductOperation productOperation, Integer changingAmount):" +
