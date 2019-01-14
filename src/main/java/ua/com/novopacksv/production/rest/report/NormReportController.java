@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = "${spring.rest.api-url-prefix}/norm-reports", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-@PreAuthorize("hasAnyRole('ROLE_MANAGER', 'ROLE_CMO', 'ROLE_ECONOMIST', 'ROLE_FULL_ACCESS')")
+@PreAuthorize("hasAnyRole('ROLE_CMO', 'ROLE_CTO', 'ROLE_ECONOMIST', 'ROLE_CEO', 'ROLE_FULL_ACCESS')")
 @RequiredArgsConstructor
 public class NormReportController {
 
