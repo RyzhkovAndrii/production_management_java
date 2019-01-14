@@ -1,6 +1,8 @@
 package ua.com.novopacksv.production.service.roll;
 
 import org.springframework.stereotype.Service;
+import ua.com.novopacksv.production.model.productModel.ProductType;
+import ua.com.novopacksv.production.model.rollModel.OperationType;
 import ua.com.novopacksv.production.model.rollModel.RollManufactured;
 import ua.com.novopacksv.production.model.rollModel.RollOperation;
 import ua.com.novopacksv.production.model.rollModel.RollType;
@@ -23,5 +25,7 @@ public interface RollOperationService extends BaseEntityService<RollOperation> {
     List<RollOperation> findAllUsedOperationsByRollManufactured(RollManufactured rollManufactured);
 
     List<RollOperation> findAllByRollTypeAndManufacturedDateBetween(RollType rollType, LocalDate fromDate, LocalDate toDate);
+
+    List<RollOperation> findAll(ProductType productType, LocalDate from, LocalDate to, OperationType type);
 
 }

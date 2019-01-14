@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.novopacksv.production.exception.NegativeAmountException;
 import ua.com.novopacksv.production.exception.ResourceNotFoundException;
+import ua.com.novopacksv.production.model.productModel.ProductType;
 import ua.com.novopacksv.production.model.rollModel.*;
 import ua.com.novopacksv.production.model.userModel.TableType;
 import ua.com.novopacksv.production.repository.rollRepository.RollOperationRepository;
@@ -67,6 +68,13 @@ public class RollOperationServiceImpl implements RollOperationService {
         return rollOperationRepository
                 .findAllByRollManufactured_RollTypeAndRollManufactured_ManufacturedDateBetween(rollType, fromDate,
                         toDate);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<RollOperation> findAll(ProductType productType, LocalDate from, LocalDate to, OperationType type) {
+        return rollOperationRepository
+                .findAllByProductTypeAndOperationDateBetweenAndOperationType(productType, from, to, type);
     }
 
     /**

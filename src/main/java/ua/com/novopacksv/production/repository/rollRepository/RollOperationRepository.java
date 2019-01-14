@@ -2,6 +2,7 @@ package ua.com.novopacksv.production.repository.rollRepository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import ua.com.novopacksv.production.model.productModel.ProductType;
 import ua.com.novopacksv.production.model.rollModel.OperationType;
 import ua.com.novopacksv.production.model.rollModel.RollManufactured;
 import ua.com.novopacksv.production.model.rollModel.RollOperation;
@@ -11,7 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-public interface RollOperationRepository extends JpaRepository <RollOperation, Long> {
+public interface RollOperationRepository extends JpaRepository<RollOperation, Long> {
 
     List<RollOperation> findAllByRollManufactured_RollTypeAndRollManufactured_ManufacturedDateBetween
             (RollType rollType, LocalDate fromDate, LocalDate toDate);
@@ -24,4 +25,8 @@ public interface RollOperationRepository extends JpaRepository <RollOperation, L
 
     List<RollOperation> findAllByRollManufactured_RollType_IdAndOperationDateBetween(Long id, LocalDate from, LocalDate to);
 
+    List<RollOperation> findAllByProductTypeAndOperationDateBetweenAndOperationType(ProductType productType,
+                                                                                    LocalDate from,
+                                                                                    LocalDate to,
+                                                                                    OperationType type);
 }
