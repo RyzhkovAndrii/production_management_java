@@ -19,6 +19,7 @@ public class ProductOperationToProductOperationResponseConverter implements
     @Override
     public ProductOperationResponse convert(ProductOperation source) {
         ProductOperationResponse result = new ProductOperationResponse();
+        result.setId(source.getId());
         String date = conversionService.convert(source.getDate(), String.class);
         result.setOperationDate(date);
         result.setProductTypeId(source.getProductType().getId());
